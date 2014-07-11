@@ -18,19 +18,29 @@ export class ErrorService {
    * An ErrorLog is either added as a variation to a similar Error or is a new Error.
    *
    * @param {ErrorLog} errorLog
-   * @param callback
    */
-  handleNewErrorLog(errorLog, callback) {
-    this.errorRepository.findSimilarError(errorLog, (err, error) => {
-      if (!error) {
-        error = new Error();
+  handleNewErrorLog(errorLog) {
+    return new Promise((resolve, reject) => {
+
+      // Validate ErrorLog.
+      var validation = errorLog.validate();
+      if (!validation.valid) {
+        return reject(validation);
       }
 
-      error.addErrorLog(errorLog);
+      // Get or create error.
+      this.errorRepository.findSimilarError(errorLog, (err, error) =>{
+        if (!error) {
+          error = new Error();
+        }
 
-      this.errorRepository.store(error);
-      this.errorLogRepository.store(errorLog);
-      callback(error);
+        error.addErrorLog(errorLog);
+
+        this.errorRepository.store(error);
+        this.errorLogRepository.store(errorLog);
+
+        resolve(error);
+      });
     });
   }
 }

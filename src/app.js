@@ -1,6 +1,4 @@
-var events = require('events'),
-    emitter = new events.EventEmitter(),
-    hapi = require('hapi'),
+var hapi = require('hapi'),
     elasticsearch = require('elasticsearch');
 
 // Create a server with a host and port.
@@ -11,18 +9,6 @@ var es = new elasticsearch.Client({
   host: 'localhost:9200',
   log: 'trace'
 });
-
-// Setup event logging.
-Array.prototype.map(function(eventName) {
-  emitter.on(eventName, function() {
-    server.log([eventName], arguments);
-  });
-}, [
-  'ErrorLog.invalid',
-  'ErrorLog.foundSimilar',
-  'ErrorLog.created',
-  'ErrorLog.error'
-]);
 
 // Setup dependencies.
 import {ErrorService} from './domain/ErrorService';
@@ -36,18 +22,12 @@ server.route({
   method: 'POST',
   path: '/error',
   handler: (request, reply) => {
-    var errorLog = new ErrorLog(null, request.payload);
-
-    // Validate ErrorLog.
-    var validation = errorLog.validate();
-    if (!validation.valid) {
-      emitter.emit('ErrorLog.invalid', errorLog, validation.errors);
-      return reply(400, {}, {'error': validation.errors});
-    }
-
-    errorService.handleNewErrorLog(errorLog, (error) => {
-      reply(error);
-    });
+    errorService.handleNewErrorLog(new ErrorLog(null, request.payload))
+      .then((solutions) => {
+        reply(solutions);
+      }).catch((validation) => {
+        reply({error: validation.errors}).code(400);
+      });
   }
 });
 
