@@ -13,7 +13,6 @@ export class ErrorLog {
 
   constructor(uuid, data = {}) {
     this.uuid = uuid || uuidGenerator.v4();
-    this.validate(data)
     for (var name in ErrorLog.properties()) {
         this[name] = data[name] || ErrorLog.properties()[name].default;
     }
@@ -28,6 +27,7 @@ export class ErrorLog {
       programmingLanguageVersion: {required: true, type: 'string'},
       errorCode: {type: 'string'},
       line: {type: 'number'},
+      created: {type: 'string', default: (new Date()).toJSON()},
       filePath: {type: 'string', default: ''},
       framework: {type: 'string', default: ''}
     }

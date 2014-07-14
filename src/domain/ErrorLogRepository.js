@@ -1,4 +1,5 @@
 import {ErrorLog} from './ErrorLog';
+var ejs = require('elastic.js/dist/elastic.js');
 
 /**
  * @param {es.Client} esClient
@@ -10,6 +11,33 @@ export class ErrorLogRepository
     this.es = es;
     this.index = 'wtf';
     this.type = 'error_log';
+  }
+
+  getLatest() {
+    return this.search(ErrorLog, ejs.Request()
+        .sort(ejs.Sort('created', 'desc'))
+        .query(ejs.ConstantScoreQuery().filter(
+          ejs.ExistsFilter('created')
+        ))
+        .size(10)
+    );
+  }
+
+  search(entity, body) {
+    return new Promise((resolve, reject) => {
+      this.es.search({
+        index: this.index,
+        type: this.type,
+        body: body
+      }).then((result) => {
+        resolve(result.hits.hits.map((hit) => {
+          return new entity(hit._id, hit._source);
+        }));
+      }).catch((err) => {
+        console.log('fail', err);
+        reject(err)
+      });
+    });
   }
 
   /**
@@ -24,6 +52,7 @@ export class ErrorLogRepository
       id: errorLog.uuid,
       body: errorLog
     }, function (error) {
+
     });
   }
 

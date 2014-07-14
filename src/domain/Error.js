@@ -14,8 +14,9 @@ var validator = require('revalidator'),
  */
 export class Error {
 
-  constructor(uuid, data) {
+  constructor(uuid, data = {}) {
     this.uuid = uuid || uuidGenerator.v4();
+    // created?
 
     for (var name in Error.properties()) {
       this[name] = data[name] || Error.properties()[name].default;
