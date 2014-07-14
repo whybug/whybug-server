@@ -7,18 +7,27 @@
     "test": "node_modules/mocha/bin/mocha tests"
   },
   "dependencies": {
-    "URIjs": "^1.13.2",
     "elastic.js": "^1.1.1",
     "elasticsearch": "^2.2.0",
     "es6-module-loader": "^0.7.1",
+    "es6-promise": "^1.0.0",
+    "fibers": "^1.0.1",
     "hapi": "^6.0.2",
     "node-uuid": "^1.4.1",
+    "react": "^0.10.0",
+    "react-async": "^0.9.4",
+    "react-router-component": "^0.19.0",
+    "react-topcoat": "git+https://github.com/plaxdan/react-topcoat.git",
     "revalidator": "^0.1.8",
+    "superagent": "^0.18.2",
+    "topcoat": "^0.7.5",
     "traceur-runtime": "0.0.43"
   },
   "devDependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.20.1",
-    "traceur": "0.0.49"
+    "stylus": "^0.47.1",
+    "traceur": "0.0.49",
+    "webpack": "^1.3.1-beta8"
   }
 }
