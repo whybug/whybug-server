@@ -1,15 +1,21 @@
 var hapi = require('hapi'),
     elasticsearch = require('elasticsearch'),
+//    mysql = require('mysql-promise'),
     ReactAsync = require('react-async');
 
 // Create a server with a host and port.
-var server = new hapi.Server('172.16.11.1', 80);
+var server = new hapi.Server('localhost', 8080);
 
 // Setup classes and resolve dependencies.
 var es = new elasticsearch.Client({
-  host: 'localhost:9200',
-  log: 'trace'
+  host: 'localhost:9200'
+  , log: 'trace'
 });
+//var mysqlPool =  mysql.createPool({
+//  host : 'localhost',
+//  user : 'root',
+//  password: ''
+//});
 
 // Setup dependencies.
 import {ErrorService} from './domain/ErrorService';
@@ -75,7 +81,21 @@ var reactProxy = (callback) => {
           console.log(err);
           reply(err).code(500);
         } else {
-          reply("<!DOCTYPE html>" + ReactAsync.injectIntoMarkup(markup, data, ['js/bundle.js']));
+          markup = ReactAsync.injectIntoMarkup(markup, data);
+          console.log('render', request.path);
+          var deferScript = '<script type="text/javascript"> \
+          function downloadJSAtOnload() { \
+            var element = document.createElement("script"); \
+            element.src = "js/bundle.js"; \
+            document.body.appendChild(element); \
+          } \
+          if (window.addEventListener) \
+            window.addEventListener("load", downloadJSAtOnload, false); \
+          else if (window.attachEvent) \
+            window.attachEvent("onload", downloadJSAtOnload); \
+          else window.onload = downloadJSAtOnload; \
+        </script>';
+          reply("<!DOCTYPE html>" + markup.replace('</body>', deferScript + '$&'));
         }
       });
     }
@@ -85,14 +105,23 @@ var reactProxy = (callback) => {
 // Web routes.
 
 // Startpage
-server.route({ method: 'GET', path: '/', handler: reactProxy((request, reply) => {
-    reply({});
-})});
+server.route({ method: 'GET', path: '/', handler: reactProxy((request, reply) => { reply({}); }) });
 
 // Api routes.
-server.route({ method: 'GET', path: '/api/error_logs/latest', handler: (request, reply) => {
-  errorLogRepository.getLatest().then(reply).catch((err) => {console.log('handler', err); reply(err).code(500)});
-}});
+server.route({
+  method: 'GET',
+  path: '/api/error_logs/latest',
+  config: {
+    handler: (request, reply) => {
+      errorLogRepository.getLatest()
+        .then(reply)
+        .catch((err) => {reply(err).code(500)});
+    },
+    cache: {
+      expiresIn: 60 * 60 * 1000 // 1 hour
+    }
+  }
+});
 
 // Serve static files from `static` dir.
 server.route({ method: 'GET', path: '/css/{p*}', handler: { directory: { path: './src/web/static/css', listing: false, index: true } } });

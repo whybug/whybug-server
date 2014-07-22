@@ -1,5 +1,5 @@
 import {ErrorLog} from './ErrorLog';
-var ejs = require('elastic.js/dist/elastic.js');
+var ejs = require('elastic.js');
 
 /**
  * @param {es.Client} esClient
@@ -15,7 +15,7 @@ export class ErrorLogRepository
 
   getLatest() {
     return this.search(ErrorLog, ejs.Request()
-        .sort(ejs.Sort('created', 'desc'))
+        .sort(ejs.Sort('created').order('desc'))
         .query(ejs.ConstantScoreQuery().filter(
           ejs.ExistsFilter('created')
         ))

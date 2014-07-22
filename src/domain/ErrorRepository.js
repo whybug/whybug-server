@@ -1,5 +1,5 @@
 import {Error} from './Error';
-var ejs = require('elastic.js/dist/elastic.js');
+var ejs = require('elastic.js');
 
 /**
  *
@@ -57,6 +57,29 @@ export class ErrorRepository {
       }
       callback(error, entity);
     });
+  }
+
+  findSimilarError2() {
+    return this.search(Error, ejs.Request()
+      .size(1)
+      .query(
+        ejs.FilteredQuery(
+          ejs.BoolQuery()
+            .must([
+              ejs.MatchQuery('errorMessage', errorLog.errorMessage).minimumShouldMatch('75%')
+            ])
+            .should([
+              ejs.TermQuery('programmingLanguageVersion', errorLog.programmingLanguageVersion),
+              ejs.TermQuery('framework', errorLog.framework),
+            ]),
+          ejs.BoolFilter()
+            .must([
+              ejs.TermFilter('programmingLanguage', errorLog.programmingLanguage),
+              ejs.TermFilter('errorLevel', errorLog.errorLevel)
+            ])
+        )
+      )
+    );
   }
 
   /**
