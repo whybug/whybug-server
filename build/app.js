@@ -398,7 +398,7 @@ System.register("../src/app", [], function() {
   var hapi = require('hapi'),
       elasticsearch = require('elasticsearch'),
       ReactAsync = require('react-async');
-  var server = new hapi.Server('localhost', 8080);
+  var server = new hapi.Server('localhost', 8000);
   var es = new elasticsearch.Client({
     host: 'localhost:9200',
     log: 'trace'

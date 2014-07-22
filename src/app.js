@@ -4,7 +4,7 @@ var hapi = require('hapi'),
     ReactAsync = require('react-async');
 
 // Create a server with a host and port.
-var server = new hapi.Server('localhost', 8080);
+var server = new hapi.Server('localhost', 8000);
 
 // Setup classes and resolve dependencies.
 var es = new elasticsearch.Client({
