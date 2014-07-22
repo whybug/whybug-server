@@ -1,0 +1,5 @@
+  .idea/
+  build/
+  gslint.conf
+  node_modules/
+  npm-debug.log
