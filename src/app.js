@@ -91,10 +91,12 @@ route(config.route.api.search_errors, { handler: (request, reply) => {
 
 // Web routes.
 route(config.route.web.startpage, {
-  config: cache_2min,
-  handler: reactProxy((request, reply) => {
-    reply({});
-  })
+  config: {
+    cache: cache_2min,
+    handler: reactProxy((request, reply) => {
+      reply({});
+    })
+  }
 });
 
 // Serve static files from `static` dir.

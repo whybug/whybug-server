@@ -554,12 +554,12 @@ System.register("../src/app", [], function() {
         reply(err);
       }));
     })});
-  route(config.route.web.startpage, {
-    config: cache_2min,
-    handler: reactProxy((function(request, reply) {
-      reply({});
-    }))
-  });
+  route(config.route.web.startpage, {config: {
+      cache: cache_2min,
+      handler: reactProxy((function(request, reply) {
+        reply({});
+      }))
+    }});
   server.route({
     method: 'GET',
     path: '/css/{p*}',
