@@ -1,10 +1,9 @@
 var React = require('react'),
-    Async = require('react-async'),
-    request = require('superagent');
+    Async = require('react-async');
 
 var {div, p, h2, h3} = React.DOM;
-//var {Link} = Router;
-//import {ErrorElement} from '../elements/ErrorElement';
+
+import {Api} from '../Api';
 
 class LatestErrors {
 
@@ -13,13 +12,7 @@ class LatestErrors {
   }
 
   getInitialStateAsync(cb) {
-    request.get('http://whybug.lo/api/error_logs/latest').end((err, result) => {
-      if (err) {
-        cb(err, {error_logs: []});
-      } else {
-        cb(err, {error_logs: result.body});
-      }
-    });
+    Api.searchErrors(cb);
   }
 
   componentWillMount() {

@@ -12,7 +12,7 @@ System.register("../../components/HeaderComponent", [], function() {
       return NavigationBar({onTop: true}, NavigationBarItem({
         position: 'left',
         width: 'quarter'
-      }, Link({href: '/'}, 'whyfail')), NavigationBarItem({
+      }, Link({href: '/'}, 'whybug')), NavigationBarItem({
         position: 'right',
         width: 'quarter'
       }, Link({href: '/faq'}, 'FAQ')), NavigationBarItem({
@@ -37,38 +37,126 @@ System.register("../../pages/NotFoundPage", [], function() {
       return NotFoundPage;
     }};
 });
+System.register("../../../config", [], function() {
+  "use strict";
+  var __moduleName = "../../../config";
+  var config = {debug: process.env.DEBUG || false};
+  config.route = {
+    web: {
+      startpage: {
+        method: 'GET',
+        path: '/'
+      },
+      search_errors: {
+        method: 'GET',
+        path: '/search'
+      },
+      read_error: {
+        method: 'GET',
+        path: '/error/{programmingLanguage}/{errorMessageSlug}'
+      },
+      url_shortener: {
+        method: 'GET',
+        path: '/e/{p*}'
+      }
+    },
+    api: {
+      create_error: {
+        method: 'POST',
+        path: '/api/errors'
+      },
+      update_error: {
+        method: 'PUT',
+        path: '/api/errors/{error_uuid}'
+      },
+      search_errors: {
+        method: 'GET',
+        path: '/api/errors'
+      },
+      create_solution: {
+        method: 'POST',
+        path: '/api/errors/{error_uuid}/solutions'
+      },
+      update_solution: {
+        method: 'PUT',
+        path: '/api/errors/{error_uuid}/solutions/{solution_uuid}'
+      },
+      delete_solution: {
+        method: 'DELETE',
+        path: '/api/errors/{error_uuid}/solutions/{solution_uuid}'
+      }
+    }
+  };
+  config.web = {url: process.env.WEB_URL || 'http://127.0.0.1:8000'};
+  config.node = {
+    host: process.env.WEB_HOST || '127.0.0.1',
+    port: process.env.WEB_PORT || 8000
+  };
+  config.mysql = {
+    host: process.env.MYSQL_URL || 'localhost',
+    port: process.env.MYSQL_URL || 3360,
+    user: process.env.MYSQL_USER || '',
+    pass: process.env.MYSQL_PASS || ''
+  };
+  config.elasticsearch = {
+    host: process.env.ES_URL || 'localhost',
+    port: process.env.ES_URL || 9200
+  };
+  return {get config() {
+      return config;
+    }};
+});
+System.register("../../Api", [], function() {
+  "use strict";
+  var __moduleName = "../../Api";
+  var superagent = require('superagent');
+  var config = System.get("../../../config").config;
+  var Api = function Api() {};
+  var $Api = Api;
+  ($traceurRuntime.createClass)(Api, {}, {
+    searchErrors: function(cb) {
+      return $Api.request(config.route.api.search_errors).end((function(err, result) {
+        if (err) {
+          cb(err, {error_logs: []});
+          return;
+        }
+        cb(err, {error_logs: result.body});
+      }));
+    },
+    request: function(route) {
+      return superagent(route.method, config.web.url + route.path).set('Accept', 'application/json');
+    }
+  });
+  return {get Api() {
+      return Api;
+    }};
+});
 System.register("../../components/LatestErrorsComponent", [], function() {
   "use strict";
   var __moduleName = "../../components/LatestErrorsComponent";
   var React = require('react'),
-      Async = require('react-async'),
-      request = require('superagent');
-  var $__5 = $traceurRuntime.assertObject(React.DOM),
-      div = $__5.div,
-      p = $__5.p,
-      h2 = $__5.h2,
-      h3 = $__5.h3;
+      Async = require('react-async');
+  var $__8 = $traceurRuntime.assertObject(React.DOM),
+      div = $__8.div,
+      p = $__8.p,
+      h2 = $__8.h2,
+      h3 = $__8.h3;
+  var Api = System.get("../../Api").Api;
   var LatestErrors = function LatestErrors() {};
   ($traceurRuntime.createClass)(LatestErrors, {
     get mixins() {
       return [Async.Mixin];
     },
     getInitialStateAsync: function(cb) {
-      request.get('http://whybug.lo/api/error_logs/latest').end((function(err, result) {
-        if (err) {
-          cb(err, {error_logs: []});
-        } else {
-          cb(err, {error_logs: result.body});
-        }
-      }));
+      Api.searchErrors(cb);
     },
     componentWillMount: function() {
-      var $__3 = this;
+      var $__6 = this;
       if (this.state.error_logs) {
         return;
       }
       this.getInitialStateAsync((function(err, result) {
-        $__3.setState(result);
+        $__6.setState(result);
       }));
     },
     render: function() {
@@ -106,16 +194,16 @@ System.register("../../WebApp", [], function() {
       ReactMount = require('react/lib/ReactMount'),
       Router = require('react-router-component');
   ReactMount.allowFullPageRender = true;
-  var $__14 = $traceurRuntime.assertObject(React.DOM),
-      html = $__14.html,
-      head = $__14.head,
-      meta = $__14.meta,
-      title = $__14.title,
-      link = $__14.link;
-  var $__14 = $traceurRuntime.assertObject(Router),
-      Page = $__14.Page,
-      Pages = $__14.Pages,
-      NotFound = $__14.NotFound;
+  var $__17 = $traceurRuntime.assertObject(React.DOM),
+      html = $__17.html,
+      head = $__17.head,
+      meta = $__17.meta,
+      title = $__17.title,
+      link = $__17.link;
+  var $__17 = $traceurRuntime.assertObject(Router),
+      Page = $__17.Page,
+      Pages = $__17.Pages,
+      NotFound = $__17.NotFound;
   var StartPage = System.get("../../pages/StartPage").StartPage;
   var NotFoundPage = System.get("../../pages/NotFoundPage").NotFoundPage;
   var HeaderComponent = System.get("../../components/HeaderComponent").HeaderComponent;
@@ -124,7 +212,7 @@ System.register("../../WebApp", [], function() {
       return html({}, head({}, link({
         rel: 'stylesheet',
         href: 'css/main.css'
-      }), title({}, "whyfail"), meta({charSet: "UTF-8"}), meta({
+      }), title({}, "whybug"), meta({charSet: "UTF-8"}), meta({
         name: "viewport",
         content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
       })), Pages({path: this.props.path}, Page({

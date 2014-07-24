@@ -1,5 +1,6 @@
+var ejs = require('elastic.js/dist/elastic.js');
+
 import {Error} from './Error';
-var ejs = require('elastic.js');
 
 /**
  *

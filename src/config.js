@@ -1,4 +1,4 @@
-var config = {
+export var config = {
   debug: process.env.DEBUG || false
 };
 
@@ -56,7 +56,8 @@ config.route = {
 };
 
 config.web = {
-  url: process.env.WEB_URL || 'http://127.0.0.1'
+  // Url where to access whybug, NO trailing slash.
+  url: process.env.WEB_URL || 'http://127.0.0.1:8000'
 };
 
 config.node = {
@@ -75,5 +76,3 @@ config.elasticsearch = {
   host: process.env.ES_URL || 'localhost',
   port: process.env.ES_URL || 9200
 };
-
-export var config;

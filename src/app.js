@@ -3,66 +3,38 @@ var hapi = require('hapi'),
 //    mysql = require('mysql-promise'),
     ReactAsync = require('react-async');
 
-// Create a server with a host and port.
-var server = new hapi.Server('localhost', 8000);
-
-// Setup classes and resolve dependencies.
-var es = new elasticsearch.Client({
-  host: 'localhost:9200'
-  , log: 'trace'
-});
-//var mysqlPool =  mysql.createPool({
-//  host : 'localhost',
-//  user : 'root',
-//  password: ''
-//});
-
 // Setup dependencies.
+import {config} from './config';
 import {ErrorService} from './domain/ErrorService';
 import {ErrorRepository} from './domain/ErrorRepository';
 import {ErrorLogRepository} from './domain/ErrorLogRepository';
 import {ErrorLog} from './domain/ErrorLog';
 import {WebApp} from './web/Webapp';
 
+//var mysqlPool =  mysql.createPool({
+//  host : 'localhost',
+//  user : 'root',
+//  password: ''
+//});
+var server = new hapi.Server(config.node.host, config.node.port);
+var es = new elasticsearch.Client({
+  host: config.elasticsearch.host + ':' + config.elasticsearch.port,
+  log: config.debug ? 'trace' : 'warning'
+});
 var errorLogRepository = new ErrorLogRepository(es);
 var errorRepository = new ErrorRepository(es);
 var errorService = new ErrorService(errorRepository, errorLogRepository);
 
-// Add the routes.
-
-/*
-Client endpoints:
-  POST /error {payload} ; returns solutions
-*/
-
-/*
-Web endpoints:
- Return either HTML (non-ajax) or JSON (ajax).
-
- GET /  ; web, StartPage, HTML or JSON
- GET /error/{programmingLanguage}/{errorMessageSlug}  ; ErrorPage, HTML or JSON
-
- POST /api/error/{error_uuid} {payload}  ; update error
-
- PUT /api/error/{error_uuid}/solution/ {payload}  ; add a solution to an error
- POST /api/error/{error_uuid}/solution/{solution_uuid} {payload}  ; change a solution to an error
- DELETE /api/error/{error_uuid}/solution/{solution_uuid}  ; delete a solution from an error
- */
-
-
 // Client routes.
-server.route({
-  method: 'POST',
-  path: '/error',
-  handler: (request, reply) => {
-    errorService
-      .handleNewErrorLog(new ErrorLog(null, request.payload))
-      .then(reply)
-      .catch((validation) => {
-        reply({error: validation.errors}).code(400);
-      });
-  }
-});
+config.route.api.create_error.handler = (request, reply) => {
+  errorService
+    .handleNewErrorLog(new ErrorLog(null, request.payload))
+    .then(reply)
+    .catch((validation) => {
+      reply({error: validation.errors});
+    });
+};
+server.route(config.route.api.create_error);
 
 /**
  * If a request is non ajax, return the server rendered html, otherwise call the callback.
@@ -79,10 +51,11 @@ var reactProxy = (callback) => {
       ReactAsync.renderComponentToStringWithAsyncState(WebApp({path: request.path}), (err, markup, data) => {
         if (err) {
           console.log(err);
-          reply(err).code(500);
+          reply(err);
         } else {
           markup = ReactAsync.injectIntoMarkup(markup, data);
           console.log('render', request.path);
+          // Todo: extract somewhere else
           var deferScript = '<script type="text/javascript"> \
           function downloadJSAtOnload() { \
             var element = document.createElement("script"); \
@@ -108,20 +81,13 @@ var reactProxy = (callback) => {
 server.route({ method: 'GET', path: '/', handler: reactProxy((request, reply) => { reply({}); }) });
 
 // Api routes.
-server.route({
-  method: 'GET',
-  path: '/api/error_logs/latest',
-  config: {
-    handler: (request, reply) => {
-      errorLogRepository.getLatest()
-        .then(reply)
-        .catch((err) => {reply(err).code(500)});
-    },
-    cache: {
-      expiresIn: 60 * 60 * 1000 // 1 hour
-    }
-  }
-});
+config.route.api.search_errors.handler = (request, reply) => {
+  console.log(request.path);
+  errorLogRepository.getLatest()
+    .then(reply)
+    .catch((err) => {reply(err)});
+};
+server.route(config.route.api.search_errors);
 
 // Serve static files from `static` dir.
 server.route({ method: 'GET', path: '/css/{p*}', handler: { directory: { path: './src/web/static/css', listing: false, index: true } } });
@@ -130,9 +96,8 @@ server.route({ method: 'GET', path: '/font/{p*}', handler: { directory: { path: 
 
 // Handler for 404
 server.route({ method: '*', path: '/{p*}', handler: reactProxy((request, reply) => {
-  reply('The page was not found').code(404);
+  reply('The page was not found');
 })});
-
 
 // Start the server.
 server.start();

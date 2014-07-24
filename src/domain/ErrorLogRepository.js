@@ -1,5 +1,6 @@
+var ejs = require('elastic.js/dist/elastic.js');
+
 import {ErrorLog} from './ErrorLog';
-var ejs = require('elastic.js');
 
 /**
  * @param {es.Client} esClient

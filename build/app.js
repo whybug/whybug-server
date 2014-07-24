@@ -1,3 +1,72 @@
+System.register("../src/config", [], function() {
+  "use strict";
+  var __moduleName = "../src/config";
+  var config = {debug: process.env.DEBUG || false};
+  config.route = {
+    web: {
+      startpage: {
+        method: 'GET',
+        path: '/'
+      },
+      search_errors: {
+        method: 'GET',
+        path: '/search'
+      },
+      read_error: {
+        method: 'GET',
+        path: '/error/{programmingLanguage}/{errorMessageSlug}'
+      },
+      url_shortener: {
+        method: 'GET',
+        path: '/e/{p*}'
+      }
+    },
+    api: {
+      create_error: {
+        method: 'POST',
+        path: '/api/errors'
+      },
+      update_error: {
+        method: 'PUT',
+        path: '/api/errors/{error_uuid}'
+      },
+      search_errors: {
+        method: 'GET',
+        path: '/api/errors'
+      },
+      create_solution: {
+        method: 'POST',
+        path: '/api/errors/{error_uuid}/solutions'
+      },
+      update_solution: {
+        method: 'PUT',
+        path: '/api/errors/{error_uuid}/solutions/{solution_uuid}'
+      },
+      delete_solution: {
+        method: 'DELETE',
+        path: '/api/errors/{error_uuid}/solutions/{solution_uuid}'
+      }
+    }
+  };
+  config.web = {url: process.env.WEB_URL || 'http://127.0.0.1:8000'};
+  config.node = {
+    host: process.env.WEB_HOST || '127.0.0.1',
+    port: process.env.WEB_PORT || 8000
+  };
+  config.mysql = {
+    host: process.env.MYSQL_URL || 'localhost',
+    port: process.env.MYSQL_URL || 3360,
+    user: process.env.MYSQL_USER || '',
+    pass: process.env.MYSQL_PASS || ''
+  };
+  config.elasticsearch = {
+    host: process.env.ES_URL || 'localhost',
+    port: process.env.ES_URL || 9200
+  };
+  return {get config() {
+      return config;
+    }};
+});
 System.register("../src/domain/ErrorLog", [], function() {
   "use strict";
   var __moduleName = "../src/domain/ErrorLog";
@@ -67,8 +136,8 @@ System.register("../src/domain/ErrorLog", [], function() {
 System.register("../src/domain/ErrorLogRepository", [], function() {
   "use strict";
   var __moduleName = "../src/domain/ErrorLogRepository";
+  var ejs = require('elastic.js/dist/elastic.js');
   var ErrorLog = System.get("../src/domain/ErrorLog").ErrorLog;
-  var ejs = require('elastic.js');
   var ErrorLogRepository = function ErrorLogRepository(es) {
     this.es = es;
     this.index = 'wtf';
@@ -176,8 +245,8 @@ System.register("../src/domain/Error", [], function() {
 System.register("../src/domain/ErrorRepository", [], function() {
   "use strict";
   var __moduleName = "../src/domain/ErrorRepository";
+  var ejs = require('elastic.js/dist/elastic.js');
   var Error = System.get("../src/domain/Error").Error;
-  var ejs = require('elastic.js');
   var ErrorRepository = function ErrorRepository(es) {
     this.es = es;
     this.index = 'wtf';
@@ -262,7 +331,7 @@ System.register("../src/web/components/HeaderComponent", [], function() {
       return NavigationBar({onTop: true}, NavigationBarItem({
         position: 'left',
         width: 'quarter'
-      }, Link({href: '/'}, 'whyfail')), NavigationBarItem({
+      }, Link({href: '/'}, 'whybug')), NavigationBarItem({
         position: 'right',
         width: 'quarter'
       }, Link({href: '/faq'}, 'FAQ')), NavigationBarItem({
@@ -287,38 +356,57 @@ System.register("../src/web/pages/NotFoundPage", [], function() {
       return NotFoundPage;
     }};
 });
+System.register("../src/web/Api", [], function() {
+  "use strict";
+  var __moduleName = "../src/web/Api";
+  var superagent = require('superagent');
+  var config = System.get("../src/config").config;
+  var Api = function Api() {};
+  var $Api = Api;
+  ($traceurRuntime.createClass)(Api, {}, {
+    searchErrors: function(cb) {
+      return $Api.request(config.route.api.search_errors).end((function(err, result) {
+        if (err) {
+          cb(err, {error_logs: []});
+          return;
+        }
+        cb(err, {error_logs: result.body});
+      }));
+    },
+    request: function(route) {
+      return superagent(route.method, config.web.url + route.path).set('Accept', 'application/json');
+    }
+  });
+  return {get Api() {
+      return Api;
+    }};
+});
 System.register("../src/web/components/LatestErrorsComponent", [], function() {
   "use strict";
   var __moduleName = "../src/web/components/LatestErrorsComponent";
   var React = require('react'),
-      Async = require('react-async'),
-      request = require('superagent');
-  var $__18 = $traceurRuntime.assertObject(React.DOM),
-      div = $__18.div,
-      p = $__18.p,
-      h2 = $__18.h2,
-      h3 = $__18.h3;
+      Async = require('react-async');
+  var $__21 = $traceurRuntime.assertObject(React.DOM),
+      div = $__21.div,
+      p = $__21.p,
+      h2 = $__21.h2,
+      h3 = $__21.h3;
+  var Api = System.get("../src/web/Api").Api;
   var LatestErrors = function LatestErrors() {};
   ($traceurRuntime.createClass)(LatestErrors, {
     get mixins() {
       return [Async.Mixin];
     },
     getInitialStateAsync: function(cb) {
-      request.get('http://whybug.lo/api/error_logs/latest').end((function(err, result) {
-        if (err) {
-          cb(err, {error_logs: []});
-        } else {
-          cb(err, {error_logs: result.body});
-        }
-      }));
+      Api.searchErrors(cb);
     },
     componentWillMount: function() {
-      var $__16 = this;
+      var $__19 = this;
       if (this.state.error_logs) {
         return;
       }
       this.getInitialStateAsync((function(err, result) {
-        $__16.setState(result);
+        $__19.setState(result);
       }));
     },
     render: function() {
@@ -356,16 +444,16 @@ System.register("../src/web/Webapp", [], function() {
       ReactMount = require('react/lib/ReactMount'),
       Router = require('react-router-component');
   ReactMount.allowFullPageRender = true;
-  var $__27 = $traceurRuntime.assertObject(React.DOM),
-      html = $__27.html,
-      head = $__27.head,
-      meta = $__27.meta,
-      title = $__27.title,
-      link = $__27.link;
-  var $__27 = $traceurRuntime.assertObject(Router),
-      Page = $__27.Page,
-      Pages = $__27.Pages,
-      NotFound = $__27.NotFound;
+  var $__30 = $traceurRuntime.assertObject(React.DOM),
+      html = $__30.html,
+      head = $__30.head,
+      meta = $__30.meta,
+      title = $__30.title,
+      link = $__30.link;
+  var $__30 = $traceurRuntime.assertObject(Router),
+      Page = $__30.Page,
+      Pages = $__30.Pages,
+      NotFound = $__30.NotFound;
   var StartPage = System.get("../src/web/pages/StartPage").StartPage;
   var NotFoundPage = System.get("../src/web/pages/NotFoundPage").NotFoundPage;
   var HeaderComponent = System.get("../src/web/components/HeaderComponent").HeaderComponent;
@@ -374,7 +462,7 @@ System.register("../src/web/Webapp", [], function() {
       return html({}, head({}, link({
         rel: 'stylesheet',
         href: 'css/main.css'
-      }), title({}, "whyfail"), meta({charSet: "UTF-8"}), meta({
+      }), title({}, "whybug"), meta({charSet: "UTF-8"}), meta({
         name: "viewport",
         content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
       })), Pages({path: this.props.path}, Page({
@@ -398,28 +486,26 @@ System.register("../src/app", [], function() {
   var hapi = require('hapi'),
       elasticsearch = require('elasticsearch'),
       ReactAsync = require('react-async');
-  var server = new hapi.Server('localhost', 8000);
-  var es = new elasticsearch.Client({
-    host: 'localhost:9200',
-    log: 'trace'
-  });
+  var config = System.get("../src/config").config;
   var ErrorService = System.get("../src/domain/ErrorService").ErrorService;
   var ErrorRepository = System.get("../src/domain/ErrorRepository").ErrorRepository;
   var ErrorLogRepository = System.get("../src/domain/ErrorLogRepository").ErrorLogRepository;
   var ErrorLog = System.get("../src/domain/ErrorLog").ErrorLog;
   var WebApp = System.get("../src/web/Webapp").WebApp;
+  var server = new hapi.Server(config.node.host, config.node.port);
+  var es = new elasticsearch.Client({
+    host: config.elasticsearch.host + ':' + config.elasticsearch.port,
+    log: config.debug ? 'trace' : 'warning'
+  });
   var errorLogRepository = new ErrorLogRepository(es);
   var errorRepository = new ErrorRepository(es);
   var errorService = new ErrorService(errorRepository, errorLogRepository);
-  server.route({
-    method: 'POST',
-    path: '/error',
-    handler: (function(request, reply) {
-      errorService.handleNewErrorLog(new ErrorLog(null, request.payload)).then(reply).catch((function(validation) {
-        reply({error: validation.errors}).code(400);
-      }));
-    })
+  config.route.api.create_error.handler = (function(request, reply) {
+    errorService.handleNewErrorLog(new ErrorLog(null, request.payload)).then(reply).catch((function(validation) {
+      reply({error: validation.errors});
+    }));
   });
+  server.route(config.route.api.create_error);
   var reactProxy = (function(callback) {
     return (function(request, reply) {
       if ("X-Requested-With" in request.headers) {
@@ -428,7 +514,7 @@ System.register("../src/app", [], function() {
         ReactAsync.renderComponentToStringWithAsyncState(WebApp({path: request.path}), (function(err, markup, data) {
           if (err) {
             console.log(err);
-            reply(err).code(500);
+            reply(err);
           } else {
             markup = ReactAsync.injectIntoMarkup(markup, data);
             console.log('render', request.path);
@@ -457,18 +543,13 @@ System.register("../src/app", [], function() {
       reply({});
     }))
   });
-  server.route({
-    method: 'GET',
-    path: '/api/error_logs/latest',
-    config: {
-      handler: (function(request, reply) {
-        errorLogRepository.getLatest().then(reply).catch((function(err) {
-          reply(err).code(500);
-        }));
-      }),
-      cache: {expiresIn: 60 * 60 * 1000}
-    }
+  config.route.api.search_errors.handler = (function(request, reply) {
+    console.log(request.path);
+    errorLogRepository.getLatest().then(reply).catch((function(err) {
+      reply(err);
+    }));
   });
+  server.route(config.route.api.search_errors);
   server.route({
     method: 'GET',
     path: '/css/{p*}',
@@ -500,7 +581,7 @@ System.register("../src/app", [], function() {
     method: '*',
     path: '/{p*}',
     handler: reactProxy((function(request, reply) {
-      reply('The page was not found').code(404);
+      reply('The page was not found');
     }))
   });
   server.start();
