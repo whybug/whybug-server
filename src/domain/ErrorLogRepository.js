@@ -10,7 +10,7 @@ export class ErrorLogRepository
 {
   constructor(es) {
     this.es = es;
-    this.index = 'wtf';
+    this.index = 'whybug';
     this.type = 'error_log';
   }
 

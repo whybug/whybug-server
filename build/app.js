@@ -140,7 +140,7 @@ System.register("../src/domain/ErrorLogRepository", [], function() {
   var ErrorLog = System.get("../src/domain/ErrorLog").ErrorLog;
   var ErrorLogRepository = function ErrorLogRepository(es) {
     this.es = es;
-    this.index = 'wtf';
+    this.index = 'whybug';
     this.type = 'error_log';
   };
   ($traceurRuntime.createClass)(ErrorLogRepository, {
@@ -249,7 +249,7 @@ System.register("../src/domain/ErrorRepository", [], function() {
   var Error = System.get("../src/domain/Error").Error;
   var ErrorRepository = function ErrorRepository(es) {
     this.es = es;
-    this.index = 'wtf';
+    this.index = 'whybug';
     this.type = 'error';
   };
   ($traceurRuntime.createClass)(ErrorRepository, {
