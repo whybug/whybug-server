@@ -504,9 +504,9 @@ System.register("../src/app", [], function() {
     privacy: 'public',
     expiresIn: 24 * 60 * 60 * 1000
   };
-  var cache_10min = {
+  var cache_2min = {
     privacy: 'public',
-    expiresIn: 10 * 60 * 1000
+    expiresIn: 2 * 60 * 1000
   };
   var route = (function(route, options) {
     for (var name in options) {
@@ -554,9 +554,12 @@ System.register("../src/app", [], function() {
         reply(err);
       }));
     })});
-  route(config.route.web.startpage, {handler: reactProxy((function(request, reply) {
+  route(config.route.web.startpage, {
+    config: cache_2min,
+    handler: reactProxy((function(request, reply) {
       reply({});
-    }))});
+    }))
+  });
   server.route({
     method: 'GET',
     path: '/css/{p*}',

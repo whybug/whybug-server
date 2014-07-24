@@ -25,7 +25,7 @@ var errorLogRepository = new ErrorLogRepository(es);
 var errorRepository = new ErrorRepository(es);
 var errorService = new ErrorService(errorRepository, errorLogRepository);
 var cache_unlimited = {privacy: 'public', expiresIn: 24 * 60 * 60 * 1000};
-var cache_10min = {privacy: 'public', expiresIn: 10 * 60 * 1000};
+var cache_2min = {privacy: 'public', expiresIn: 2 * 60 * 1000};
 
 var route = (route, options) => {
   for (var name in options) {
@@ -90,7 +90,12 @@ route(config.route.api.search_errors, { handler: (request, reply) => {
 }});
 
 // Web routes.
-route(config.route.web.startpage, {handler: reactProxy((request, reply) => { reply({}); }) });
+route(config.route.web.startpage, {
+  config: cache_2min,
+  handler: reactProxy((request, reply) => {
+    reply({});
+  })
+});
 
 // Serve static files from `static` dir.
 server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_unlimited,  handler: { directory: { path: './src/web/static/css', listing: false, index: true } } } });
