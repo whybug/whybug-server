@@ -1,8 +1,7 @@
 #!/bin/sh
 # Call in .git/hooks/post-recieve and make executable
 # #!/bin/sh
-# cd ..
-# /bin/bash deploy.sh
+# cd .. && /bin/bash deploy.sh
 
 pwd
 
