@@ -500,12 +500,20 @@ System.register("../src/app", [], function() {
   var errorLogRepository = new ErrorLogRepository(es);
   var errorRepository = new ErrorRepository(es);
   var errorService = new ErrorService(errorRepository, errorLogRepository);
-  config.route.api.create_error.handler = (function(request, reply) {
-    errorService.handleNewErrorLog(new ErrorLog(null, request.payload)).then(reply).catch((function(validation) {
-      reply({error: validation.errors});
-    }));
+  var cache_unlimited = {
+    privacy: 'public',
+    expiresIn: 24 * 60 * 60 * 1000
+  };
+  var cache_10min = {
+    privacy: 'public',
+    expiresIn: 10 * 60 * 1000
+  };
+  var route = (function(route, options) {
+    for (var name in options) {
+      $traceurRuntime.setProperty(route, name, options[$traceurRuntime.toProperty(name)]);
+    }
+    server.route(route);
   });
-  server.route(config.route.api.create_error);
   var reactProxy = (function(callback) {
     return (function(request, reply) {
       if ("X-Requested-With" in request.headers) {
@@ -536,46 +544,54 @@ System.register("../src/app", [], function() {
       }
     });
   });
-  server.route({
-    method: 'GET',
-    path: '/',
-    handler: reactProxy((function(request, reply) {
+  route(config.route.api.create_error, {handler: (function(request, reply) {
+      errorService.handleNewErrorLog(new ErrorLog(null, request.payload)).then(reply).catch((function(validation) {
+        reply({error: validation.errors});
+      }));
+    })});
+  route(config.route.api.search_errors, {handler: (function(request, reply) {
+      errorLogRepository.getLatest().then(reply).catch((function(err) {
+        reply(err);
+      }));
+    })});
+  route(config.route.web.startpage, {handler: reactProxy((function(request, reply) {
       reply({});
-    }))
-  });
-  config.route.api.search_errors.handler = (function(request, reply) {
-    console.log(request.path);
-    errorLogRepository.getLatest().then(reply).catch((function(err) {
-      reply(err);
-    }));
-  });
-  server.route(config.route.api.search_errors);
+    }))});
   server.route({
     method: 'GET',
     path: '/css/{p*}',
-    handler: {directory: {
-        path: './src/web/static/css',
-        listing: false,
-        index: true
-      }}
+    config: {
+      cache: cache_unlimited,
+      handler: {directory: {
+          path: './src/web/static/css',
+          listing: false,
+          index: true
+        }}
+    }
   });
   server.route({
     method: 'GET',
     path: '/js/{p*}',
-    handler: {directory: {
-        path: './src/web/static/js',
-        listing: false,
-        index: true
-      }}
+    config: {
+      cache: cache_unlimited,
+      handler: {directory: {
+          path: './src/web/static/js',
+          listing: false,
+          index: true
+        }}
+    }
   });
   server.route({
     method: 'GET',
     path: '/font/{p*}',
-    handler: {directory: {
-        path: './src/web/static/font',
-        listing: false,
-        index: true
-      }}
+    config: {
+      cache: cache_unlimited,
+      handler: {directory: {
+          path: './src/web/static/font',
+          listing: false,
+          index: true
+        }}
+    }
   });
   server.route({
     method: '*',
