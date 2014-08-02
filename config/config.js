@@ -2,6 +2,8 @@ export var config = {
   debug: process.env.DEBUG || false
 };
 
+var cache_2min = {privacy: 'public', expiresIn: 2 * 60 * 1000};
+
 /**
  * Routes for frontend (client) and backend (server).
  *
@@ -16,7 +18,7 @@ config.route = {
    */
   web: {
     // StartPage, returns HTML.
-    startpage: { method: 'GET', path: '/'},
+    startpage: { method: 'GET', path: '/', config: { cache: cache_2min }},
 
     // SearchPage, returns HTML.
     search_errors: { method: 'GET', path: '/search' },

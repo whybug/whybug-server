@@ -2,11 +2,16 @@ System.register("../config/config", [], function() {
   "use strict";
   var __moduleName = "../config/config";
   var config = {debug: process.env.DEBUG || false};
+  var cache_2min = {
+    privacy: 'public',
+    expiresIn: 2 * 60 * 1000
+  };
   config.route = {
     web: {
       startpage: {
         method: 'GET',
-        path: '/'
+        path: '/',
+        config: {cache: cache_2min}
       },
       search_errors: {
         method: 'GET',
@@ -483,20 +488,6 @@ System.register("../src/app", [], function() {
   var errorLogRepository = new ErrorLogRepository(es);
   var errorRepository = new ErrorRepository(es);
   var errorService = new ErrorService(errorRepository, errorLogRepository);
-  var cache_unlimited = {
-    privacy: 'public',
-    expiresIn: 24 * 60 * 60 * 1000
-  };
-  var cache_2min = {
-    privacy: 'public',
-    expiresIn: 2 * 60 * 1000
-  };
-  var route = (function(route, options) {
-    for (var name in options) {
-      $traceurRuntime.setProperty(route, name, options[$traceurRuntime.toProperty(name)]);
-    }
-    server.route(route);
-  });
   var reactProxy = (function(callback) {
     return (function(request, reply) {
       if ("X-Requested-With" in request.headers) {
@@ -514,29 +505,35 @@ System.register("../src/app", [], function() {
       }
     });
   });
-  route(config.route.api.create_error, {handler: (function(request, reply) {
-      errorService.handleNewErrorLog(new ErrorLog(null, request.payload)).then(reply).catch((function(validation) {
-        reply({error: validation.errors});
-      }));
-    })});
-  route(config.route.api.search_errors, {handler: (function(request, reply) {
-      errorLogRepository.getLatest().then(reply).catch((function(err) {
-        reply(err);
-      }));
-    })});
-  route(config.route.web.startpage, {config: {
-      cache: cache_2min,
-      handler: reactProxy((function(request, reply) {
-        reply({});
-      }))
-    }});
+  var route = (function(route, handler) {
+    route.config = route.config || {};
+    route.config.handler = handler;
+    server.route(route);
+  });
+  route(config.route.api.create_error, (function(request, reply) {
+    errorService.handleNewErrorLog(new ErrorLog(null, request.payload)).then(reply).catch((function(validation) {
+      reply({error: validation.errors});
+    }));
+  }));
+  route(config.route.api.search_errors, (function(request, reply) {
+    errorLogRepository.getLatest().then(reply).catch((function(err) {
+      reply(err);
+    }));
+  }));
+  route(config.route.web.startpage, reactProxy((function(request, reply) {
+    reply({});
+  })));
+  var cache_unlimited = {
+    privacy: 'public',
+    expiresIn: 24 * 60 * 60 * 1000
+  };
   server.route({
     method: 'GET',
     path: '/css/{p*}',
     config: {
       cache: cache_unlimited,
       handler: {directory: {
-          path: './src/web/static/css',
+          path: './build/css',
           listing: false,
           index: true
         }}
@@ -548,7 +545,7 @@ System.register("../src/app", [], function() {
     config: {
       cache: cache_unlimited,
       handler: {directory: {
-          path: './src/web/static/js',
+          path: './build/js',
           listing: false,
           index: true
         }}

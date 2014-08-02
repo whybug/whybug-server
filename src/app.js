@@ -18,7 +18,6 @@ var es = new elasticsearch.Client({
   log: config.debug ? 'trace' : 'warning'
 });
 
-
 // Setup dependencies.
 import {ErrorService} from './domain/ErrorService';
 import {ErrorRepository} from './domain/ErrorRepository';
@@ -29,17 +28,6 @@ import {WebApp} from './web/Webapp';
 var errorLogRepository = new ErrorLogRepository(es);
 var errorRepository = new ErrorRepository(es);
 var errorService = new ErrorService(errorRepository, errorLogRepository);
-
-// move to config
-var cache_unlimited = {privacy: 'public', expiresIn: 24 * 60 * 60 * 1000};
-var cache_2min = {privacy: 'public', expiresIn: 2 * 60 * 1000};
-
-var route = (route, options) => {
-  for (var name in options) {
-    route[name] = options[name];
-  }
-  server.route(route);
-};
 
 /**
  * If a request is non ajax, return the server rendered html, otherwise call the callback.
@@ -66,38 +54,49 @@ var reactProxy = (callback) => {
   }
 };
 
-// Api routes.
-route(config.route.api.create_error, { handler: (request, reply) => {
+var route = (route, handler) => {
+  route.config = route.config || {};
+  route.config.handler = handler;
+  server.route(route);
+};
+
+
+/**
+ * API routes.
+ *
+ * These all return JSON.
+ */
+route(config.route.api.create_error, (request, reply) => {
   errorService
     .handleNewErrorLog(new ErrorLog(null, request.payload))
     .then(reply)
     .catch((validation) => {
       reply({error: validation.errors});
     });
-}});
+});
 
-route(config.route.api.search_errors, { handler: (request, reply) => {
+route(config.route.api.search_errors, (request, reply) => {
   errorLogRepository.getLatest()
     .then(reply)
     .catch((err) => {reply(err)});
-}});
-
-// Web routes.
-route(config.route.web.startpage, {
-  config: {
-    cache: cache_2min,
-    handler: reactProxy((request, reply) => {
-      reply({});
-    })
-  }
 });
 
+/**
+ * Web routes.
+ *
+ * For AJAX requests these return JSON, otherwise HTML.
+ */
+route(config.route.web.startpage, reactProxy((request, reply) => {
+  reply({});
+}));
+
 // Serve static files from `static` dir.
-server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_unlimited,  handler: { directory: { path: './src/web/static/css', listing: false, index: true } } } });
-server.route({ method: 'GET', path: '/js/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './src/web/static/js', listing: false, index: true } } } });
+var cache_unlimited = {privacy: 'public', expiresIn: 24 * 60 * 60 * 1000};
+server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_unlimited,  handler: { directory: { path: './build/css', listing: false, index: true } } } });
+server.route({ method: 'GET', path: '/js/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './build/js', listing: false, index: true } } } });
 server.route({ method: 'GET', path: '/font/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './src/web/static/font', listing: false, index: true } } } });
 
-// Handler for 404
+// Handler for 404.
 server.route({ method: '*', path: '/{p*}', handler: reactProxy((request, reply) => {
   reply('The page was not found');
 })});
