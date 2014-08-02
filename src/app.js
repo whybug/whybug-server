@@ -1,29 +1,36 @@
 var hapi = require('hapi'),
     elasticsearch = require('elasticsearch'),
-//    mysql = require('mysql-promise'),
     ReactAsync = require('react-async');
 
+import {config} from '../config/config';
+
+var server = new hapi.Server(config.node.host, config.node.port, {
+  views: {
+    engines: {
+      html: require('handlebars')
+    },
+    path: 'src/web/templates'
+  }
+});
+
+var es = new elasticsearch.Client({
+  host: config.elasticsearch.host + ':' + config.elasticsearch.port,
+  log: config.debug ? 'trace' : 'warning'
+});
+
+
 // Setup dependencies.
-import {config} from './config';
 import {ErrorService} from './domain/ErrorService';
 import {ErrorRepository} from './domain/ErrorRepository';
 import {ErrorLogRepository} from './domain/ErrorLogRepository';
 import {ErrorLog} from './domain/ErrorLog';
 import {WebApp} from './web/Webapp';
 
-//var mysqlPool =  mysql.createPool({
-//  host : 'localhost',
-//  user : 'root',
-//  password: ''
-//});
-var server = new hapi.Server(config.node.host, config.node.port);
-var es = new elasticsearch.Client({
-  host: config.elasticsearch.host + ':' + config.elasticsearch.port,
-  log: config.debug ? 'trace' : 'warning'
-});
 var errorLogRepository = new ErrorLogRepository(es);
 var errorRepository = new ErrorRepository(es);
 var errorService = new ErrorService(errorRepository, errorLogRepository);
+
+// move to config
 var cache_unlimited = {privacy: 'public', expiresIn: 24 * 60 * 60 * 1000};
 var cache_2min = {privacy: 'public', expiresIn: 2 * 60 * 1000};
 
@@ -43,30 +50,16 @@ var route = (route, options) => {
 var reactProxy = (callback) => {
   return (request, reply) => {
     if ("X-Requested-With" in request.headers) {
-      // is ajax request
+      // Forward ajax request to the proxied function.
       callback(request, reply);
     } else {
       ReactAsync.renderComponentToStringWithAsyncState(WebApp({path: request.path}), (err, markup, data) => {
         if (err) {
-          console.log(err);
+          console.log('error', err);
           reply(err);
         } else {
-          markup = ReactAsync.injectIntoMarkup(markup, data);
           console.log('render', request.path);
-          // Todo: Extract somewhere else!!!
-          var deferScript = '<script type="text/javascript"> \
-          function downloadJSAtOnload() { \
-            var element = document.createElement("script"); \
-            element.src = "js/bundle.js"; \
-            document.body.appendChild(element); \
-          } \
-          if (window.addEventListener) \
-            window.addEventListener("load", downloadJSAtOnload, false); \
-          else if (window.attachEvent) \
-            window.attachEvent("onload", downloadJSAtOnload); \
-          else window.onload = downloadJSAtOnload; \
-        </script>';
-          reply("<!DOCTYPE html>" + markup.replace('</body>', deferScript + '$&'));
+          reply.view('index', { content: ReactAsync.injectIntoMarkup(markup, data)});
         }
       });
     }
@@ -111,4 +104,3 @@ server.route({ method: '*', path: '/{p*}', handler: reactProxy((request, reply) 
 
 // Start the server.
 server.start();
-

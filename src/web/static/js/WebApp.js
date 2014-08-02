@@ -37,9 +37,9 @@ System.register("../../pages/NotFoundPage", [], function() {
       return NotFoundPage;
     }};
 });
-System.register("../../../config", [], function() {
+System.register("../../../../config/config", [], function() {
   "use strict";
-  var __moduleName = "../../../config";
+  var __moduleName = "../../../../config/config";
   var config = {debug: process.env.DEBUG || false};
   config.route = {
     web: {
@@ -110,7 +110,7 @@ System.register("../../Api", [], function() {
   "use strict";
   var __moduleName = "../../Api";
   var superagent = require('superagent');
-  var config = System.get("../../../config").config;
+  var config = System.get("../../../../config/config").config;
   var Api = function Api() {};
   var $Api = Api;
   ($traceurRuntime.createClass)(Api, {}, {
@@ -191,43 +191,23 @@ System.register("../../WebApp", [], function() {
   "use strict";
   var __moduleName = "../../WebApp";
   var React = require('react'),
-      ReactMount = require('react/lib/ReactMount'),
       Router = require('react-router-component');
-  ReactMount.allowFullPageRender = true;
-  var $__17 = $traceurRuntime.assertObject(React.DOM),
-      html = $__17.html,
-      head = $__17.head,
-      meta = $__17.meta,
-      title = $__17.title,
-      link = $__17.link;
-  var $__17 = $traceurRuntime.assertObject(Router),
-      Page = $__17.Page,
-      Pages = $__17.Pages,
-      NotFound = $__17.NotFound;
+  var $__16 = $traceurRuntime.assertObject(Router),
+      Location = $__16.Location,
+      Locations = $__16.Locations,
+      NotFound = $__16.NotFound;
   var StartPage = System.get("../../pages/StartPage").StartPage;
   var NotFoundPage = System.get("../../pages/NotFoundPage").NotFoundPage;
-  var HeaderComponent = System.get("../../components/HeaderComponent").HeaderComponent;
   var App = function App() {};
   ($traceurRuntime.createClass)(App, {render: function() {
-      return html({}, head({}, link({
-        rel: 'stylesheet',
-        href: 'css/main.css'
-      }), title({}, "whybug"), meta({charSet: "UTF-8"}), meta({
-        name: "viewport",
-        content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-      })), Pages({path: this.props.path}, Page({
+      return Locations({path: this.props.path}, Location({
         path: "/",
         handler: StartPage
-      }), NotFound({handler: NotFoundPage})));
+      }), NotFound({handler: NotFoundPage}));
     }}, {});
   var WebApp = React.createClass(App.prototype);
-  return {
-    get App() {
-      return App;
-    },
-    get WebApp() {
+  return {get WebApp() {
       return WebApp;
-    }
-  };
+    }};
 });
 System.get("../../WebApp" + '');

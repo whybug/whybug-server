@@ -1,6 +1,6 @@
 var superagent = require('superagent');
 
-import {config} from '../config';
+import {config} from '../../config/config';
 
 export class Api {
 

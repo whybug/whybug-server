@@ -1,6 +1,6 @@
-System.register("../src/config", [], function() {
+System.register("../config/config", [], function() {
   "use strict";
-  var __moduleName = "../src/config";
+  var __moduleName = "../config/config";
   var config = {debug: process.env.DEBUG || false};
   config.route = {
     web: {
@@ -360,7 +360,7 @@ System.register("../src/web/Api", [], function() {
   "use strict";
   var __moduleName = "../src/web/Api";
   var superagent = require('superagent');
-  var config = System.get("../src/config").config;
+  var config = System.get("../config/config").config;
   var Api = function Api() {};
   var $Api = Api;
   ($traceurRuntime.createClass)(Api, {}, {
@@ -441,44 +441,24 @@ System.register("../src/web/Webapp", [], function() {
   "use strict";
   var __moduleName = "../src/web/Webapp";
   var React = require('react'),
-      ReactMount = require('react/lib/ReactMount'),
       Router = require('react-router-component');
-  ReactMount.allowFullPageRender = true;
-  var $__30 = $traceurRuntime.assertObject(React.DOM),
-      html = $__30.html,
-      head = $__30.head,
-      meta = $__30.meta,
-      title = $__30.title,
-      link = $__30.link;
-  var $__30 = $traceurRuntime.assertObject(Router),
-      Page = $__30.Page,
-      Pages = $__30.Pages,
-      NotFound = $__30.NotFound;
+  var $__29 = $traceurRuntime.assertObject(Router),
+      Location = $__29.Location,
+      Locations = $__29.Locations,
+      NotFound = $__29.NotFound;
   var StartPage = System.get("../src/web/pages/StartPage").StartPage;
   var NotFoundPage = System.get("../src/web/pages/NotFoundPage").NotFoundPage;
-  var HeaderComponent = System.get("../src/web/components/HeaderComponent").HeaderComponent;
   var App = function App() {};
   ($traceurRuntime.createClass)(App, {render: function() {
-      return html({}, head({}, link({
-        rel: 'stylesheet',
-        href: 'css/main.css'
-      }), title({}, "whybug"), meta({charSet: "UTF-8"}), meta({
-        name: "viewport",
-        content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-      })), Pages({path: this.props.path}, Page({
+      return Locations({path: this.props.path}, Location({
         path: "/",
         handler: StartPage
-      }), NotFound({handler: NotFoundPage})));
+      }), NotFound({handler: NotFoundPage}));
     }}, {});
   var WebApp = React.createClass(App.prototype);
-  return {
-    get App() {
-      return App;
-    },
-    get WebApp() {
+  return {get WebApp() {
       return WebApp;
-    }
-  };
+    }};
 });
 System.register("../src/app", [], function() {
   "use strict";
@@ -486,17 +466,20 @@ System.register("../src/app", [], function() {
   var hapi = require('hapi'),
       elasticsearch = require('elasticsearch'),
       ReactAsync = require('react-async');
-  var config = System.get("../src/config").config;
+  var config = System.get("../config/config").config;
+  var server = new hapi.Server(config.node.host, config.node.port, {views: {
+      engines: {html: require('handlebars')},
+      path: 'src/web/templates'
+    }});
+  var es = new elasticsearch.Client({
+    host: config.elasticsearch.host + ':' + config.elasticsearch.port,
+    log: config.debug ? 'trace' : 'warning'
+  });
   var ErrorService = System.get("../src/domain/ErrorService").ErrorService;
   var ErrorRepository = System.get("../src/domain/ErrorRepository").ErrorRepository;
   var ErrorLogRepository = System.get("../src/domain/ErrorLogRepository").ErrorLogRepository;
   var ErrorLog = System.get("../src/domain/ErrorLog").ErrorLog;
   var WebApp = System.get("../src/web/Webapp").WebApp;
-  var server = new hapi.Server(config.node.host, config.node.port);
-  var es = new elasticsearch.Client({
-    host: config.elasticsearch.host + ':' + config.elasticsearch.port,
-    log: config.debug ? 'trace' : 'warning'
-  });
   var errorLogRepository = new ErrorLogRepository(es);
   var errorRepository = new ErrorRepository(es);
   var errorService = new ErrorService(errorRepository, errorLogRepository);
@@ -521,24 +504,11 @@ System.register("../src/app", [], function() {
       } else {
         ReactAsync.renderComponentToStringWithAsyncState(WebApp({path: request.path}), (function(err, markup, data) {
           if (err) {
-            console.log(err);
+            console.log('error', err);
             reply(err);
           } else {
-            markup = ReactAsync.injectIntoMarkup(markup, data);
             console.log('render', request.path);
-            var deferScript = '<script type="text/javascript"> \
-          function downloadJSAtOnload() { \
-            var element = document.createElement("script"); \
-            element.src = "js/bundle.js"; \
-            document.body.appendChild(element); \
-          } \
-          if (window.addEventListener) \
-            window.addEventListener("load", downloadJSAtOnload, false); \
-          else if (window.attachEvent) \
-            window.attachEvent("onload", downloadJSAtOnload); \
-          else window.onload = downloadJSAtOnload; \
-        </script>';
-            reply("<!DOCTYPE html>" + markup.replace('</body>', deferScript + '$&'));
+            reply.view('index', {content: ReactAsync.injectIntoMarkup(markup, data)});
           }
         }));
       }
