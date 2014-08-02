@@ -1,0 +1,23 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/main.css" />
+    <title>whybug</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+</head>
+<body>
+{{{ content }}}
+</body>
+<script type="text/javascript">
+    function downloadJSAtOnload() {
+        var element = document.createElement("script");
+        element.src = "js/bundle.js";
+        document.body.appendChild(element);
+    }
+    if (window.addEventListener)
+        window.addEventListener("load", downloadJSAtOnload, false);
+    else if (window.attachEvent)
+        window.attachEvent("onload", downloadJSAtOnload);
+    else window.onload = downloadJSAtOnload;
+</script>
+</html>
