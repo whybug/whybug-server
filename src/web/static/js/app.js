@@ -1,5 +1,5 @@
 require('traceur-runtime');
-require('./WebApp');
+require('../../../../build/WebApp');
 
 var React = require('react'),
      WebApp = System.get('../../WebApp').WebApp;

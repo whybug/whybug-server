@@ -1,6 +1,6 @@
-System.register("../../components/HeaderComponent", [], function() {
+System.register("../../src/web/components/HeaderComponent", [], function() {
   "use strict";
-  var __moduleName = "../../components/HeaderComponent";
+  var __moduleName = "../../src/web/components/HeaderComponent";
   var React = require('react'),
       Router = require('react-router-component'),
       ReactTopcoat = require('react-topcoat');
@@ -24,11 +24,11 @@ System.register("../../components/HeaderComponent", [], function() {
       return HeaderComponent;
     }};
 });
-System.register("../../pages/NotFoundPage", [], function() {
+System.register("../../src/web/pages/NotFoundPage", [], function() {
   "use strict";
-  var __moduleName = "../../pages/NotFoundPage";
+  var __moduleName = "../../src/web/pages/NotFoundPage";
   var React = require('react');
-  var HeaderComponent = System.get("../../components/HeaderComponent").HeaderComponent;
+  var HeaderComponent = System.get("../../src/web/components/HeaderComponent").HeaderComponent;
   var div = $traceurRuntime.assertObject(React.DOM).div;
   var NotFoundPage = React.createClass({render: function() {
       return div({}, HeaderComponent({}), div({}, 'notfound'));
@@ -37,15 +37,20 @@ System.register("../../pages/NotFoundPage", [], function() {
       return NotFoundPage;
     }};
 });
-System.register("../../../../config/config", [], function() {
+System.register("../../config/config", [], function() {
   "use strict";
-  var __moduleName = "../../../../config/config";
+  var __moduleName = "../../config/config";
   var config = {debug: process.env.DEBUG || false};
+  var cache_2min = {
+    privacy: 'public',
+    expiresIn: 2 * 60 * 1000
+  };
   config.route = {
     web: {
       startpage: {
         method: 'GET',
-        path: '/'
+        path: '/',
+        config: {cache: cache_2min}
       },
       search_errors: {
         method: 'GET',
@@ -106,11 +111,11 @@ System.register("../../../../config/config", [], function() {
       return config;
     }};
 });
-System.register("../../Api", [], function() {
+System.register("../../src/web/Api", [], function() {
   "use strict";
-  var __moduleName = "../../Api";
+  var __moduleName = "../../src/web/Api";
   var superagent = require('superagent');
-  var config = System.get("../../../../config/config").config;
+  var config = System.get("../../config/config").config;
   var Api = function Api() {};
   var $Api = Api;
   ($traceurRuntime.createClass)(Api, {}, {
@@ -131,9 +136,9 @@ System.register("../../Api", [], function() {
       return Api;
     }};
 });
-System.register("../../components/LatestErrorsComponent", [], function() {
+System.register("../../src/web/components/LatestErrorsComponent", [], function() {
   "use strict";
-  var __moduleName = "../../components/LatestErrorsComponent";
+  var __moduleName = "../../src/web/components/LatestErrorsComponent";
   var React = require('react'),
       Async = require('react-async');
   var $__8 = $traceurRuntime.assertObject(React.DOM),
@@ -141,7 +146,7 @@ System.register("../../components/LatestErrorsComponent", [], function() {
       p = $__8.p,
       h2 = $__8.h2,
       h3 = $__8.h3;
-  var Api = System.get("../../Api").Api;
+  var Api = System.get("../../src/web/Api").Api;
   var LatestErrors = function LatestErrors() {};
   ($traceurRuntime.createClass)(LatestErrors, {
     get mixins() {
@@ -171,12 +176,12 @@ System.register("../../components/LatestErrorsComponent", [], function() {
       return LatestErrorsComponent;
     }};
 });
-System.register("../../pages/StartPage", [], function() {
+System.register("../../src/web/pages/StartPage", [], function() {
   "use strict";
-  var __moduleName = "../../pages/StartPage";
+  var __moduleName = "../../src/web/pages/StartPage";
   var React = require('react');
-  var HeaderComponent = System.get("../../components/HeaderComponent").HeaderComponent;
-  var LatestErrorsComponent = System.get("../../components/LatestErrorsComponent").LatestErrorsComponent;
+  var HeaderComponent = System.get("../../src/web/components/HeaderComponent").HeaderComponent;
+  var LatestErrorsComponent = System.get("../../src/web/components/LatestErrorsComponent").LatestErrorsComponent;
   var div = $traceurRuntime.assertObject(React.DOM).div;
   var Start = function Start() {};
   ($traceurRuntime.createClass)(Start, {render: function() {
@@ -187,17 +192,17 @@ System.register("../../pages/StartPage", [], function() {
       return StartPage;
     }};
 });
-System.register("../../WebApp", [], function() {
+System.register("../../src/web/WebApp", [], function() {
   "use strict";
-  var __moduleName = "../../WebApp";
+  var __moduleName = "../../src/web/WebApp";
   var React = require('react'),
       Router = require('react-router-component');
   var $__16 = $traceurRuntime.assertObject(Router),
       Location = $__16.Location,
       Locations = $__16.Locations,
       NotFound = $__16.NotFound;
-  var StartPage = System.get("../../pages/StartPage").StartPage;
-  var NotFoundPage = System.get("../../pages/NotFoundPage").NotFoundPage;
+  var StartPage = System.get("../../src/web/pages/StartPage").StartPage;
+  var NotFoundPage = System.get("../../src/web/pages/NotFoundPage").NotFoundPage;
   var App = function App() {};
   ($traceurRuntime.createClass)(App, {render: function() {
       return Locations({path: this.props.path}, Location({
@@ -210,4 +215,4 @@ System.register("../../WebApp", [], function() {
       return WebApp;
     }};
 });
-System.get("../../WebApp" + '');
+System.get("../../src/web/WebApp" + '');
