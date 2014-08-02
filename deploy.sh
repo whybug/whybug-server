@@ -3,21 +3,19 @@
 # #!/bin/sh
 # cd .. && /bin/bash deploy.sh
 
+# Fix to run git commands.
 unset GIT_DIR
 
-echo "*** $USER: updating server info..."
+echo "updating sources..."
 git update-server-info 2<&1
-
-echo "*** $USER: updating sources..."
 git reset --hard 2<&1
 
-echo "*** $USER: updating dependencies..."
-npm install
+echo "updating dependencies..."
+npm install 2<&1
 
-echo "*** $USER: restarting services..."
-# Todo: use cluster.js and send a signal to reload,
-/usr/bin/pkill -f '/usr/bin/node /home/whybug/whybug-server/server.js'
-/usr/bin/node /home/whybug/whybug-server/server.js 2<&1 > node-debug.log &
-varnishadm "ban req.url ~ /"
+echo "reloading services..."
+node_modules/pm2/bin/pm2 reload whybug 2<&1
+varnishadm "ban req.url ~ /" 2<&1
 
-echo "*** $USER: deployment done ***"
+echo "deployment done."
+exit;
