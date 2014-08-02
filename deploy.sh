@@ -10,9 +10,6 @@ echo "updating sources..."
 git update-server-info 2<&1
 git reset --hard 2<&1
 
-echo "updating dependencies..."
-npm install 2<&1
-
 echo "reloading services..."
 node_modules/pm2/bin/pm2 reload whybug 2<&1
 # varnishadm "ban req.url ~ /" 2<&1
