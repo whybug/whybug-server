@@ -41,13 +41,13 @@ var reactProxy = (callback) => {
       // Forward ajax request to the proxied function.
       callback(request, reply);
     } else {
-      ReactAsync.renderComponentToStringWithAsyncState(WebApp({path: request.path}), (err, markup, data) => {
+      ReactAsync.renderComponentToStringWithAsyncState(new WebApp({path: request.path}), (err, markup) => {
         if (err) {
           console.log('error', err);
           reply(err);
         } else {
           console.log('render', request.path);
-          reply.view('index', { content: ReactAsync.injectIntoMarkup(markup, data)});
+          reply.view('index', { content: markup });
         }
       });
     }
@@ -92,8 +92,9 @@ route(config.route.web.startpage, reactProxy((request, reply) => {
 
 // Serve static files from `static` dir.
 var cache_unlimited = {privacy: 'public', expiresIn: 24 * 60 * 60 * 1000};
-server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_unlimited,  handler: { directory: { path: './build/css', listing: false, index: true } } } });
-server.route({ method: 'GET', path: '/js/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './build/js', listing: false, index: true } } } });
+
+server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_unlimited,  handler: { directory: { path: './build/css/', listing: false, index: true } } } });
+server.route({ method: 'GET', path: '/js/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './build/js/', listing: false, index: true } } } });
 server.route({ method: 'GET', path: '/font/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './src/web/static/font', listing: false, index: true } } } });
 
 // Handler for 404.

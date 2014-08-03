@@ -15,16 +15,6 @@ class LatestErrors {
     Api.searchErrors(cb);
   }
 
-  componentWillMount() {
-    if (this.state.error_logs) {
-      return;
-    }
-
-    this.getInitialStateAsync((err, result) => {
-      this.setState(result);
-    });
-  }
-
   render() {
     var error_logs = this.state.error_logs || [];
 

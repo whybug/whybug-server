@@ -92,7 +92,7 @@ System.register("../../config/config", [], function() {
       }
     }
   };
-  config.web = {url: process.env.WEB_URL || 'http://127.0.0.1:8000'};
+  config.web = {url: process.env.WEB_URL || 'http://localhost:8080'};
   config.node = {
     host: process.env.WEB_HOST || '127.0.0.1',
     port: process.env.WEB_PORT || 8000
@@ -141,11 +141,11 @@ System.register("../../src/web/components/LatestErrorsComponent", [], function()
   var __moduleName = "../../src/web/components/LatestErrorsComponent";
   var React = require('react'),
       Async = require('react-async');
-  var $__8 = $traceurRuntime.assertObject(React.DOM),
-      div = $__8.div,
-      p = $__8.p,
-      h2 = $__8.h2,
-      h3 = $__8.h3;
+  var $__7 = $traceurRuntime.assertObject(React.DOM),
+      div = $__7.div,
+      p = $__7.p,
+      h2 = $__7.h2,
+      h3 = $__7.h3;
   var Api = System.get("../../src/web/Api").Api;
   var LatestErrors = function LatestErrors() {};
   ($traceurRuntime.createClass)(LatestErrors, {
@@ -154,15 +154,6 @@ System.register("../../src/web/components/LatestErrorsComponent", [], function()
     },
     getInitialStateAsync: function(cb) {
       Api.searchErrors(cb);
-    },
-    componentWillMount: function() {
-      var $__6 = this;
-      if (this.state.error_logs) {
-        return;
-      }
-      this.getInitialStateAsync((function(err, result) {
-        $__6.setState(result);
-      }));
     },
     render: function() {
       var error_logs = this.state.error_logs || [];
@@ -197,10 +188,10 @@ System.register("../../src/web/WebApp", [], function() {
   var __moduleName = "../../src/web/WebApp";
   var React = require('react'),
       Router = require('react-router-component');
-  var $__16 = $traceurRuntime.assertObject(Router),
-      Location = $__16.Location,
-      Locations = $__16.Locations,
-      NotFound = $__16.NotFound;
+  var $__15 = $traceurRuntime.assertObject(Router),
+      Location = $__15.Location,
+      Locations = $__15.Locations,
+      NotFound = $__15.NotFound;
   var StartPage = System.get("../../src/web/pages/StartPage").StartPage;
   var NotFoundPage = System.get("../../src/web/pages/NotFoundPage").NotFoundPage;
   var App = function App() {};
@@ -208,7 +199,10 @@ System.register("../../src/web/WebApp", [], function() {
       return Locations({path: this.props.path}, Location({
         path: "/",
         handler: StartPage
-      }), NotFound({handler: NotFoundPage}));
+      }), Location({
+        path: null,
+        handler: NotFoundPage
+      }));
     }}, {});
   var WebApp = React.createClass(App.prototype);
   return {get WebApp() {

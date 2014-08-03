@@ -10,10 +10,9 @@ class App {
   render() {
     return Locations({path: this.props.path},
       Location({path: "/", handler: StartPage}),
-      NotFound({handler: NotFoundPage})
+      Location({path: null, handler: NotFoundPage})
     );
   }
 }
 
 export var WebApp = React.createClass(App.prototype);
-
