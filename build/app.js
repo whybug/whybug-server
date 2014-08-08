@@ -53,7 +53,7 @@ System.register("../config/config", [], function() {
       }
     }
   };
-  config.web = {url: process.env.WEB_URL || 'http://localhost:8080'};
+  config.web = {url: process.env.WEB_URL || 'http://whybug.com'};
   config.node = {
     host: process.env.WEB_HOST || '127.0.0.1',
     port: process.env.WEB_PORT || 8000
@@ -322,17 +322,18 @@ System.register("../src/domain/ErrorService", [], function() {
       return ErrorService;
     }};
 });
-System.register("../src/web/components/HeaderComponent", [], function() {
+System.register("../src/web/components/Header", [], function() {
   "use strict";
-  var __moduleName = "../src/web/components/HeaderComponent";
+  var __moduleName = "../src/web/components/Header";
   var React = require('react'),
       Router = require('react-router-component'),
       ReactTopcoat = require('react-topcoat');
   var Link = $traceurRuntime.assertObject(Router).Link;
-  var $__13 = $traceurRuntime.assertObject(ReactTopcoat),
-      NavigationBar = $__13.NavigationBar,
-      NavigationBarItem = $__13.NavigationBarItem;
-  var HeaderComponent = React.createClass({render: function() {
+  var $__14 = $traceurRuntime.assertObject(ReactTopcoat),
+      NavigationBar = $__14.NavigationBar,
+      NavigationBarItem = $__14.NavigationBarItem;
+  var _Header = function _Header() {};
+  ($traceurRuntime.createClass)(_Header, {render: function() {
       return NavigationBar({onTop: true}, NavigationBarItem({
         position: 'left',
         width: 'quarter'
@@ -343,67 +344,66 @@ System.register("../src/web/components/HeaderComponent", [], function() {
         position: 'right',
         width: 'quarter'
       }, Link({href: '/about'}, 'About')));
-    }});
-  return {get HeaderComponent() {
-      return HeaderComponent;
+    }}, {});
+  var Header = React.createClass(_Header.prototype);
+  return {get Header() {
+      return Header;
     }};
 });
 System.register("../src/web/pages/NotFoundPage", [], function() {
   "use strict";
   var __moduleName = "../src/web/pages/NotFoundPage";
   var React = require('react');
-  var HeaderComponent = System.get("../src/web/components/HeaderComponent").HeaderComponent;
+  var Header = System.get("../src/web/components/Header").Header;
   var div = $traceurRuntime.assertObject(React.DOM).div;
   var NotFoundPage = React.createClass({render: function() {
-      return div({}, HeaderComponent({}), div({}, 'notfound'));
+      return div({}, Header({}), div({}, 'notfound'));
     }});
   return {get NotFoundPage() {
       return NotFoundPage;
     }};
 });
-System.register("../src/web/Api", [], function() {
+System.register("../src/web/WhybugApi", [], function() {
   "use strict";
-  var __moduleName = "../src/web/Api";
+  var __moduleName = "../src/web/WhybugApi";
   var superagent = require('superagent');
   var config = System.get("../config/config").config;
-  var Api = function Api() {};
-  var $Api = Api;
-  ($traceurRuntime.createClass)(Api, {}, {
-    searchErrors: function(cb) {
-      return $Api.request(config.route.api.search_errors).end((function(err, result) {
-        if (err) {
-          cb(err, {error_logs: []});
-          return;
-        }
-        cb(err, {error_logs: result.body});
-      }));
+  var WhybugApi = function WhybugApi() {};
+  var $WhybugApi = WhybugApi;
+  ($traceurRuntime.createClass)(WhybugApi, {}, {
+    searchErrors: function(callback) {
+      return $WhybugApi.request(config.route.api.search_errors, callback);
     },
-    request: function(route) {
-      return superagent(route.method, config.web.url + route.path).set('Accept', 'application/json');
+    request: function(route, callback) {
+      return superagent(route.method, config.web.url + route.path).set('Accept', 'application/json').end((function(error, result) {
+        return callback(error, result.body);
+      }));
     }
   });
-  return {get Api() {
-      return Api;
+  return {get WhybugApi() {
+      return WhybugApi;
     }};
 });
-System.register("../src/web/components/LatestErrorsComponent", [], function() {
+System.register("../src/web/components/Search", [], function() {
   "use strict";
-  var __moduleName = "../src/web/components/LatestErrorsComponent";
+  var __moduleName = "../src/web/components/Search";
   var React = require('react'),
       Async = require('react-async');
-  var $__20 = $traceurRuntime.assertObject(React.DOM),
-      div = $__20.div,
-      p = $__20.p,
-      h2 = $__20.h2,
-      h3 = $__20.h3;
-  var Api = System.get("../src/web/Api").Api;
-  var LatestErrors = function LatestErrors() {};
-  ($traceurRuntime.createClass)(LatestErrors, {
+  var $__21 = $traceurRuntime.assertObject(React.DOM),
+      div = $__21.div,
+      p = $__21.p,
+      h2 = $__21.h2,
+      h3 = $__21.h3;
+  var WhybugApi = System.get("../src/web/WhybugApi").WhybugApi;
+  var _Search = function _Search() {};
+  ($traceurRuntime.createClass)(_Search, {
     get mixins() {
       return [Async.Mixin];
     },
-    getInitialStateAsync: function(cb) {
-      Api.searchErrors(cb);
+    getInitialStateAsync: function(callback) {
+      WhybugApi.searchErrors((function(error, result) {
+        return callback(error, {error_logs: result});
+      }));
     },
     render: function() {
       var error_logs = this.state.error_logs || [];
@@ -412,21 +412,21 @@ System.register("../src/web/components/LatestErrorsComponent", [], function() {
       })));
     }
   }, {});
-  var LatestErrorsComponent = React.createClass(LatestErrors.prototype);
-  return {get LatestErrorsComponent() {
-      return LatestErrorsComponent;
+  var Search = React.createClass(_Search.prototype);
+  return {get Search() {
+      return Search;
     }};
 });
 System.register("../src/web/pages/StartPage", [], function() {
   "use strict";
   var __moduleName = "../src/web/pages/StartPage";
   var React = require('react');
-  var HeaderComponent = System.get("../src/web/components/HeaderComponent").HeaderComponent;
-  var LatestErrorsComponent = System.get("../src/web/components/LatestErrorsComponent").LatestErrorsComponent;
+  var Header = System.get("../src/web/components/Header").Header;
+  var Search = System.get("../src/web/components/Search").Search;
   var div = $traceurRuntime.assertObject(React.DOM).div;
   var Start = function Start() {};
   ($traceurRuntime.createClass)(Start, {render: function() {
-      return div({}, HeaderComponent({}), div({}, 'startpage'), LatestErrorsComponent({limit: 10}));
+      return div({}, Header({}), div({}, 'startpage'), Search({limit: 10}));
     }}, {});
   var StartPage = React.createClass(Start.prototype);
   return {get StartPage() {
@@ -438,14 +438,14 @@ System.register("../src/web/Webapp", [], function() {
   var __moduleName = "../src/web/Webapp";
   var React = require('react'),
       Router = require('react-router-component');
-  var $__28 = $traceurRuntime.assertObject(Router),
-      Location = $__28.Location,
-      Locations = $__28.Locations,
-      NotFound = $__28.NotFound;
+  var $__29 = $traceurRuntime.assertObject(Router),
+      Location = $__29.Location,
+      Locations = $__29.Locations,
+      NotFound = $__29.NotFound;
   var StartPage = System.get("../src/web/pages/StartPage").StartPage;
   var NotFoundPage = System.get("../src/web/pages/NotFoundPage").NotFoundPage;
-  var App = function App() {};
-  ($traceurRuntime.createClass)(App, {render: function() {
+  var _WebApp = function _WebApp() {};
+  ($traceurRuntime.createClass)(_WebApp, {render: function() {
       return Locations({path: this.props.path}, Location({
         path: "/",
         handler: StartPage
@@ -454,7 +454,7 @@ System.register("../src/web/Webapp", [], function() {
         handler: NotFoundPage
       }));
     }}, {});
-  var WebApp = React.createClass(App.prototype);
+  var WebApp = React.createClass(_WebApp.prototype);
   return {get WebApp() {
       return WebApp;
     }};
@@ -466,6 +466,11 @@ System.register("../src/app", [], function() {
       elasticsearch = require('elasticsearch'),
       ReactAsync = require('react-async');
   var config = System.get("../config/config").config;
+  var ErrorService = System.get("../src/domain/ErrorService").ErrorService;
+  var ErrorRepository = System.get("../src/domain/ErrorRepository").ErrorRepository;
+  var ErrorLogRepository = System.get("../src/domain/ErrorLogRepository").ErrorLogRepository;
+  var ErrorLog = System.get("../src/domain/ErrorLog").ErrorLog;
+  var WebApp = System.get("../src/web/Webapp").WebApp;
   var server = new hapi.Server(config.node.host, config.node.port, {views: {
       engines: {html: require('handlebars')},
       path: 'src/web/templates'
@@ -474,11 +479,6 @@ System.register("../src/app", [], function() {
     host: config.elasticsearch.host + ':' + config.elasticsearch.port,
     log: config.debug ? 'trace' : 'warning'
   });
-  var ErrorService = System.get("../src/domain/ErrorService").ErrorService;
-  var ErrorRepository = System.get("../src/domain/ErrorRepository").ErrorRepository;
-  var ErrorLogRepository = System.get("../src/domain/ErrorLogRepository").ErrorLogRepository;
-  var ErrorLog = System.get("../src/domain/ErrorLog").ErrorLog;
-  var WebApp = System.get("../src/web/Webapp").WebApp;
   var errorLogRepository = new ErrorLogRepository(es);
   var errorRepository = new ErrorRepository(es);
   var errorService = new ErrorService(errorRepository, errorLogRepository);

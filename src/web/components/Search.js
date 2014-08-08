@@ -3,16 +3,18 @@ var React = require('react'),
 
 var {div, p, h2, h3} = React.DOM;
 
-import {Api} from '../Api';
+import {WhybugApi} from '../WhybugApi';
 
-class LatestErrors {
+class _Search {
 
   get mixins() {
     return [Async.Mixin];
   }
 
-  getInitialStateAsync(cb) {
-    Api.searchErrors(cb);
+  getInitialStateAsync(callback) {
+    WhybugApi.searchErrors((error, result) => callback(error, {
+      error_logs: result
+    }));
   }
 
   render() {
@@ -31,4 +33,4 @@ class LatestErrors {
   }
 }
 
-export var LatestErrorsComponent = React.createClass(LatestErrors.prototype);
+export var Search = React.createClass(_Search.prototype);

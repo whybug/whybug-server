@@ -1,17 +1,16 @@
 var React = require('react');
 
-import {HeaderComponent} from '../components/HeaderComponent';
-import {LatestErrorsComponent} from '../components/LatestErrorsComponent';
+import {Header} from '../components/Header';
+import {Search} from '../components/Search';
 var {div} = React.DOM;
 
 class Start {
   render() {
     return div({},
-      HeaderComponent({}),
+      Header({}),
       div({}, 'startpage'),
-      LatestErrorsComponent({limit: 10})
-      //FooterComponent({}),
-    )
+      Search({limit: 10})
+   )
   }
 }
 

@@ -3,10 +3,9 @@ var React = require('react'),
     ReactTopcoat = require('react-topcoat');
 
 var {Link} = Router;
-
 var {NavigationBar, NavigationBarItem} = ReactTopcoat;
 
-export var HeaderComponent = React.createClass({
+class _Header {
   render() {
     return NavigationBar({onTop: true},
       NavigationBarItem({position: 'left', width: 'quarter' }, Link({href: '/'}, 'whybug')),
@@ -14,4 +13,6 @@ export var HeaderComponent = React.createClass({
       NavigationBarItem({position: 'right', width: 'quarter' }, Link({href: '/about'}, 'About'))
     );
   }
-});
+}
+
+export var Header = React.createClass(_Header.prototype);

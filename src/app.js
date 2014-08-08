@@ -2,7 +2,13 @@ var hapi = require('hapi'),
     elasticsearch = require('elasticsearch'),
     ReactAsync = require('react-async');
 
+// Setup dependencies.
 import {config} from '../config/config';
+import {ErrorService} from './domain/ErrorService';
+import {ErrorRepository} from './domain/ErrorRepository';
+import {ErrorLogRepository} from './domain/ErrorLogRepository';
+import {ErrorLog} from './domain/ErrorLog';
+import {WebApp} from './web/Webapp';
 
 var server = new hapi.Server(config.node.host, config.node.port, {
   views: {
@@ -12,19 +18,10 @@ var server = new hapi.Server(config.node.host, config.node.port, {
     path: 'src/web/templates'
   }
 });
-
 var es = new elasticsearch.Client({
   host: config.elasticsearch.host + ':' + config.elasticsearch.port,
   log: config.debug ? 'trace' : 'warning'
 });
-
-// Setup dependencies.
-import {ErrorService} from './domain/ErrorService';
-import {ErrorRepository} from './domain/ErrorRepository';
-import {ErrorLogRepository} from './domain/ErrorLogRepository';
-import {ErrorLog} from './domain/ErrorLog';
-import {WebApp} from './web/Webapp';
-
 var errorLogRepository = new ErrorLogRepository(es);
 var errorRepository = new ErrorRepository(es);
 var errorService = new ErrorService(errorRepository, errorLogRepository);
@@ -54,12 +51,17 @@ var reactProxy = (callback) => {
   }
 };
 
+/**
+ * Helper to add a handler to a route definition and add it to the server.
+ *
+ * @param route
+ * @param handler
+ */
 var route = (route, handler) => {
   route.config = route.config || {};
   route.config.handler = handler;
   server.route(route);
 };
-
 
 /**
  * API routes.
@@ -92,7 +94,6 @@ route(config.route.web.startpage, reactProxy((request, reply) => {
 
 // Serve static files from `static` dir.
 var cache_unlimited = {privacy: 'public', expiresIn: 24 * 60 * 60 * 1000};
-
 server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_unlimited,  handler: { directory: { path: './build/css/', listing: false, index: true } } } });
 server.route({ method: 'GET', path: '/js/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './build/js/', listing: false, index: true } } } });
 server.route({ method: 'GET', path: '/font/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './src/web/static/font', listing: false, index: true } } } });
