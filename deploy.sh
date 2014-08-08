@@ -11,7 +11,7 @@ git update-server-info 2<&1
 git reset --hard 2<&1
 
 echo "updating dependencies..."
-npm install
+npm install --production
 
 echo "reloading services..."
 node_modules/.bin/pm2 reload whybug 2<&1
