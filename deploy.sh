@@ -14,7 +14,7 @@ echo "updating dependencies..."
 npm install
 
 echo "reloading services..."
-node_modules/pm2/bin/pm2 reload whybug 2<&1
+node_modules/.bin/pm2 reload whybug 2<&1
 # varnishadm "ban req.url ~ /" 2<&1
 
 echo "deployment done."
