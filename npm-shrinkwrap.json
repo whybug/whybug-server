@@ -716,11 +716,6 @@
       "version": "1.4.1",
       "from": "node-uuid@>=1.4.1-0 <2.0.0-0"
     },
-    "node-varnish": {
-      "version": "0.2.0",
-      "from": "node-varnish@*",
-      "resolved": "https://registry.npmjs.org/node-varnish/-/node-varnish-0.2.0.tgz"
-    },
     "pm2": {
       "version": "0.9.6",
       "from": "pm2@>=0.9.5-0 <0.10.0-0",
