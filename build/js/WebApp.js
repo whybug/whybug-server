@@ -1,44 +1,3 @@
-System.register("../../src/web/components/Header", [], function() {
-  "use strict";
-  var __moduleName = "../../src/web/components/Header";
-  var React = require('react'),
-      Router = require('react-router-component'),
-      ReactTopcoat = require('react-topcoat');
-  var Link = $traceurRuntime.assertObject(Router).Link;
-  var $__1 = $traceurRuntime.assertObject(ReactTopcoat),
-      NavigationBar = $__1.NavigationBar,
-      NavigationBarItem = $__1.NavigationBarItem;
-  var _Header = function _Header() {};
-  ($traceurRuntime.createClass)(_Header, {render: function() {
-      return NavigationBar({onTop: true}, NavigationBarItem({
-        position: 'left',
-        width: 'quarter'
-      }, Link({href: '/'}, 'whybug')), NavigationBarItem({
-        position: 'right',
-        width: 'quarter'
-      }, Link({href: '/faq'}, 'FAQ')), NavigationBarItem({
-        position: 'right',
-        width: 'quarter'
-      }, Link({href: '/about'}, 'About')));
-    }}, {});
-  var Header = React.createClass(_Header.prototype);
-  return {get Header() {
-      return Header;
-    }};
-});
-System.register("../../src/web/pages/NotFoundPage", [], function() {
-  "use strict";
-  var __moduleName = "../../src/web/pages/NotFoundPage";
-  var React = require('react');
-  var Header = System.get("../../src/web/components/Header").Header;
-  var div = $traceurRuntime.assertObject(React.DOM).div;
-  var NotFoundPage = React.createClass({render: function() {
-      return div({}, Header({}), div({}, 'notfound'));
-    }});
-  return {get NotFoundPage() {
-      return NotFoundPage;
-    }};
-});
 System.register("../../config/config", [], function() {
   "use strict";
   var __moduleName = "../../config/config";
@@ -54,9 +13,13 @@ System.register("../../config/config", [], function() {
         path: '/',
         config: {cache: cache_2min}
       },
+      login: {
+        method: 'GET',
+        path: '/login'
+      },
       search_errors: {
         method: 'GET',
-        path: '/search'
+        path: '/solutions'
       },
       read_error: {
         method: 'GET',
@@ -94,7 +57,7 @@ System.register("../../config/config", [], function() {
       }
     }
   };
-  config.web = {url: process.env.WEB_URL || 'http://whybug.com'};
+  config.web = {url: process.env.WEB_URL || 'http://localhost:8000'};
   config.node = {
     host: process.env.WEB_HOST || '127.0.0.1',
     port: process.env.WEB_PORT || 8000
@@ -111,6 +74,72 @@ System.register("../../config/config", [], function() {
   };
   return {get config() {
       return config;
+    }};
+});
+System.register("../../src/web/components/Header", [], function() {
+  "use strict";
+  var __moduleName = "../../src/web/components/Header";
+  var React = require('react'),
+      Router = require('react-router-component');
+  var config = System.get("../../config/config").config;
+  var Link = $traceurRuntime.assertObject(Router).Link;
+  var $__2 = $traceurRuntime.assertObject(React.DOM),
+      div = $__2.div,
+      a = $__2.a,
+      nav = $__2.nav;
+  var _Header = function _Header() {};
+  ($traceurRuntime.createClass)(_Header, {render: function() {
+      var route = config.route.web;
+      return div({className: 'navbar-section'}, div({className: 'w-container'}, div({className: 'w-nav navbar'}, div({className: 'w-container'}, a({
+        href: route.startpage.path,
+        className: 'w-nav-brand brand'
+      }, 'whybug'), nav({
+        className: 'w-nav-menu',
+        role: 'navigation'
+      }, Link({
+        href: route.search_errors.path,
+        className: 'w-nav-link nav-link active'
+      }, 'Solutions'), Link({
+        href: 'projects',
+        className: 'w-nav-link nav-link'
+      }, 'Projects'), Link({
+        href: 'installation',
+        className: 'w-nav-link nav-link'
+      }, 'Installation'), Link({
+        href: 'about',
+        className: 'w-nav-link nav-link'
+      }, 'About'), div({className: 'login-text'}, 'Login with ...'), Link({
+        href: route.login.path + '?github',
+        className: 'social-btn icon-github'
+      }), Link({
+        href: route.login.path + '?facebook',
+        className: 'social-btn icon-facebook-square'
+      }), Link({
+        href: route.login.path + '?google',
+        className: 'social-btn icon-googleplus'
+      }), Link({
+        href: route.login.path + '?twitter',
+        className: 'social-btn icon-twitter-square'
+      })), div({className: 'w-nav-button'}, div({className: "w-icon-nav-menu"}))))));
+    }}, {});
+  var Header = React.createClass(_Header.prototype);
+  return {get Header() {
+      return Header;
+    }};
+});
+System.register("../../src/web/pages/NotFoundPage", [], function() {
+  "use strict";
+  var __moduleName = "../../src/web/pages/NotFoundPage";
+  var React = require('react');
+  var Header = System.get("../../src/web/components/Header").Header;
+  var div = $traceurRuntime.assertObject(React.DOM).div;
+  var _NotFoundPage = function _NotFoundPage() {};
+  ($traceurRuntime.createClass)(_NotFoundPage, {render: function() {
+      return div({}, Header({}), div({}, 'Not found :-('));
+    }}, {});
+  var NotFoundPage = React.createClass(_NotFoundPage.prototype);
+  return {get NotFoundPage() {
+      return NotFoundPage;
     }};
 });
 System.register("../../src/web/WhybugApi", [], function() {
@@ -139,11 +168,15 @@ System.register("../../src/web/components/Search", [], function() {
   var __moduleName = "../../src/web/components/Search";
   var React = require('react'),
       Async = require('react-async');
-  var $__8 = $traceurRuntime.assertObject(React.DOM),
-      div = $__8.div,
-      p = $__8.p,
-      h2 = $__8.h2,
-      h3 = $__8.h3;
+  var $__10 = $traceurRuntime.assertObject(React.DOM),
+      div = $__10.div,
+      a = $__10.a,
+      h1 = $__10.h1,
+      h2 = $__10.h2,
+      h3 = $__10.h3,
+      form = $__10.form,
+      input = $__10.input,
+      p = $__10.p;
   var WhybugApi = System.get("../../src/web/WhybugApi").WhybugApi;
   var _Search = function _Search() {};
   ($traceurRuntime.createClass)(_Search, {
@@ -157,7 +190,22 @@ System.register("../../src/web/components/Search", [], function() {
     },
     render: function() {
       var error_logs = this.state.error_logs || [];
-      return div({}, h2({}, 'list of errors'), error_logs.map((function(error) {
+      return div({}, div({className: 'section hero search-hero'}, div({className: 'w-container container'}, a({
+        href: '#',
+        className: 'button small'
+      }, 'Back to search'), h1({className: 'error-headline'}, 'Find a solution to your error message.'), div({className: 'w-form sign-up-form'}, form({
+        className: 'w-clearfix',
+        name: 'wf-form-signup-form'
+      }, input({
+        className: 'w-input field',
+        name: 'query',
+        type: 'text',
+        placeholder: 'Enter error messsage...'
+      }), input({
+        className: 'w-button button',
+        type: 'submit',
+        value: 'Search'
+      }))))), h2({}, 'list of errors'), error_logs.map((function(error) {
         return div({}, h3({}, (error.errorLevel + ": " + error.errorMessage)), p({className: 'error-created'}, error.created), p({className: 'error-programming-language'}, (error.programmingLanguage + " " + error.programmingLanguageVersion)));
       })));
     }
@@ -176,7 +224,7 @@ System.register("../../src/web/pages/StartPage", [], function() {
   var div = $traceurRuntime.assertObject(React.DOM).div;
   var Start = function Start() {};
   ($traceurRuntime.createClass)(Start, {render: function() {
-      return div({}, Header({}), div({}, 'startpage'), Search({limit: 10}));
+      return div({}, Header({}), Search({limit: 10}));
     }}, {});
   var StartPage = React.createClass(Start.prototype);
   return {get StartPage() {
@@ -188,10 +236,9 @@ System.register("../../src/web/WebApp", [], function() {
   var __moduleName = "../../src/web/WebApp";
   var React = require('react'),
       Router = require('react-router-component');
-  var $__16 = $traceurRuntime.assertObject(Router),
-      Location = $__16.Location,
-      Locations = $__16.Locations,
-      NotFound = $__16.NotFound;
+  var $__18 = $traceurRuntime.assertObject(Router),
+      Location = $__18.Location,
+      Locations = $__18.Locations;
   var StartPage = System.get("../../src/web/pages/StartPage").StartPage;
   var NotFoundPage = System.get("../../src/web/pages/NotFoundPage").NotFoundPage;
   var _WebApp = function _WebApp() {};

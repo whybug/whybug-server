@@ -27,7 +27,7 @@ var errorRepository = new ErrorRepository(es);
 var errorService = new ErrorService(errorRepository, errorLogRepository);
 
 /**
- * If a request is non ajax, return the server rendered html, otherwise call the callback.
+ * If a request is non ajax, return the server rendered HTML, otherwise call the callback.
  *
  * @param callback
  * @returns {Function}
@@ -96,7 +96,7 @@ route(config.route.web.startpage, reactProxy((request, reply) => {
 var cache_unlimited = {privacy: 'public', expiresIn: 24 * 60 * 60 * 1000};
 server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_unlimited,  handler: { directory: { path: './build/css/', listing: false, index: true } } } });
 server.route({ method: 'GET', path: '/js/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './build/js/', listing: false, index: true } } } });
-server.route({ method: 'GET', path: '/font/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './src/web/static/font', listing: false, index: true } } } });
+server.route({ method: 'GET', path: '/fonts/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './src/web/static/fonts/', listing: false, index: true } } } });
 
 // Handler for 404.
 server.route({ method: '*', path: '/{p*}', handler: reactProxy((request, reply) => {

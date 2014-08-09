@@ -1,4 +1,4 @@
-var ejs = require('elastic.js/dist/elastic.js');
+var ejs = require('elastic.js');
 
 import {ErrorLog} from './ErrorLog';
 

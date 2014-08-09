@@ -20,8 +20,11 @@ config.route = {
     // StartPage, returns HTML.
     startpage: { method: 'GET', path: '/', config: { cache: cache_2min }},
 
+    // LoginPage, returns HTML.
+    login: { method: 'GET', path: '/login' },
+
     // SearchPage, returns HTML.
-    search_errors: { method: 'GET', path: '/search' },
+    search_errors: { method: 'GET', path: '/solutions' },
 
     // ErrorPage, returns HTML.
     read_error: { method: 'GET', path: '/error/{programmingLanguage}/{errorMessageSlug}' },

@@ -1,15 +1,55 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="/css/main.css" />
     <title>whybug</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
-<body>{{{ content }}}</body>
+<body>
+<div id="content-wrapper">{{{ content }}}</div>
+<div class="section">
+    <div class="w-container">
+        <div class="w-row selling-points">
+            <div class="w-col w-col-4">
+                <h3 class="grey-heading">Learn from experts.</h3>
+                <p>Some errors occur only in a specific context.&nbsp;
+                    <br>Leverage the knowledge of others who already solved the error before.</p>
+            </div>
+            <div class="w-col w-col-4">
+                <h3 class="grey-heading">Make better software.</h3>
+                <p>Prevent errors from happening and make them more understandable.
+                    <br>Your users will thank you.&nbsp;</p>
+            </div>
+            <div class="w-col w-col-4">
+                <h3 class="grey-heading">Debugging made easy.</h3>
+                <p>Get solutions to errors right where they happen
+                    <br />No more searching for an explanation of a cryptic messages.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="social-section">
+    <div class="w-container">
+        <h2>Tell your friends.</h2>
+        <p>Want more unlimited storage? Refer more friends.</p>
+    </div>
+</div>
+
+<div class="section grey footer-section">
+    <div class="w-container">
+        <a class="social-link icon-facebook-square" href="http://facebook.com/whybug"></a>
+        <a class="social-link icon-googleplus" href="http://plus.google.com/whybug"></a>
+        <a class="social-link icon-twitter" href="http://twitter.com/whybugapp"></a>
+        <a class="social-link icon-email" href="mailto:info@whybug.com"></a>
+    </div>
+    <div class="copyright-text">© 2014 made with <span class="icon-heart"></span> by Adrian Philipp</div>
+</div>
+</body>
 <script type="text/javascript">
     function downloadJSAtOnload() {
         var element = document.createElement("script");
-        element.src = "js/bundle.js";
+        element.src = "/js/bundle.js";
         document.body.appendChild(element);
     }
     if (window.addEventListener)

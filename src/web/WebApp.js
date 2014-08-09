@@ -1,7 +1,7 @@
 var React = require('react'),
     Router = require('react-router-component');
 
-var {Location, Locations, NotFound} = Router;
+var {Location, Locations} = Router;
 
 import {StartPage} from './pages/StartPage';
 import {NotFoundPage} from './pages/NotFoundPage';

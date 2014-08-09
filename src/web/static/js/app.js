@@ -5,6 +5,6 @@ require('../../../../build/js/WebApp');
 React = require('react');
 var WebApp = System.get('../../src/web/WebApp').WebApp;
 
-React.renderComponent(WebApp({path: location.pathname}), document.body);
+React.renderComponent(WebApp({path: location.pathname}), document.getElementById('content-wrapper'));
 
 
