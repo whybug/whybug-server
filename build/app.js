@@ -468,7 +468,7 @@ var $___46__46__47_src_47_web_47_components_47_Search__ = (function() {
     render: function() {
       var errors = this.state.errors || [];
       var errorList = errors.map(this._getErrorComponent);
-      return div({}, section({className: 'section hero'}, div({className: 'w-container'}, h1({}, 'Find a solution to your error message.'), form({
+      return div({}, section({className: 'section hero'}, div({className: 'w-container'}, h1({}, 'Find a solution to your error message'), form({
         name: 'search-form',
         method: 'get',
         onSubmit: this._onSubmit
