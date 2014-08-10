@@ -13,6 +13,9 @@ git reset --hard 2<&1
 echo "updating dependencies..."
 npm install --production
 
+echo "building assets..."
+node_modules/.bin/webpack --config config/webpack.config.js -p
+
 echo "reloading services..."
 node_modules/.bin/pm2 reload whybug 2<&1
 varnishadm "ban req.url ~ /" 2<&1

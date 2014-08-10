@@ -1,4 +1,5 @@
 .idea/
+build/*
 gslint.conf
 npm-debug.log
 node_modules

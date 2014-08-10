@@ -1,5 +1,4 @@
-require('traceur-runtime');
-require('../../../../build/js/WebApp');
+require('../../WebApp');
 
 // Declare React as global to make use of it in the Google Chrome extension.
 React = require('react');
