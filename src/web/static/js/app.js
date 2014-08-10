@@ -1,9 +1,7 @@
+import {WebApp} from '../../WebApp';
 
 // Declare React as global to make use of it in the Google Chrome extension.
-var React = require('react');
-import {WebApp} from '../../WebApp';
-//var WebApp = System.get('../../src/web/WebApp').WebApp;
-
+React = require('react');
 React.renderComponent(WebApp({path: location.pathname}), document.getElementById('content-wrapper'));
 
 

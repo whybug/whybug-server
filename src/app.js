@@ -93,10 +93,11 @@ route(config.route.web.startpage, reactProxy((request, reply) => {
 }));
 
 // Serve static files from `static` dir.
-var cache_unlimited = {privacy: 'public', expiresIn: 24 * 60 * 60 * 1000};
-server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_unlimited,  handler: { directory: { path: './build/css/', listing: false, index: true } } } });
-server.route({ method: 'GET', path: '/js/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './build/js/', listing: false, index: true } } } });
-server.route({ method: 'GET', path: '/fonts/{p*}', config: {cache: cache_unlimited, handler: { directory: { path: './src/web/static/fonts/', listing: false, index: true } } } });
+var SECOND = 1000, MINUTE = 60 * SECOND, HOUR = 60 * SECOND, DAY = 24 * HOUR, WEEK = 7 * DAY;
+var cache_2weeks = {privacy: 'public', expiresIn: 2 * WEEK};
+server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_2weeks,  handler: { directory: { path: './build/css/', listing: false, index: true } } } });
+server.route({ method: 'GET', path: '/js/{p*}', config: {cache: cache_2weeks, handler: { directory: { path: './build/js/', listing: false, index: true } } } });
+server.route({ method: 'GET', path: '/fonts/{p*}', config: {cache: cache_2weeks, handler: { directory: { path: './src/web/static/fonts/', listing: false, index: true } } } });
 
 // Handler for 404.
 server.route({ method: '*', path: '/{p*}', handler: reactProxy((request, reply) => {
