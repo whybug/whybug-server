@@ -11,7 +11,7 @@ git update-server-info 2<&1
 git reset --hard 2<&1
 
 echo "updating dependencies..."
-npm install --production
+npm install
 
 echo "building assets..."
 node_modules/.bin/webpack --config config/webpack.config.js -p

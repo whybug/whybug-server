@@ -8,7 +8,7 @@ import {ErrorService} from './domain/ErrorService';
 import {ErrorRepository} from './domain/ErrorRepository';
 import {ErrorLogRepository} from './domain/ErrorLogRepository';
 import {ErrorLog} from './domain/ErrorLog';
-import {WebApp} from './web/Webapp';
+import {WebApp} from './web/WebApp';
 
 var server = new hapi.Server(config.node.host, config.node.port, {
   views: {
