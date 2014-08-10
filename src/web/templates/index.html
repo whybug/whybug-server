@@ -7,34 +7,55 @@
 </head>
 <body>
 <div id="content-wrapper">{{{ content }}}</div>
-<div class="section">
+<section class="section features-section">
     <div class="w-container">
         <div class="w-row selling-points">
             <div class="w-col w-col-4">
+                <h3 class="grey-heading">Advanced debugging.</h3>
+                <p>Get solutions to errors right where they happen.
+                    No more searching for an explanation of cryptic messages.</p>
+            </div>
+            <div class="w-col w-col-4">
                 <h3 class="grey-heading">Learn from experts.</h3>
-                <p>Some errors occur only in a specific context.&nbsp;
-                    <br>Leverage the knowledge of others who already solved the error before.</p>
+                <p>Some errors occur only in a specific context.
+                    Leverage the knowledge of others who already solved the error before.</p>
             </div>
             <div class="w-col w-col-4">
                 <h3 class="grey-heading">Make better software.</h3>
-                <p>Prevent errors from happening and make them more understandable.
-                    <br>Your users will thank you.&nbsp;</p>
-            </div>
-            <div class="w-col w-col-4">
-                <h3 class="grey-heading">Debugging made easy.</h3>
-                <p>Get solutions to errors right where they happen
-                    <br />No more searching for an explanation of a cryptic messages.</p>
+                <p>As a project maintainer you can make errors more understandable or prevent them from happening. Your users will thank you.&nbsp;</p>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<div class="social-section">
+<section class="section social-section">
     <div class="w-container">
-        <h2>Tell your friends.</h2>
-        <p>Want more unlimited storage? Refer more friends.</p>
+        <h3>Stay in touch.</h3>
+        <p>Would you like to be notified when we add new features?</p>
+        <div class="w-form">
+            <form id="email-form-2" name="email-form-2" data-name="Email Form 2">
+                <div class="w-row">
+                    <div class="w-col w-col-4">
+                        <input class="w-input field" id="name" type="text" placeholder="Enter your name..." name="name" data-name="Name" required="required">
+                    </div>
+                    <div class="w-col w-col-4">
+                        <input class="w-input field" id="email" type="text" placeholder="Enter your email..." name="email" data-name="email" required="required">
+                    </div>
+                    <div class="w-col w-col-4">
+                        <input class="w-button button submit-button" type="submit" value="Notify me" data-wait="Please wait...">
+                        <div class="text-no-spam">We don’t send spam. Unsubscribe whenever you like.</div>
+                    </div>
+                </div>
+            </form>
+            <div class="w-form-done">
+                <p>Thank you! Your submission has been received!</p>
+            </div>
+            <div class="w-form-fail">
+                <p>Oops! Something went wrong while submitting the form :(</p>
+            </div>
+        </div>
     </div>
-</div>
+</section>
 
 <div class="section grey footer-section">
     <div class="w-container">
@@ -45,6 +66,7 @@
     </div>
     <div class="copyright-text">© 2014 made with <span class="icon-heart"></span> by Adrian Philipp</div>
 </div>
+
 </body>
 <script type="text/javascript">
     function downloadJSAtOnload() {

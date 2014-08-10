@@ -23,7 +23,7 @@ class _Search {
     return div({},
       section({className: 'section hero'},
         div({className: 'w-container'},
-          h1({}, 'Find a solution to your error message.'),
+          h1({}, 'Find a solution to your error message'),
           form({
               name: 'search-form',
               method: 'get',
