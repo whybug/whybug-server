@@ -62,7 +62,7 @@ config.route = {
 
 config.web = {
   // Url where to access whybug, NO trailing slash.
-  url: process.env.WEB_URL || 'http://whybug.com'
+  url: process.env.WEB_URL || 'http://localhost:8000'
 };
 
 config.node = {

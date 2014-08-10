@@ -14,7 +14,7 @@ echo "updating dependencies..."
 npm install
 
 echo "building assets..."
-node_modules/.bin/webpack --config config/webpack.config.js -p
+node_modules/.bin/webpack --config config/webpack.config.js -p 2<&1
 
 echo "reloading services..."
 node_modules/.bin/pm2 reload whybug 2<&1
