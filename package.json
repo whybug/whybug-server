@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node_modules/pm2/bin/pm2 start server.js --name whybug -i max",
     "stop": "node_modules/pm2/bin/pm2 stop whybug",
+    "watch": "node_modules/.bin/webpack --config config/webpack.config.js --watch -d --progress --colors",
     "test": "node_modules/mocha/bin/mocha tests"
   },
   "dependencies": {
