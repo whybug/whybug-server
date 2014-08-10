@@ -1,8 +1,9 @@
 var React = require('react'),
     Async = require('react-async');
 
-var {div, a, h1, h2, h3, form, input, p} = React.DOM;
+var {section, div, main, a, h1, h2, h3, form, input, p} = React.DOM;
 
+import {SolutionStore} from '../stores/SolutionStore';
 import {WhybugApi} from '../WhybugApi';
 
 class _Search {
@@ -12,36 +13,74 @@ class _Search {
   }
 
   getInitialStateAsync(callback) {
-    WhybugApi.searchErrors((error, result) => callback(error, {
-      error_logs: result
-    }));
+    SolutionStore.searchSolutions('', callback);
   }
 
   render() {
-    var error_logs = this.state.error_logs || [];
+    var errors = this.state.errors || [];
+    var errorList = errors.map(this._getErrorComponent);
 
     return div({},
-      div({className: 'section hero search-hero'},
-        div({className: 'w-container container'},
-          a({href: '#', className: 'button small'}, 'Back to search'),
-          h1({className: 'error-headline'}, 'Find a solution to your error message.'),
-          div({className: 'w-form sign-up-form'},
-            form({className: 'w-clearfix', name: 'wf-form-signup-form'},
-              input({className: 'w-input field', name: 'query', type: 'text', placeholder: 'Enter error messsage...'}),
-              input({className: 'w-button button', type: 'submit', value: 'Search'})
+      section({className: 'section hero'},
+        div({className: 'w-container'},
+          h1({}, 'Find a solution to your error message.'),
+          form({
+              name: 'search-form',
+              method: 'get',
+              onSubmit: this._onSubmit
+            },
+            div({className: 'w-row'},
+              div({className: 'w-col w-col-9'},
+                input({
+                  placeholder: 'Enter error messsage...',
+                  onChange: this._onChange,
+                  value: this.state.query,
+                  className: 'w-input field',
+                  name: 'query',
+                  type: 'text'
+                }),
+                div({className: 'hint-text'},
+                  'Hint: You can use language:php or language:javascript, type:warning and platform:windows to narrow down your search.')
+              ),
+              div({className: 'w-col w-col-3'},
+                input({
+                  className: 'w-button button submit-button',
+                  type: 'submit',
+                  value: 'Search',
+                  dataWait: 'Searching...'
+                })
+              )
             )
           )
+        )),
+      section({className: 'section grey error-section'},
+        div({className: 'w-container'},
+          div({className: 'w-row'},
+            main({className: 'w-col w-col-9'},
+              h2({}, 'All error messages'),
+              errorList
+            ),
+            div({className: 'w-col w-col-3'})
+          )
         )
-      ),
+      )
+    );
+  }
 
-      h2({}, 'list of errors'),
-      error_logs.map((error) => {
-        return div({},
-          h3({}, `${error.errorLevel}: ${error.errorMessage}`),
-          p({className: 'error-created'}, error.created),
-          p({className: 'error-programming-language'}, `${error.programmingLanguage} ${error.programmingLanguageVersion}`)
-        );
-      })
+  _onChange(event) {
+    this.setState({query: event.target.value});
+  }
+
+  _onSubmit(event) {
+    event.preventDefault();
+    SolutionStore.searchSolutions(this.state.query, (err, res) => {this.setState(res);});
+  }
+
+  _getErrorComponent(error) {
+    return div({className: 'content-block'},
+      h3({className: 'latest-errors'}, `${error.errorLevel}: ${error.errorMessage}`)
+//      p({className: 'solution-text'}, error.created),
+//      p({className: 'solution-text'}, `${error.programmingLanguage} ${error.programmingLanguageVersion}`)
     );
   }
 }

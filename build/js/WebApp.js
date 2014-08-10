@@ -148,19 +148,44 @@ System.register("../../src/web/WhybugApi", [], function() {
   var superagent = require('superagent');
   var config = System.get("../../config/config").config;
   var WhybugApi = function WhybugApi() {};
-  var $WhybugApi = WhybugApi;
-  ($traceurRuntime.createClass)(WhybugApi, {}, {
-    searchErrors: function(callback) {
-      return $WhybugApi.request(config.route.api.search_errors, callback);
-    },
-    request: function(route, callback) {
-      return superagent(route.method, config.web.url + route.path).set('Accept', 'application/json').end((function(error, result) {
-        return callback(error, result.body);
-      }));
-    }
+  ($traceurRuntime.createClass)(WhybugApi, {}, {searchErrors: function(query, callback) {
+      return request(config.route.api.search_errors).query({query: query}).end(notify(callback));
+    }});
+  var notify = (function(callback) {
+    return (function(error, result) {
+      return callback(error, result.body);
+    });
+  });
+  var request = (function(route) {
+    return superagent(route.method, config.web.url + route.path).set('Accept', 'application/json');
   });
   return {get WhybugApi() {
       return WhybugApi;
+    }};
+});
+System.register("../../src/web/stores/SolutionStore", [], function() {
+  "use strict";
+  var __moduleName = "../../src/web/stores/SolutionStore";
+  var EventEmitter = require('events').EventEmitter;
+  var WhybugApi = System.get("../../src/web/WhybugApi").WhybugApi;
+  var SolutionStore = function SolutionStore() {
+    $traceurRuntime.defaultSuperCall(this, $SolutionStore.prototype, arguments);
+  };
+  var $SolutionStore = SolutionStore;
+  ($traceurRuntime.createClass)(SolutionStore, {
+    get CHANGE_EVENT() {
+      return 'change';
+    },
+    emitChange: function() {
+      this.emit(CHANGE_EVENT);
+    }
+  }, {searchSolutions: function(query, callback) {
+      WhybugApi.searchErrors(query, (function(error, result) {
+        return callback(error, {errors: result});
+      }));
+    }}, EventEmitter);
+  return {get SolutionStore() {
+      return SolutionStore;
     }};
 });
 System.register("../../src/web/components/Search", [], function() {
@@ -168,15 +193,18 @@ System.register("../../src/web/components/Search", [], function() {
   var __moduleName = "../../src/web/components/Search";
   var React = require('react'),
       Async = require('react-async');
-  var $__10 = $traceurRuntime.assertObject(React.DOM),
-      div = $__10.div,
-      a = $__10.a,
-      h1 = $__10.h1,
-      h2 = $__10.h2,
-      h3 = $__10.h3,
-      form = $__10.form,
-      input = $__10.input,
-      p = $__10.p;
+  var $__14 = $traceurRuntime.assertObject(React.DOM),
+      section = $__14.section,
+      div = $__14.div,
+      main = $__14.main,
+      a = $__14.a,
+      h1 = $__14.h1,
+      h2 = $__14.h2,
+      h3 = $__14.h3,
+      form = $__14.form,
+      input = $__14.input,
+      p = $__14.p;
+  var SolutionStore = System.get("../../src/web/stores/SolutionStore").SolutionStore;
   var WhybugApi = System.get("../../src/web/WhybugApi").WhybugApi;
   var _Search = function _Search() {};
   ($traceurRuntime.createClass)(_Search, {
@@ -184,30 +212,41 @@ System.register("../../src/web/components/Search", [], function() {
       return [Async.Mixin];
     },
     getInitialStateAsync: function(callback) {
-      WhybugApi.searchErrors((function(error, result) {
-        return callback(error, {error_logs: result});
-      }));
+      SolutionStore.searchSolutions('', callback);
     },
     render: function() {
-      var error_logs = this.state.error_logs || [];
-      return div({}, div({className: 'section hero search-hero'}, div({className: 'w-container container'}, a({
-        href: '#',
-        className: 'button small'
-      }, 'Back to search'), h1({className: 'error-headline'}, 'Find a solution to your error message.'), div({className: 'w-form sign-up-form'}, form({
-        className: 'w-clearfix',
-        name: 'wf-form-signup-form'
-      }, input({
+      var errors = this.state.errors || [];
+      var errorList = errors.map(this._getErrorComponent);
+      return div({}, section({className: 'section hero'}, div({className: 'w-container'}, h1({}, 'Find a solution to your error message.'), form({
+        name: 'search-form',
+        method: 'get',
+        onSubmit: this._onSubmit
+      }, div({className: 'w-row'}, div({className: 'w-col w-col-9'}, input({
+        placeholder: 'Enter error messsage...',
+        onChange: this._onChange,
+        value: this.state.query,
         className: 'w-input field',
         name: 'query',
-        type: 'text',
-        placeholder: 'Enter error messsage...'
-      }), input({
-        className: 'w-button button',
+        type: 'text'
+      }), div({className: 'hint-text'}, 'Hint: You can use language:php or language:javascript, type:warning and platform:windows to narrow down your search.')), div({className: 'w-col w-col-3'}, input({
+        className: 'w-button button submit-button',
         type: 'submit',
-        value: 'Search'
-      }))))), h2({}, 'list of errors'), error_logs.map((function(error) {
-        return div({}, h3({}, (error.errorLevel + ": " + error.errorMessage)), p({className: 'error-created'}, error.created), p({className: 'error-programming-language'}, (error.programmingLanguage + " " + error.programmingLanguageVersion)));
-      })));
+        value: 'Search',
+        dataWait: 'Searching...'
+      })))))), section({className: 'section grey error-section'}, div({className: 'w-container'}, div({className: 'w-row'}, main({className: 'w-col w-col-9'}, h2({}, 'All error messages'), errorList), div({className: 'w-col w-col-3'})))));
+    },
+    _onChange: function(event) {
+      this.setState({query: event.target.value});
+    },
+    _onSubmit: function(event) {
+      var $__12 = this;
+      event.preventDefault();
+      SolutionStore.searchSolutions(this.state.query, (function(err, res) {
+        $__12.setState(res);
+      }));
+    },
+    _getErrorComponent: function(error) {
+      return div({className: 'content-block'}, h3({className: 'latest-errors'}, (error.errorLevel + ": " + error.errorMessage)));
     }
   }, {});
   var Search = React.createClass(_Search.prototype);
@@ -236,9 +275,9 @@ System.register("../../src/web/WebApp", [], function() {
   var __moduleName = "../../src/web/WebApp";
   var React = require('react'),
       Router = require('react-router-component');
-  var $__18 = $traceurRuntime.assertObject(Router),
-      Location = $__18.Location,
-      Locations = $__18.Locations;
+  var $__22 = $traceurRuntime.assertObject(Router),
+      Location = $__22.Location,
+      Locations = $__22.Locations;
   var StartPage = System.get("../../src/web/pages/StartPage").StartPage;
   var NotFoundPage = System.get("../../src/web/pages/NotFoundPage").NotFoundPage;
   var _WebApp = function _WebApp() {};

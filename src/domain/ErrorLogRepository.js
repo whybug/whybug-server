@@ -14,22 +14,30 @@ export class ErrorLogRepository
     this.type = 'error_log';
   }
 
-  getLatest() {
-    return this.search(ErrorLog, ejs.Request()
-        .sort(ejs.Sort('created').order('desc'))
-        .query(ejs.ConstantScoreQuery().filter(
+  findByQuery(query = '*') {
+    return this.search(
+      ErrorLog,
+      ejs.Request()
+      .size(10)
+      .sort(ejs.Sort('created').order('desc'))
+      .query(
+        ejs.FilteredQuery(
+          ejs.MatchQuery('errorMessage', query)
+            .operator('and')
+            .minimumShouldMatch('70%')
+            .zeroTermsQuery('all'),
           ejs.ExistsFilter('created')
-        ))
-        .size(10)
+        )
+      )
     );
   }
 
-  search(entity, body) {
+  search(entity, request) {
     return new Promise((resolve, reject) => {
       this.es.search({
         index: this.index,
         type: this.type,
-        body: body
+        body: request.toString()
       }).then((result) => {
         resolve(result.hits.hits.map((hit) => {
           return new entity(hit._id, hit._source);

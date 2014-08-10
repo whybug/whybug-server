@@ -153,16 +153,17 @@ var $___46__46__47_src_47_domain_47_ErrorLogRepository__ = (function() {
     this.type = 'error_log';
   };
   ($traceurRuntime.createClass)(ErrorLogRepository, {
-    getLatest: function() {
-      return this.search(ErrorLog, ejs.Request().sort(ejs.Sort('created').order('desc')).query(ejs.ConstantScoreQuery().filter(ejs.ExistsFilter('created'))).size(10));
+    findByQuery: function() {
+      var query = arguments[0] !== (void 0) ? arguments[0] : '*';
+      return this.search(ErrorLog, ejs.Request().size(10).sort(ejs.Sort('created').order('desc')).query(ejs.FilteredQuery(ejs.MatchQuery('errorMessage', query).operator('and').minimumShouldMatch('70%').zeroTermsQuery('all'), ejs.ExistsFilter('created'))));
     },
-    search: function(entity, body) {
+    search: function(entity, request) {
       var $__2 = this;
       return new Promise((function(resolve, reject) {
         $__2.es.search({
           index: $__2.index,
           type: $__2.type,
-          body: body
+          body: request.toString()
         }).then((function(result) {
           resolve(result.hits.hits.map((function(hit) {
             return new entity(hit._id, hit._source);
@@ -398,19 +399,44 @@ var $___46__46__47_src_47_web_47_WhybugApi__ = (function() {
   var superagent = require('superagent');
   var config = $___46__46__47_config_47_config__.config;
   var WhybugApi = function WhybugApi() {};
-  var $WhybugApi = WhybugApi;
-  ($traceurRuntime.createClass)(WhybugApi, {}, {
-    searchErrors: function(callback) {
-      return $WhybugApi.request(config.route.api.search_errors, callback);
-    },
-    request: function(route, callback) {
-      return superagent(route.method, config.web.url + route.path).set('Accept', 'application/json').end((function(error, result) {
-        return callback(error, result.body);
-      }));
-    }
+  ($traceurRuntime.createClass)(WhybugApi, {}, {searchErrors: function(query, callback) {
+      return request(config.route.api.search_errors).query({query: query}).end(notify(callback));
+    }});
+  var notify = (function(callback) {
+    return (function(error, result) {
+      return callback(error, result.body);
+    });
+  });
+  var request = (function(route) {
+    return superagent(route.method, config.web.url + route.path).set('Accept', 'application/json');
   });
   return {get WhybugApi() {
       return WhybugApi;
+    }};
+})();
+var $___46__46__47_src_47_web_47_stores_47_SolutionStore__ = (function() {
+  "use strict";
+  var __moduleName = "../src/web/stores/SolutionStore";
+  var EventEmitter = require('events').EventEmitter;
+  var WhybugApi = $___46__46__47_src_47_web_47_WhybugApi__.WhybugApi;
+  var SolutionStore = function SolutionStore() {
+    $traceurRuntime.defaultSuperCall(this, $SolutionStore.prototype, arguments);
+  };
+  var $SolutionStore = SolutionStore;
+  ($traceurRuntime.createClass)(SolutionStore, {
+    get CHANGE_EVENT() {
+      return 'change';
+    },
+    emitChange: function() {
+      this.emit(CHANGE_EVENT);
+    }
+  }, {searchSolutions: function(query, callback) {
+      WhybugApi.searchErrors(query, (function(error, result) {
+        return callback(error, {errors: result});
+      }));
+    }}, EventEmitter);
+  return {get SolutionStore() {
+      return SolutionStore;
     }};
 })();
 var $___46__46__47_src_47_web_47_components_47_Search__ = (function() {
@@ -418,15 +444,18 @@ var $___46__46__47_src_47_web_47_components_47_Search__ = (function() {
   var __moduleName = "../src/web/components/Search";
   var React = require('react'),
       Async = require('react-async');
-  var $__23 = $traceurRuntime.assertObject(React.DOM),
-      div = $__23.div,
-      a = $__23.a,
-      h1 = $__23.h1,
-      h2 = $__23.h2,
-      h3 = $__23.h3,
-      form = $__23.form,
-      input = $__23.input,
-      p = $__23.p;
+  var $__27 = $traceurRuntime.assertObject(React.DOM),
+      section = $__27.section,
+      div = $__27.div,
+      main = $__27.main,
+      a = $__27.a,
+      h1 = $__27.h1,
+      h2 = $__27.h2,
+      h3 = $__27.h3,
+      form = $__27.form,
+      input = $__27.input,
+      p = $__27.p;
+  var SolutionStore = $___46__46__47_src_47_web_47_stores_47_SolutionStore__.SolutionStore;
   var WhybugApi = $___46__46__47_src_47_web_47_WhybugApi__.WhybugApi;
   var _Search = function _Search() {};
   ($traceurRuntime.createClass)(_Search, {
@@ -434,30 +463,41 @@ var $___46__46__47_src_47_web_47_components_47_Search__ = (function() {
       return [Async.Mixin];
     },
     getInitialStateAsync: function(callback) {
-      WhybugApi.searchErrors((function(error, result) {
-        return callback(error, {error_logs: result});
-      }));
+      SolutionStore.searchSolutions('', callback);
     },
     render: function() {
-      var error_logs = this.state.error_logs || [];
-      return div({}, div({className: 'section hero search-hero'}, div({className: 'w-container container'}, a({
-        href: '#',
-        className: 'button small'
-      }, 'Back to search'), h1({className: 'error-headline'}, 'Find a solution to your error message.'), div({className: 'w-form sign-up-form'}, form({
-        className: 'w-clearfix',
-        name: 'wf-form-signup-form'
-      }, input({
+      var errors = this.state.errors || [];
+      var errorList = errors.map(this._getErrorComponent);
+      return div({}, section({className: 'section hero'}, div({className: 'w-container'}, h1({}, 'Find a solution to your error message.'), form({
+        name: 'search-form',
+        method: 'get',
+        onSubmit: this._onSubmit
+      }, div({className: 'w-row'}, div({className: 'w-col w-col-9'}, input({
+        placeholder: 'Enter error messsage...',
+        onChange: this._onChange,
+        value: this.state.query,
         className: 'w-input field',
         name: 'query',
-        type: 'text',
-        placeholder: 'Enter error messsage...'
-      }), input({
-        className: 'w-button button',
+        type: 'text'
+      }), div({className: 'hint-text'}, 'Hint: You can use language:php or language:javascript, type:warning and platform:windows to narrow down your search.')), div({className: 'w-col w-col-3'}, input({
+        className: 'w-button button submit-button',
         type: 'submit',
-        value: 'Search'
-      }))))), h2({}, 'list of errors'), error_logs.map((function(error) {
-        return div({}, h3({}, (error.errorLevel + ": " + error.errorMessage)), p({className: 'error-created'}, error.created), p({className: 'error-programming-language'}, (error.programmingLanguage + " " + error.programmingLanguageVersion)));
-      })));
+        value: 'Search',
+        dataWait: 'Searching...'
+      })))))), section({className: 'section grey error-section'}, div({className: 'w-container'}, div({className: 'w-row'}, main({className: 'w-col w-col-9'}, h2({}, 'All error messages'), errorList), div({className: 'w-col w-col-3'})))));
+    },
+    _onChange: function(event) {
+      this.setState({query: event.target.value});
+    },
+    _onSubmit: function(event) {
+      var $__25 = this;
+      event.preventDefault();
+      SolutionStore.searchSolutions(this.state.query, (function(err, res) {
+        $__25.setState(res);
+      }));
+    },
+    _getErrorComponent: function(error) {
+      return div({className: 'content-block'}, h3({className: 'latest-errors'}, (error.errorLevel + ": " + error.errorMessage)));
     }
   }, {});
   var Search = React.createClass(_Search.prototype);
@@ -486,9 +526,9 @@ var $___46__46__47_src_47_web_47_Webapp__ = (function() {
   var __moduleName = "../src/web/Webapp";
   var React = require('react'),
       Router = require('react-router-component');
-  var $__31 = $traceurRuntime.assertObject(Router),
-      Location = $__31.Location,
-      Locations = $__31.Locations;
+  var $__35 = $traceurRuntime.assertObject(Router),
+      Location = $__35.Location,
+      Locations = $__35.Locations;
   var StartPage = $___46__46__47_src_47_web_47_pages_47_StartPage__.StartPage;
   var NotFoundPage = $___46__46__47_src_47_web_47_pages_47_NotFoundPage__.NotFoundPage;
   var _WebApp = function _WebApp() {};
@@ -557,7 +597,8 @@ var $___46__46__47_src_47_app__ = (function() {
     }));
   }));
   route(config.route.api.search_errors, (function(request, reply) {
-    errorLogRepository.getLatest().then(reply).catch((function(err) {
+    console.log(request.params);
+    errorLogRepository.findByQuery(request.query.query).then(reply).catch((function(err) {
       reply(err);
     }));
   }));
@@ -614,3 +655,5 @@ var $___46__46__47_src_47_app__ = (function() {
   server.start();
   return {};
 })();
+
+//# sourceMappingURL=app.map
