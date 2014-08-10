@@ -69,40 +69,41 @@
 
 </body>
 <script type="text/javascript">
-    function downloadJSAtOnload() {
-        lazyload();
+    function loadFont() {
+        var font =
+                "@font-face {" +
+                "font-family: 'icomoon';" +
+                "src:url('../fonts/icomoon.eot?-nl05o8');" +
+                "src:url('../fonts/icomoon.eot?#iefix-nl05o8') format('embedded-opentype')," +
+                "url('../fonts/icomoon.woff') format('woff')," +
+                "url('../fonts/icomoon.svg?-nl05o8#icomoon') format('svg');" +
+                "font-weight: normal;" +
+                "font-style: normal;" +
+                "}";
+        var style = document.styleSheets[0];
+        if ( "function" === typeof(style.insertRule) ) {
+            style.insertRule(font, 0); // Firefox, Safari, Chrome
+        }
+        else if ( "string" === typeof(style.cssText) ) {
+            style.cssText = font; // IE
+        }
+    }
+
+    function loadApp() {
         var element = document.createElement("script");
         element.src = "/js/bundle.js";
         document.body.appendChild(element);
     }
 
-    if (window.addEventListener)
-        window.addEventListener("load", downloadJSAtOnload, false);
-    else if (window.attachEvent)
-        window.attachEvent("onload", downloadJSAtOnload);
-    else window.onload = downloadJSAtOnload;
-
-
     function lazyload() {
-        var sRule1 =
-                "@font-face {" +
-        "font-family: 'icomoon';" +
-        "src:url('../fonts/icomoon.eot?-nl05o8');" +
-        "src:url('../fonts/icomoon.eot?#iefix-nl05o8') format('embedded-opentype')," +
-                "url('../fonts/icomoon.woff') format('woff')," +
-                "url('../fonts/icomoon.svg?-nl05o8#icomoon') format('svg');" +
-        "font-weight: normal;" +
-        "font-style: normal;" +
-    "}";
-        var style1 = document.styleSheets[0];
-        if ( "function" === typeof(style1.insertRule) ) {
-            // Firefox, Safari, Chrome
-            style1.insertRule(sRule1, 0);
-        }
-        else if ( "string" === typeof(style1.cssText) ) {
-            // IE
-            style1.cssText = sRule1;
-        }
+        loadFont();
+        loadApp();
     }
+
+    if (window.addEventListener)
+        window.addEventListener("load", lazyload, false);
+    else if (window.attachEvent)
+        window.attachEvent("onload", lazyload);
+    else window.onload = lazyload;
 </script>
 </html>

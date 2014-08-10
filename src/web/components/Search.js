@@ -58,7 +58,7 @@ class _Search {
           div({className: 'w-row'},
             main({className: 'w-col w-col-9'},
               h2({}, 'All error messages'),
-              errorList
+              errors.length ? errorList : div({}, 'No errors found')
             ),
             div({className: 'w-col w-col-3'})
           )
@@ -69,10 +69,13 @@ class _Search {
 
   _onChange(event) {
     this.setState({query: event.target.value});
+    clearTimeout(this.timeout);
+    this.timeout = setTimeout(this._onSubmit, 500);
   }
 
   _onSubmit(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
+    clearTimeout(this.timeout);
     SolutionStore.searchSolutions(this.state.query, (err, res) => {this.setState(res);});
   }
 
