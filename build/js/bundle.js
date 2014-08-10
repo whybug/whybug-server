@@ -119,7 +119,7 @@
 	      }
 	    }
 	  };
-	  config.web = {url: process.env.WEB_URL || 'http://localhost:8000'};
+	  config.web = {url: process.env.WEB_URL || 'http://whybug.com'};
 	  config.node = {
 	    host: process.env.WEB_HOST || '127.0.0.1',
 	    port: process.env.WEB_PORT || 8000

@@ -78,7 +78,6 @@ route(config.route.api.create_error, (request, reply) => {
 });
 
 route(config.route.api.search_errors, (request, reply) => {
-  console.log(request.params);
   errorLogRepository.findByQuery(request.query.query)
     .then(reply)
     .catch((err) => {reply(err)});
