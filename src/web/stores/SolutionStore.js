@@ -2,19 +2,39 @@ var EventEmitter = require('events').EventEmitter;
 
 import {WhybugApi} from '../WhybugApi';
 
-export class SolutionStore extends EventEmitter {
+var NEW_RESULTS_EVENT = 'new-results';
 
-  get CHANGE_EVENT() {
-    return 'change';
+class _SearchResultStore extends EventEmitter {
+
+  constructor() {
+    this.searchResults = [];
   }
 
-  emitChange() {
-    this.emit(CHANGE_EVENT);
+  /**
+   * @param query
+   * @param {function} callback
+   */
+    searchSolutions(query, callback) {
+    var storeResult = (error, result) => {
+      this.searchResult = result;
+      this.emit(NEW_RESULTS_EVENT);
+    };
+    WhybugApi.searchErrors(query, callback || storeResult);
   }
 
-  static searchSolutions(query, callback) {
-    WhybugApi.searchErrors(query, (error, result) => callback(error, {
-      errors: result
-    }));
+  /**
+   * @param {function} callback
+   */
+  attachResultListener(callback) {
+    this.on(NEW_RESULTS_EVENT , callback);
+  }
+
+  /**
+   * @param {function} callback
+   */
+  removeResultListener(callback) {
+    this.removeListener(NEW_RESULTS_EVENT, callback);
   }
 }
+
+export var SolutionStore = new _SearchResultStore();
