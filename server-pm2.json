@@ -1,0 +1,6 @@
+{
+  "script":"server.js",
+  "name":"whybug",
+  "exec_mode":"cluster_mode",
+  "exec_interpreter":"node"
+}

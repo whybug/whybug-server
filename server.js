@@ -1,3 +1,5 @@
+require('newrelic');
+
 var traceur = require('traceur');
 traceur.require.makeDefault(function(filename) {
   // don't transpile our dependencies, just our app
