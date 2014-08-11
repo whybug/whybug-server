@@ -41,10 +41,10 @@ var reactProxy = (callback) => {
       ReactAsync.renderComponentToStringWithAsyncState(new WebApp({path: request.path}), (err, markup) => {
         console.log('render', request.path);
         if (err) { console.log('error', err);
-          return reply(err).takeover();
+          return reply(err);
         }
 
-        return reply.view('index', { content: markup }).takeover();
+        return reply.view('index', { content: markup });
       });
     }
   }
