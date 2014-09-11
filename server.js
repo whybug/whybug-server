@@ -1,4 +1,4 @@
-require('newrelic');
+//require('newrelic');
 
 var traceur = require('traceur');
 traceur.require.makeDefault(function(filename) {
@@ -6,5 +6,4 @@ traceur.require.makeDefault(function(filename) {
   return filename.indexOf('node_modules') === -1;
 });
 
-//var System = require('es6-module-loader').System;
 require('./src/app.js');
