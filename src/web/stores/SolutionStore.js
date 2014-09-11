@@ -7,16 +7,16 @@ var NEW_RESULTS_EVENT = 'new-results';
 class _SearchResultStore extends EventEmitter {
 
   constructor() {
-    this.searchResults = [];
+    this.state = [];
   }
 
   /**
    * @param query
    * @param {function} callback
    */
-    searchSolutions(query, callback) {
+  searchSolutions(query, callback) {
     var storeResult = (error, result) => {
-      this.searchResult = result;
+      this.state = result;
       this.emit(NEW_RESULTS_EVENT);
     };
     WhybugApi.searchErrors(query, callback || storeResult);

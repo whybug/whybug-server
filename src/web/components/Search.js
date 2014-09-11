@@ -87,7 +87,9 @@ class _Search {
 
     return div({},
       SearchForm({query: this.state.query}),
-      SearchResultList({searchResults: errors.map(error => SearchResult({error: error}))})
+      SearchResultList({
+        searchResults: errors.map(error => SearchResult({error: error}))
+      })
     );
   }
 
@@ -108,7 +110,7 @@ class _Search {
 
   onResult() {
     this.setState({
-      errors: SolutionStore.searchResults
+      errors: SolutionStore.state
     });
   }
 }
