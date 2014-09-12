@@ -9,31 +9,27 @@
     "test": "node_modules/mocha/bin/mocha tests"
   },
   "dependencies": {
-    "elastic.js": "^1.1.1",
-    "elasticsearch": "^2.2.0",
-    "es6-module-loader": "^0.7.1",
-    "es6-promise": "^1.0.0",
-    "fibers": "^1.0.1",
-    "handlebars": "^2.0.0-alpha.4",
-    "hapi": "^6.4.0",
-    "mysql": "^2.4.0",
+    "elastic.js": "^1.2.0",
+    "elasticsearch": "^2.4.2",
+    "fibers": "^1.0.2",
+    "handlebars": "^2.0.0",
+    "hapi": "^6.8.1",
+    "mysql": "^2.5.0",
     "mysql-promise": "^1.3.0",
-    "newrelic": "^1.9.2",
     "node-uuid": "^1.4.1",
-    "pm2": "^0.9.5",
-    "react": "^0.10.0",
-    "react-async": "^0.9.4",
-    "react-router-component": "^0.19.0",
-    "revalidator": "^0.1.8",
+    "pm2": "^0.10.7",
+    "react": "^0.11.1",
+    "react-async": "^1.0.2",
+    "react-router-component": "^0.20.1",
+    "revalidator": "^0.2.0",
     "superagent": "^0.18.2",
-    "traceur-loader": "^0.3.0",
-    "traceur-runtime": "0.0.43"
+    "traceur": "0.0.58"
   },
   "devDependencies": {
     "chai": "^1.9.1",
     "envify-loader": "^0.1.0",
-    "mocha": "^1.20.1",
-    "traceur": "0.0.55",
-    "webpack": "^1.3.1-beta8"
+    "mocha": "^1.21.4",
+    "traceur-loader": "^0.4.0",
+    "webpack": "^1.4.0-beta5"
   }
 }
