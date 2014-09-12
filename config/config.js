@@ -23,11 +23,11 @@ config.route = {
     // LoginPage, returns HTML.
     login: { method: 'GET', path: '/login' },
 
-    // SearchPage, returns HTML.
-    search_errors: { method: 'GET', path: '/solutions' },
+    // SolutionPage, returns HTML.
+    solution_search: { method: 'GET', path: '/solutions' },
 
     // ErrorPage, returns HTML.
-    read_error: { method: 'GET', path: '/error/{programmingLanguage}/{errorMessageSlug}' },
+    solution: { method: 'GET', path: '/solutions/:programmingLanguage/:errorMessageSlug' },
 
     // URL shortener, redirects to error.
     url_shortener: { method: 'GET', path: '/e/{p*}' }

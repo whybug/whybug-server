@@ -1,15 +1,13 @@
 var React = require('react');
 
 import {Header} from '../components/Header';
-import {Search} from '../components/Search';
 
 var {div} = React.DOM;
 
-class Start {
+class Start{
   render() {
     return div({},
-      Header({}),
-      Search({limit: 10})
+      Header({})
    )
   }
 }

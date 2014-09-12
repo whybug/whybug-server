@@ -2,10 +2,10 @@ var React = require('react'),
     Router = require('react-router-component');
 
 import {config} from '../../../config/config';
+import {NavLink} from './Elements';
 
 var {Link} = Router;
 var {div, a, nav} = React.DOM;
-
 
 class _Header {
   render() {
@@ -15,13 +15,13 @@ class _Header {
       div({className: 'w-container'},
         div({className: 'w-nav navbar'},
           div({className: 'w-container'},
-            a({href: route.startpage.path, className: 'w-nav-brand brand'}, 'whybug'),
+            Link({href: route.startpage.path, className: 'w-nav-brand brand'}, 'whybug'),
 
             nav({className: 'w-nav-menu', role: 'navigation'},
-              Link({href: route.search_errors.path, className: 'w-nav-link nav-link active'}, 'Solutions'),
-              Link({href: 'projects', className: 'w-nav-link nav-link'}, 'Projects'),
-              Link({href: 'installation', className: 'w-nav-link nav-link'}, 'Installation'),
-              Link({href: 'about', className: 'w-nav-link nav-link'}, 'About'),
+              NavLink({href: route.solution_search.path}, 'Solutions'),
+              NavLink({href: 'projects'}, 'Projects'),
+              NavLink({href: 'installation'}, 'Installation'),
+              NavLink({href: 'about'}, 'About'),
 
               div({className: 'login-text'}, 'Login with ...'),
               Link({href: route.login.path + '?github', className: 'social-btn icon-github'}),

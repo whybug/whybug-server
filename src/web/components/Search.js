@@ -1,8 +1,11 @@
 var React = require('react'),
+    Router = require('react-router-component'),
     Async = require('react-async');
 
 var {section, div, main, a, h1, h2, h3, form, input, p} = React.DOM;
+var {Link} = Router;
 
+import {config} from '../../../config/config';
 import {SolutionStore} from '../stores/SolutionStore';
 import {WhybugApi} from '../WhybugApi';
 
@@ -68,11 +71,17 @@ var SearchResultList = React.createClass(_SearchResultList.prototype);
 
 class _SearchResult{
   render() {
-    return div({className: 'content-block'},
+    return Link({href: this.getSolutionLink(), className: 'content-block'},
       h3({className: 'latest-errors'}, this.props.error.errorLevel,  ': ', this.props.error.errorMessage)
 //      p({className: 'solution-text'}, error.created),
 //      p({className: 'solution-text'}, `${error.programmingLanguage} ${error.programmingLanguageVersion}`)
     );
+  }
+
+  getSolutionLink() {
+    return config.route.web.solution.path
+      .replace(':programmingLanguage', this.props.error.programmingLanguage)
+      .replace(':errorMessageSlug', this.props.error.uuid);
   }
 }
 
