@@ -1,5 +1,3 @@
-var ejs = require('elastic.js');
-
 import {ErrorLog} from './ErrorLog';
 
 /**
@@ -17,18 +15,27 @@ export class ErrorLogRepository
   findByQuery(query = '*') {
     return this.search(
       ErrorLog,
-      ejs.Request()
-      .size(10)
-      .sort(ejs.Sort('created').order('desc'))
-      .query(
-        ejs.FilteredQuery(
-          ejs.MatchQuery('errorMessage', query)
-            .operator('and')
-            .minimumShouldMatch('70%')
-            .zeroTermsQuery('all'),
-          ejs.ExistsFilter('created')
-        )
-      )
+      {
+        size: 10,
+        sort: {created: 'desc'},
+        query: {
+          filtered: {
+            query: {
+              match: {
+                errorMessage: {
+                  query: query,
+                  operator: 'and',
+                  minimum_should_match: '70%',
+                  zero_terms_query: 'all'
+                }
+              }
+            },
+            filter: {
+              exists: { field: 'created' }
+            }
+          }
+        }
+      }
     );
   }
 
@@ -37,7 +44,7 @@ export class ErrorLogRepository
       this.es.search({
         index: this.index,
         type: this.type,
-        body: request.toString()
+        body: request
       }).then((result) => {
         resolve(result.hits.hits.map((hit) => {
           return new entity(hit._id, hit._source);
