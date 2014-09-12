@@ -16,7 +16,9 @@ var server = new hapi.Server(config.node.host, config.node.port, {
       html: require('handlebars')
     },
     path: 'src/web/templates'
-  }
+  },
+  debug:{ request: ['error'] }
+
 });
 var es = new elasticsearch.Client({
   host: config.elasticsearch.host + ':' + config.elasticsearch.port,
