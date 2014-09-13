@@ -98,7 +98,7 @@ server.pack.register(require('hapi-auth-cookie'), (err) => {
   server.auth.strategy('session', 'cookie', {
     password: 'worldofwalmart', // cookie secret
     cookie: 'session', // Cookie name
-    isSecure: config.debug ? false : true,
+    isSecure: false, // Terrible idea but required if not using HTTPS
     ttl: 24 * 60 * 60 * 1000 // Set session to 1 day
   });
 
@@ -124,7 +124,7 @@ server.pack.register(require('bell'), (err) => {
       password: config[provider].password, // random, for cookie encryption
       clientId: config[provider].clientId, // from the provider
       clientSecret: config[provider].clientSecret, // from the provider
-      isSecure: config.debug ? false : true // Terrible idea but required if not using HTTPS
+      isSecure: false // Terrible idea but required if not using HTTPS
     });
   });
 
