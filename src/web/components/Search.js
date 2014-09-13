@@ -1,12 +1,13 @@
 var React = require('react'),
     Router = require('react-router-component'),
-    Async = require('react-async');
+    Async = require('react-async'),
+    routes = require('../../../config/routes');
 
 var {section, div, main, a, h1, h2, h3, form, input, p} = React.DOM;
 var {Link} = Router;
 
-import {config} from '../../../config/config';
 import {SolutionStore} from '../stores/SolutionStore';
+import {Section} from './Elements';
 import {WhybugApi} from '../WhybugApi';
 
 
@@ -24,44 +25,41 @@ class _SearchForm {
   }
 
   render() {
-    return section({className: 'section hero'},
-      div({className: 'w-container'},
-        h1({}, 'Find a solution to your error message'),
-        form({onSubmit: this.onSubmit, name: 'search-form', method: 'get'},
-          div({className: 'w-row'},
-            div({className: 'w-col w-col-9'},
-              input({
-                placeholder: 'Enter error messsage...',
-                onChange: this.onChange,
-                value: this.props.query,
-                className: 'w-input field',
-                name: 'query',
-                id: 'query',
-                type: 'text'
-              }),
-              div({className: 'hint-text'}, 'Hint: You can use language:php or language:javascript, type:warning and platform:windows to narrow down your search.')
-            ),
-            div({className: 'w-col w-col-3'},
-              input({ className: 'w-button button submit-button', type: 'submit', value: 'Search', dataWait: 'Searching...' })
-            )
+    return Section({className: 'hero'},
+      h1({}, 'Find a solution to your error message'),
+      form({onSubmit: this.onSubmit, name: 'search-form', method: 'get'},
+        div({className: 'w-row'},
+          div({className: 'w-col w-col-9'},
+            input({
+              placeholder: 'Enter error messsage...',
+              onChange: this.onChange,
+              value: this.props.query,
+              className: 'w-input field',
+              name: 'query',
+              id: 'query',
+              type: 'text'
+            }),
+            div({className: 'hint-text'}, 'Hint: You can use language:php or language:javascript, type:warning and platform:windows to narrow down your search.')
+          ),
+          div({className: 'w-col w-col-3'},
+            input({ className: 'w-button button submit-button', type: 'submit', value: 'Search', dataWait: 'Searching...' })
           )
         )
-      ));
+      )
+    );
   }
 }
 var SearchForm = React.createClass(_SearchForm.prototype);
 
 class _SearchResultList {
   render() {
-    return section({className: 'section grey error-section'},
-      div({className: 'w-container'},
-        div({className: 'w-row'},
-          main({className: 'w-col w-col-9'},
-            h2({}, 'All error messages'),
-            this.props.searchResults.length ? this.props.searchResults : div({}, 'No errors found')
-          ),
-          div({className: 'w-col w-col-3'})
-        )
+    return Section({className: 'grey'},
+      div({className: 'w-row'},
+        main({className: 'w-col w-col-9'},
+          h2({}, 'All error messages'),
+          this.props.searchResults.length ? this.props.searchResults : div({}, 'No errors found')
+        ),
+        div({className: 'w-col w-col-3'}, 'sidebar for filters')
       )
     );
   }
@@ -79,7 +77,7 @@ class _SearchResult{
   }
 
   getSolutionLink() {
-    return config.route.web.solution.path
+    return routes.web.solution.path
       .replace(':programmingLanguage', this.props.error.programmingLanguage)
       .replace(':errorMessageSlug', this.props.error.uuid);
   }

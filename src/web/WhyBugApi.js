@@ -1,11 +1,11 @@
-var superagent = require('superagent');
-
-import {config} from '../../config/config';
+var superagent = require('superagent'),
+    config = require('../../config/config'),
+    routes = require('../../config/routes');
 
 export class WhybugApi {
 
   static searchErrors(query, callback) {
-    return request(config.route.api.search_errors)
+    return request(routes.api.search_errors)
       .query({query: query})
       .end(notify(callback));
   }

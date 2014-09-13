@@ -6,7 +6,7 @@ var {div} = React.DOM;
 class _NotFoundPage {
   render() {
     return div({},
-      Header({}),
+      Header({user: this.props.user}),
       div({}, 'Not found :-(')
     )
   }

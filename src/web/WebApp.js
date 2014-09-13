@@ -1,24 +1,31 @@
 var React = require('react'),
-    Router = require('react-router-component');
+    Async = require('react-async'),
+    Router = require('react-router-component'),
+    config = require('../../config/config'),
+    routes = require('../../config/routes');
 
 var {Location, Locations} = Router;
 
-import {config} from '../../config/config';
 import {StartPage} from './pages/StartPage';
-import {Header} from './components/Header';
 import {SolutionPage} from './pages/SolutionPage';
 import {SolutionSearchPage} from './pages/SolutionSearchPage';
 import {NotFoundPage} from './pages/NotFoundPage';
 
 class _WebApp {
-  render() {
-    var route = config.route.web;
+  get mixins() { return [Async.Mixin]; }
 
+  getInitialStateAsync(callback) {
+    callback(null, {
+      user: this.props.user
+    });
+  }
+
+  render() {
     return Locations({path: this.props.path},
-      Location({path: route.startpage.path, handler: StartPage}),
-      Location({path: route.solution_search.path, handler: SolutionSearchPage}),
-      Location({path: route.solution.path, handler: SolutionPage}),
-      Location({path: null, handler: NotFoundPage})
+      Location({path: routes.web.startpage.path, handler: StartPage, user: this.state.user}),
+      Location({path: routes.web.solution_search.path, handler: SolutionSearchPage, user: this.state.user}),
+      Location({path: routes.web.solution.path, handler: SolutionPage, user: this.state.user}),
+      Location({path: null, handler: NotFoundPage, user: this.state.user})
     );
   }
 }

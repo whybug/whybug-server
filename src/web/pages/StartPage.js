@@ -1,13 +1,15 @@
 var React = require('react');
 
 import {Header} from '../components/Header';
+import {Section} from '../components/Elements';
 
-var {div} = React.DOM;
+var {h1, div} = React.DOM;
 
 class Start{
   render() {
     return div({},
-      Header({})
+      Header({user: this.props.user}),
+      Section({className: 'hero'}, h1({}, 'Solutions to your error messages.'))
    )
   }
 }
