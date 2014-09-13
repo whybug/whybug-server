@@ -1,63 +1,10 @@
-export var config = {
-  debug: process.env.DEBUG || false
-};
-
-var cache_2min = {privacy: 'public', expiresIn: 2 * 60 * 1000};
-
 /**
- * Routes for frontend (client) and backend (server).
+ * Credentials and general configuration.
  *
- * Uses hapijs style declarations, see http://hapijs.com/tutorials.
+ * Can be overwritten by a `envvars` file.
  */
-config.route = {
-
-  /**
-   * Client endpoints.
-   *
-   * These routes are available on the client (single page app) and on the server (returns rendered HTML).
-   */
-  web: {
-    // StartPage, returns HTML.
-    startpage: { method: 'GET', path: '/', config: { cache: cache_2min }},
-
-    // LoginPage, returns HTML.
-    login: { method: 'GET', path: '/login' },
-
-    // SolutionPage, returns HTML.
-    solution_search: { method: 'GET', path: '/solutions' },
-
-    // ErrorPage, returns HTML.
-    solution: { method: 'GET', path: '/solutions/:programmingLanguage/:errorMessageSlug' },
-
-    // URL shortener, redirects to error.
-    url_shortener: { method: 'GET', path: '/e/{p*}' }
-  },
-
-  /**
-   * Web API endpoints.
-   *
-   * These routes are available only on the server. They may be used internally
-   * when rendering HTML on the server.
-   */
-  api: {
-    // Create a new error, with JSON payload. Returns solutions as JSON.
-    create_error: { method: 'POST', path: '/api/errors' },
-
-    // Update an existing error, with JSON payload. Returns nothing.
-    update_error: { method: 'PUT', path: '/api/errors/{error_uuid}' },
-
-    // Search for errors.
-    search_errors: { method: 'GET', path: '/api/errors' },
-
-    // Create a solution to an error, with JSON payload.
-    create_solution: { method: 'POST', path: '/api/errors/{error_uuid}/solutions' },
-
-    // Update a solution, with JSON payload.
-    update_solution: { method: 'PUT', path: '/api/errors/{error_uuid}/solutions/{solution_uuid}' },
-
-    // Update a solution, with JSON payload.
-    delete_solution: { method: 'DELETE', path: '/api/errors/{error_uuid}/solutions/{solution_uuid}' }
-  }
+var config = {
+  debug: process.env.DEBUG || false
 };
 
 config.web = {
@@ -71,13 +18,29 @@ config.node = {
 };
 
 config.mysql = {
-  host: process.env.MYSQL_URL || 'localhost',
-  port: process.env.MYSQL_URL || 3360,
+  host: process.env.MYSQL_URL || '127.0.0.1',
+  port: process.env.MYSQL_URL || 3306,
+  db:   process.env.MYSQL_DB || 'whybug',
   user: process.env.MYSQL_USER || '',
   pass: process.env.MYSQL_PASS || ''
 };
 
 config.elasticsearch = {
-  host: process.env.ES_URL || 'localhost',
+  host: process.env.ES_URL || '127.0.0.1',
   port: process.env.ES_URL || 9200
 };
+
+// For authentication options see https://github.com/hapijs/bell
+config.github = {
+  password: process.env.GITHUB_COOKIE_PASSWORD || 'some-pw-for-testing',
+  clientId: process.env.GITHUB_CLIENT_ID || '',
+  clientSecret: process.env.GITHUB_CLIENT_SECRET || ''
+};
+
+config.twitter = {
+  password: process.env.TWITTER_COOKIE_PASSWORD || 'some-pw-for-testing',
+  clientId: process.env.TWITTER_CLIENT_ID || '',
+  clientSecret: process.env.TWITTER_CLIENT_SECRET || ''
+};
+
+module.exports = config;

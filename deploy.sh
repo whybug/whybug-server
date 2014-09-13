@@ -5,7 +5,7 @@
 
 # Fix to run git commands.
 unset GIT_DIR
-. envvars
+. ./envvars
 
 echo "updating sources..."
 git update-server-info 2<&1
@@ -13,6 +13,9 @@ git reset --hard 2<&1
 
 echo "updating dependencies..."
 npm install
+
+echo "running migrations..."
+npm run knex migrate:latest
 
 echo "building assets..."
 node_modules/.bin/webpack --config config/webpack.config.js -p 2<&1
