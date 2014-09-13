@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # Copy this file from 'envvars.dist' to 'envvars'.
 #
 # For a complete list of available environment variables, see `config/config.js`.
