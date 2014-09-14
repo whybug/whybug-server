@@ -17,7 +17,7 @@ export var UserProfile = bookshelf.model('UserProfile', {
    * Returns a list of all supported providers.
    */
   providers() {
-    return ['github'];
+    return ['github', 'twitter', 'google'];
   }
 });
 

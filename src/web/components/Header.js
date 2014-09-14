@@ -8,7 +8,10 @@ import {NavLink} from './Elements';
 var {Link} = Router;
 var {div, a, span, img, nav} = React.DOM;
 
-class _Header {
+
+
+export var Header = React.createClass({
+
   render() {
     return div({className: 'navbar-section'},
       div({className: 'w-container'},
@@ -21,8 +24,6 @@ class _Header {
               NavLink({href: 'projects'}, 'Projects'),
               NavLink({href: 'installation'}, 'Installation'),
               NavLink({href: 'about'}, 'About'),
-
-              //this.renderLoginButtons()
               this.props.user ? this.renderUserMenu() : this.renderLoginButtons()
             ),
 
@@ -33,24 +34,22 @@ class _Header {
         )
       )
     );
-  }
+  },
 
   renderUserMenu() {
     return div({className: 'login-text'},
       'Welcome ',
       a({href: routes.web.logout.path}, img({src: this.props.user.avatar_url, width: 20, height: 20}))
     );
-  }
+  },
 
   renderLoginButtons() {
     return div({className: 'login-text'},
       'Login with ...',
-      a({href: routes.web.login_github.path, className: 'social-btn icon-github'})
+      a({href: routes.web.login_github.path, className: 'social-btn icon-github'}),
+      a({href: routes.web.login_twitter.path, className: 'social-btn icon-twitter-square'}),
+      a({href: routes.web.login_google.path, className: 'social-btn icon-googleplus'})
       //a({href: routes.web.login_facebook.path, className: 'social-btn icon-facebook-square'}),
-      //a({href: routes.web.login_google.path, className: 'social-btn icon-googleplus'}),
-      //a({href: routes.web.login_twitter.path, className: 'social-btn icon-twitter-square'})
     );
   }
-}
-
-export var Header = React.createClass(_Header.prototype);
+});

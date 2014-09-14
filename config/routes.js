@@ -17,7 +17,8 @@ module.exports =  {
 
     // Login, only redirect.
     login_github: { method: ['GET', 'POST'], path: '/login/github', config: { auth: 'github' } },
-    login_twitter: { method: ['GET', 'POST'], path: '/login/github', config: { auth: 'twitter' } },
+    login_twitter: { method: ['GET', 'POST'], path: '/login/twitter', config: { auth: 'twitter' } },
+    login_google: { method: ['GET', 'POST'], path: '/login/google', config: { auth: 'google' } },
 
     // Logout, only redirect.
     logout: { method: 'GET', path: '/logout', config: { auth: 'session' } },

@@ -18,17 +18,17 @@ export class UserService {
         user = (await user) || await this.userRepository.create({
           email: profile.email,
           display_name: profile.displayName,
-          avatar_url: profile.raw.avatar_url || ''
+          avatar_url: profile.raw.avatar_url || profile.raw.profile_image_url_https || profile.raw.picture || ''
         });
 
         userProfile = await this.userProfileRepository.create({
           user_uuid: user.get('uuid'),
           provider: provider,
           external_id: profile.id,
-          username: profile.username,
+          username: profile.username || profile.displayName,
           display_name: profile.displayName,
           email: profile.email,
-          avatar_url: profile.raw.avatar_url || '',
+          avatar_url: profile.raw.avatar_url || profile.raw.profile_image_url_https || profile.raw.picture || '',
           profile_url: profile.raw.html_url || '',
           last_login_at: new Date(),
           login_count: 1

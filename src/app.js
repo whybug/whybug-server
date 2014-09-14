@@ -133,6 +133,7 @@ server.pack.register(require('bell'), (err) => {
    */
   var login = (provider) => async (request, reply) => {
     var credentials = request.auth.credentials;
+    console.log(credentials.profile);
 
     // 1. Perform account lookup or registration.
     try {
@@ -150,7 +151,8 @@ server.pack.register(require('bell'), (err) => {
   };
 
   route(routes.web.login_github, login('github'));
-  //route(routes.web.login_twitter, login);
+  route(routes.web.login_twitter, login('twitter'));
+  route(routes.web.login_google, login('google'));
 });
 
 // Serve static files from `static` dir.
