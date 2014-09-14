@@ -9,7 +9,7 @@ class Start{
   render() {
     return div({},
       Header({user: this.props.user}),
-      Section({className: 'hero'}, h1({}, 'Solutions to your error messages.'))
+      Section({className: 'hero'}, h1({}, 'Solutions to errors, right where they happen.'))
    )
   }
 }
