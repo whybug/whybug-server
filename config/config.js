@@ -43,4 +43,10 @@ config.twitter = {
   clientSecret: process.env.TWITTER_CLIENT_SECRET || ''
 };
 
+config.google = {
+  password: process.env.GOOGLE_COOKIE_PASSWORD || 'some-pw-for-testing',
+  clientId: process.env.GOOGLE_CLIENT_ID || '',
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET || ''
+};
+
 module.exports = config;
