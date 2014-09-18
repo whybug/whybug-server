@@ -35,3 +35,19 @@ var knex = require('knex')({
 
 export var bookshelf = require('bookshelf')(knex);
 bookshelf.plugin('registry');
+
+import {ErrorService} from './domain/ErrorService';
+import {ErrorRepository} from './domain/ErrorRepository';
+import {ErrorLogRepository} from './domain/ErrorLogRepository';
+import {ErrorLog} from './domain/ErrorLog';
+import {UserRepository} from './domain/UserRepository';
+import {UserProfile} from './domain/UserProfile';
+import {UserProfileRepository} from './domain/UserProfileRepository';
+import {UserService} from './domain/UserService.js';
+
+export var errorLogRepository = new ErrorLogRepository(es);
+var errorRepository = new ErrorRepository(es);
+export var errorService = new ErrorService(errorRepository, errorLogRepository);
+var userRepository = new UserRepository(bookshelf);
+var userProfileRepository = new UserProfileRepository(bookshelf);
+export var userService = new UserService(userRepository, userProfileRepository);

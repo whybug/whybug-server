@@ -4,25 +4,14 @@ import {
   server,
   ReactAsync,
   es,
-  bookshelf
+  bookshelf,
+  userService,
+  errorService,
+  errorLogRepository
 } from './dependencies';
 
-import {ErrorService} from './domain/ErrorService';
-import {ErrorRepository} from './domain/ErrorRepository';
-import {ErrorLogRepository} from './domain/ErrorLogRepository';
-import {ErrorLog} from './domain/ErrorLog';
-import {UserRepository} from './domain/UserRepository';
 import {UserProfile} from './domain/UserProfile';
-import {UserProfileRepository} from './domain/UserProfileRepository';
-import {UserService} from './domain/UserService.js';
 import {WebApp} from './web/WebApp';
-
-var errorLogRepository = new ErrorLogRepository(es);
-var errorRepository = new ErrorRepository(es);
-export var errorService = new ErrorService(errorRepository, errorLogRepository);
-var userRepository = new UserRepository(bookshelf);
-var userProfileRepository = new UserProfileRepository(bookshelf);
-export var userService = new UserService(userRepository, userProfileRepository);
 
 /**
  * Helper to render HTML or return JSON.
