@@ -46,9 +46,9 @@ export var Header = React.createClass({
   renderLoginButtons() {
     return div({className: 'login-text'},
       'Login with ...',
-      a({href: routes.web.login_github.path, className: 'social-btn icon-github'}),
-      a({href: routes.web.login_twitter.path, className: 'social-btn icon-twitter-square'}),
-      a({href: routes.web.login_google.path, className: 'social-btn icon-googleplus'})
+      a({href: routes.web.login.github.path, className: 'social-btn icon-github'}),
+      a({href: routes.web.login.twitter.path, className: 'social-btn icon-twitter-square'}),
+      a({href: routes.web.login.google.path, className: 'social-btn icon-googleplus'})
       //a({href: routes.web.login_facebook.path, className: 'social-btn icon-facebook-square'}),
     );
   }

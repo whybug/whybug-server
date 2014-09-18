@@ -106,20 +106,7 @@ server.pack.register(require('hapi-auth-cookie'), (err) => {
 // Login routes.
 server.pack.register(require('bell'), (err) => {
 
-  // Register providers.
-  UserProfile.providers().forEach((provider) => {
-    server.auth.strategy(provider, 'bell', {
-      provider: provider,
-      password: config[provider].password, // random, for cookie encryption
-      clientId: config[provider].clientId, // from the provider
-      clientSecret: config[provider].clientSecret, // from the provider
-      isSecure: false // Terrible idea but required if not using HTTPS
-    });
-  });
-
-  /**
-   * Login handler for all providers.
-   */
+  // Login handler for all providers.
   var login = (provider) => async (request, reply) => {
     var credentials = request.auth.credentials;
     console.log(credentials.profile);
@@ -139,9 +126,22 @@ server.pack.register(require('bell'), (err) => {
     }
   };
 
-  route(routes.web.login_github, login('github'));
-  route(routes.web.login_twitter, login('twitter'));
-  route(routes.web.login_google, login('google'));
+  // Register providers.
+  UserProfile.providers().forEach((provider) => {
+    if (!config[provider].clientId) {return;}
+    server.auth.strategy(provider, 'bell', {
+      provider: provider,
+      password: config[provider].password, // random, for cookie encryption
+      clientId: config[provider].clientId, // from the provider
+      clientSecret: config[provider].clientSecret, // from the provider
+      isSecure: false // Terrible idea but required if not using HTTPS
+    });
+
+    route(routes.web.login_github, login('github'));
+    route(routes.web.login_twitter, login('twitter'));
+    route(routes.web.login_google, login('google'));
+  });
+
 });
 
 // Serve static files from `static` dir.

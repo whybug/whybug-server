@@ -16,9 +16,11 @@ module.exports =  {
     startpage: { method: 'GET', path: '/', config: { cache: cache_2min, auth: { mode: 'try', strategy: 'session'} } },
 
     // Login, only redirect.
-    login_github: { method: ['GET', 'POST'], path: '/login/github', config: { auth: 'github' } },
-    login_twitter: { method: ['GET', 'POST'], path: '/login/twitter', config: { auth: 'twitter' } },
-    login_google: { method: ['GET', 'POST'], path: '/login/google', config: { auth: 'google' } },
+    login: {
+      github: { method: ['GET', 'POST'], path: '/login/github', config: { auth: 'github' } },
+      twitter: { method: ['GET', 'POST'], path: '/login/twitter', config: { auth: 'twitter' } },
+      google: { method: ['GET', 'POST'], path: '/login/google', config: { auth: 'google' } }
+    },
 
     // Logout, only redirect.
     logout: { method: 'GET', path: '/logout', config: { auth: 'session' } },
