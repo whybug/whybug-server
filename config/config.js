@@ -9,7 +9,7 @@ var config = {
 
 config.web = {
   // Url where to access whybug, NO trailing slash.
-  url: process.env.WEB_URL || 'http://localhost:8000'
+  url: process.env.WEB_URL || 'http://127.0.0.1:8000'
 };
 
 config.node = {
@@ -18,8 +18,8 @@ config.node = {
 };
 
 config.mysql = {
-  host: process.env.MYSQL_URL || '127.0.0.1',
-  port: process.env.MYSQL_URL || 3306,
+  host: process.env.MYSQL_HOST || '127.0.0.1',
+  port: process.env.MYSQL_PORT || 3306,
   db:   process.env.MYSQL_DB || 'whybug',
   user: process.env.MYSQL_USER || '',
   pass: process.env.MYSQL_PASS || ''
