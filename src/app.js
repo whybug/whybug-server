@@ -40,7 +40,7 @@ var reactProxy = (callback) => {
     } else {
       var app = new WebApp({
         path: request.path,
-        user: request.auth.credentials
+        model: request.auth.credentials
       });
       ReactAsync.renderComponentToStringWithAsyncState(app, (err, markup) => {
         console.log('render', request.path);
@@ -135,19 +135,19 @@ server.pack.register(require('bell'), (err) => {
     var credentials = request.auth.credentials;
     console.log(credentials.profile);
 
-    // 1. Perform account lookup or registration.
     try {
+      // 1. Perform account lookup or registration.
       var user = await userService.loginWithProvider(provider, credentials.profile);
+
+      // 2. Setup local session.
+      request.auth.session.set(user);
+
+      // 3. Redirect to the application.
+      return reply.redirect(credentials.query.redirect || '/');
     } catch(e) {
       console.log('error', e);
-      throw e;
+      return reply(e); // todo: use Boom
     }
-
-    // 2. Setup local session.
-    request.auth.session.set(user);
-
-    // 3. Redirect to the application.
-    return reply.redirect(credentials.query.redirect || '/');
   };
 
   route(routes.web.login_github, login('github'));

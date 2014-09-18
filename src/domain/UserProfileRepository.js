@@ -4,8 +4,13 @@ import {UserProfile} from './UserProfile';
 
 export class UserProfileRepository {
 
+  constructor(bookshelf) {
+    this.bookshelf = bookshelf;
+    this.model = bookshelf.model('UserProfile', UserProfile.bookshelf());
+  }
+
   findByProvider(provider, externalId) {
-    return new UserProfile({
+    return new (this.model)({
       provider: provider,
       external_id: externalId
     }).fetch({withRelated: ['user']});
@@ -14,7 +19,7 @@ export class UserProfileRepository {
   create(data = {}) {
     data.uuid =  data.uuid || uuidGenerator.v4();
 
-    return new UserProfile(data).save({}, {method: 'insert'});
+    return new (this.model)(data).save({}, {method: 'insert'});
   }
 
 }

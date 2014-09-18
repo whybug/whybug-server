@@ -24,7 +24,7 @@ export var Header = React.createClass({
               NavLink({href: 'projects'}, 'Projects'),
               NavLink({href: 'installation'}, 'Installation'),
               NavLink({href: 'about'}, 'About'),
-              this.props.user ? this.renderUserMenu() : this.renderLoginButtons()
+              this.props.model ? this.renderUserMenu() : this.renderLoginButtons()
             ),
 
             div({className: 'w-nav-button'},
@@ -39,7 +39,7 @@ export var Header = React.createClass({
   renderUserMenu() {
     return div({className: 'login-text'},
       'Welcome ',
-      a({href: routes.web.logout.path}, img({src: this.props.user.avatar_url, width: 20, height: 20}))
+      a({href: routes.web.logout.path}, img({src: this.props.model.avatar_url, width: 20, height: 20}))
     );
   },
 

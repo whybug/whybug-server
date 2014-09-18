@@ -16,16 +16,16 @@ class _WebApp {
 
   getInitialStateAsync(callback) {
     callback(null, {
-      user: this.props.user
+      user: this.props.model
     });
   }
 
   render() {
     return Locations({path: this.props.path},
-      Location({path: routes.web.startpage.path, handler: StartPage, user: this.state.user}),
-      Location({path: routes.web.solution_search.path, handler: SolutionSearchPage, user: this.state.user}),
-      Location({path: routes.web.solution.path, handler: SolutionPage, user: this.state.user}),
-      Location({path: null, handler: NotFoundPage, user: this.state.user})
+      Location({path: routes.web.startpage.path, handler: StartPage, user: this.state.model}),
+      Location({path: routes.web.solution_search.path, handler: SolutionSearchPage, user: this.state.model}),
+      Location({path: routes.web.solution.path, handler: SolutionPage, user: this.state.model}),
+      Location({path: null, handler: NotFoundPage, user: this.state.model})
     );
   }
 }

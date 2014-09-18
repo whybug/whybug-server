@@ -1,11 +1,11 @@
-var React = require('react');
+var React = require('react'),
+    Async = require('react-async');
 
 import {Header} from '../components/Header';
 import {Search} from '../components/Search';
 import {Section} from '../components/Elements';
 
 var {div, h1} = React.DOM;
-
 
 /*
 common/
@@ -23,22 +23,32 @@ solutions/
   SolutionPage
   SolutionActions (select, search)
 
-Routes
-
 */
+
+class SolutionActions {
+  static select(solutionSlug, callback) {
+    Dispatcher.updateStores({
+      actionType: 'solution.search',
+      solutionSlug: solutionSlug,
+      callback: callback
+    });
+  }
+  static search(query, callback) {}
+}
 
 export var SolutionPage = React.createClass({
 
-  get propTypes() {
-    return {
+  mixins: [ Async.Mixin ],
+
+  propTypes: {
       errorMessageSlug: React.PropTypes.string.isRequired
-    }
   },
 
   /**
    * Select the solution given by the router.
    */
   getInitialStateAsync(callback) {
+    callback(null, {solution: {}});
     //SolutionActions.select(this.props.errorMessageSlug, (error, result) => callback(error, {
     //  solution: result
     //}));
@@ -60,7 +70,9 @@ export var SolutionPage = React.createClass({
 
   render() {
     return div({},
-      Header({user: this.props.user}),
+      Header({user: this.props.model}),
+      // SolutionHero({solution: this.state.solution))
+      // SolutionDetail({solutoin: this.state.solution))
       !this.props.solution || Section({className: 'hero'},
         h1({}, this.props.solution.errorMessage)
       ),

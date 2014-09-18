@@ -7,7 +7,7 @@ module.exports = {
       host:     config.mysql.host,
       port:     config.mysql.port,
       database: config.mysql.db,
-      user:     config.mysql.user,
+      user:     config.mysql.model,
       password: config.mysql.pass
     },
     pool: {

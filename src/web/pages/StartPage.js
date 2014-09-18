@@ -8,7 +8,7 @@ var {h1, div} = React.DOM;
 class Start{
   render() {
     return div({},
-      Header({user: this.props.user}),
+      Header({user: this.props.model}),
       Section({className: 'hero'}, h1({}, 'Solutions to errors, right where they happen.'))
    )
   }
