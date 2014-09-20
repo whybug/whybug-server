@@ -31,8 +31,8 @@ module.exports =  {
     // ErrorPage, returns HTML.
     solution: { method: 'GET', path: '/solutions/:programmingLanguage/:errorMessageSlug' },
 
-    // URL shortener, redirects to error.
-    url_shortener: { method: 'GET', path: '/e/{p*}' }
+    // URL shortener, redirects to a solution.
+    url_shortener: { method: 'GET', path: '/s/{p*}' }
   },
 
   /**
@@ -46,7 +46,7 @@ module.exports =  {
     create_error: { method: 'POST', path: '/api/errors' },
 
     // Update an existing error, with JSON payload. Returns nothing.
-    update_error: { method: 'PUT', path: '/api/errors/{error_uuid}' },
+    //update_error: { method: 'PUT', path: '/api/errors/{error_uuid}' },
 
     // Search for errors.
     search_errors: { method: 'GET', path: '/api/errors' },
