@@ -90,7 +90,7 @@ server.pack.register([
     // Delete info a client cannot provide.
     delete request.payload.uuid;
     delete request.payload.errorgroup_uuid;
-    request.payload.client_ip = request.info.remoteAddress;
+    request.payload.client_ip = request.headers['x-forwarded-for'] || request.info.remoteAddress;
 
     reply(solutionService.solve(new Error(request.payload)));
   }, { validate: {payload: Error.properties()}});
