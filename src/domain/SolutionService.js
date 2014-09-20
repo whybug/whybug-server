@@ -18,18 +18,17 @@ export class SolutionService {
    * An Solution is either added as a variation to a similar Error or is a new Error.
    *
    * @param {Error} Error
-   * @return {Solution} Solution for the provided error. 
+   * @return {Solution} Solution for the provided error.
    */
   async solve(error) {
-    var solution = await this.solutionRepository.findByError(error);
+    await this.errorRepository.store(error);
 
-    if (!solution) {
-      solution = Solution.forError(error);
-    }
+    var solutions = await this.solutionRepository.findByError(error);
 
-    this.solutionRepository.store(solution);
-    this.errorRepository.store(error);
+    return solutions;
+  }
 
-    return solution;
+  search(query) {
+    return this.errorRepository.findByQuery(query);
   }
 }

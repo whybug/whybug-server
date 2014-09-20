@@ -5,7 +5,6 @@ import {UserProfile} from './UserProfile';
 export class UserProfileRepository {
 
   constructor(bookshelf) {
-    this.bookshelf = bookshelf;
     this.model = bookshelf.model('UserProfile', UserProfile.bookshelf());
   }
 

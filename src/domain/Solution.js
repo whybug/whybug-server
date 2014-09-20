@@ -7,7 +7,7 @@ var Joi = require('joi'),
  * The description of an Error consists of an error message (preferably without dynamic details like line numbers or
  * file paths), an error level and a programming language.
  *
- * Errors group related Errors (at least one). 
+ * Errors group related Errors (at least one).
  *
  * @param {ErrorLog} errorLog
  */
@@ -17,15 +17,15 @@ export class Solution {
     // Assert valid data and initalize.
     Joi.validate(data, Solution.properties, {skipFunctions: true, abortEarly: false}, (err, values) => {
       if (err) { throw err; }
-      for (var value in values) { this[value] = values[value]};    
-    }):
+      for (var value in values) { this[value] = values[value]; }
+    });
   }
 
   static properties() {
     return {
       uuid: Joi.string().guid().default(uuidGenerator.v4()),
-      slug_long: Joi.string().required(),
-      slug_short: Joi.string().required(),
+      slug_long: Joi.string().regex(/^[a-z0-9\-]+$/), // a slug is: small chars, numbers and dashes
+      slug_short: Joi.string().alphanum(),
       level: Joi.string().max(255).required(),
       code: Joi.string().max(255).required(),
       message: Joi.string().min(5).required(),
@@ -33,46 +33,35 @@ export class Solution {
       programminglanguage_version: Joi.string().max(255).required(),
       os: Joi.string().max(255).notNullable(),
       os_version: Joi.string().max(255).notNullable(),
-      created: Joi.string().isoDate()
+      created_at: Joi.date().default(new Date)
     };
   }
 
   static bookshelf() {
     return {
       tableName: 'solutions',
-      idAttribute: 'uuid',
+      idAttribute: 'uuid'
     };
   }
 
- /**
-   * Validate current object.
-   *
-   * @return null
-   * @throws {Error} If validation fails.
-   */
-  validate() {
-    Joi.assert(this, Error.properties());
-  };
+  get slug_long() {
+    return this.message;
+  }
 
   /**
-   * Associates the specified errorLog to this error.
+   * Creates a solution with a context of specified error.
    *
    * @param {Error} error
    */
-  addError(error) {
-    errorLog.errorUuid = this.uuid;
-
-    // If this error is new, get the error description from the error log.
-    if (this.isNew()) {
-      this.message = error.message;
-      this.code = error.code;
-      this.level = error.level;
-      this.programminglanguage = error.programminglanguage;
-      this.programminglanguage_version = error.programminglanguage_version;
-      this.os = error.os;
-      this.os_version = error.os_version;
-    }
-
-    this.seen_count = ++this.seen_count || 1;
+  forError(error) {
+    return new Solution({
+      message: error.message,
+      code: error.code,
+      level: error.level,
+      programminglanguage: error.programminglanguage,
+      programminglanguage_version: error.programminglanguage_version,
+      os: error.os,
+      os_version: error.os_version
+    });
   }
 }

@@ -27,7 +27,7 @@ var knex = require('knex')({
     host:     config.mysql.host,
     port:     config.mysql.port,
     database: config.mysql.db,
-    user:     config.mysql.model,
+    user:     config.mysql.user,
     password: config.mysql.pass,
     charset  : 'utf8'
   }
@@ -45,8 +45,8 @@ import {UserProfileRepository} from './domain/UserProfileRepository';
 import {UserService} from './domain/UserService.js';
 
 export var solutionRepository = new SolutionRepository(es, bookshelf);
-var errorRepository = new ErrorRepository(es);
-export var solutionService = new SolutionService(errorRepository, errorLogRepository);
+var errorRepository = new ErrorRepository(es, bookshelf);
+export var solutionService = new SolutionService(solutionRepository, errorRepository);
 var userRepository = new UserRepository(bookshelf);
 var userProfileRepository = new UserProfileRepository(bookshelf);
 export var userService = new UserService(userRepository, userProfileRepository);

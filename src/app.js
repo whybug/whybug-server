@@ -6,7 +6,7 @@ import {
   es,
   bookshelf,
   userService,
-  errorService,
+  solutionService,
   errorRepository
 } from './dependencies';
 
@@ -50,10 +50,16 @@ var reactProxy = (callback) => {
  *
  * @param route
  * @param handler
+ * @param config
  */
-var route = (route, handler) => {
+var route = (route, handler, config = {}) => {
   route.config = route.config || {};
   route.config.handler = handler;
+  if (config) {
+    for (var setting in config) {
+      route.config[setting] = config[setting];
+    }
+  }
   server.route(route);
 };
 
@@ -69,7 +75,7 @@ ErrorService
   - [GroupedError]: search(query)
  */
 server.pack.register([
-  require('bell'), 
+  require('bell'),
   require('hapi-as-promised'),
   require('hapi-auth-cookie')
 ], (err) => {
@@ -84,15 +90,13 @@ server.pack.register([
     // Delete info a client cannot provide.
     delete request.payload.uuid;
     delete request.payload.errorgroup_uuid;
-    request.payload.client_ip = request.info.address;
+    request.payload.client_ip = request.info.remoteAddress;
 
-    reply(errorService.solve(new Error(request.payload)));
-  });
+    reply(solutionService.solve(new Error(request.payload)));
+  }, { validate: {payload: Error.properties()}});
 
   route(routes.api.search_errors, (request, reply) => {
-    errorService.search(request.query.query)
-      .then(reply)
-      .catch((err) => {reply(err)});
+    reply(solutionService.search(request.query.query));
   });
 
   /**
@@ -103,7 +107,7 @@ server.pack.register([
 
   // Register session cookie strategy.
   server.auth.strategy('session', 'cookie', {
-    password: config.web.session_password, 
+    password: config.web.session_password,
     cookie: 'session', // Cookie name
     isSecure: false, // Terrible idea but required if not using HTTPS
     ttl: 24 * 60 * 60 * 1000 // Set session to 1 day
@@ -114,25 +118,18 @@ server.pack.register([
     reply({});
   }));
 
+
+  route(routes.web.url_shortener, (request, reply) => {
+    //var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    //private static final int    BASE     = ALPHABET.length();
+
+    reply({});
+  });
+
   // Logout.
   route(routes.web.logout, (request, reply) => {
     request.auth.session.clear();
     return reply.redirect('/');
-  });
-
-  // Register providers.
-  UserProfile.providers().forEach((provider) => {
-    if (!config[provider].clientId) {return;}
-
-    server.auth.strategy(provider, 'bell', {
-      provider: provider,
-      password: config[provider].password, // random, for cookie encryption
-      clientId: config[provider].clientId, // from the provider
-      clientSecret: config[provider].clientSecret, // from the provider
-      isSecure: false // Terrible idea but required if not using HTTPS
-    });
-
-    route(routes.web.login[provider], login(provider));
   });
 
   // Login handler for all providers.
@@ -149,6 +146,20 @@ server.pack.register([
     return reply.redirect(credentials.query.redirect || '/');
   };
 
+  // Register providers.
+  UserProfile.providers().forEach((provider) => {
+    if (!config[provider].clientId) {return;}
+
+    server.auth.strategy(provider, 'bell', {
+      provider: provider,
+      password: config[provider].password, // random, for cookie encryption
+      clientId: config[provider].clientId, // from the provider
+      clientSecret: config[provider].clientSecret, // from the provider
+      isSecure: false // Terrible idea but required if not using HTTPS
+    });
+
+    route(routes.web.login[provider], login(provider));
+  });
 });
 
 // Serve static files from `static` dir.

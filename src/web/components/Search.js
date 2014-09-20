@@ -26,7 +26,7 @@ class _SearchForm {
 
   render() {
     return Section({className: 'hero'},
-      h1({}, 'Find a solution to your error message'),
+      h1({}, 'Find solutions for errors.'),
       form({onSubmit: this.onSubmit, name: 'search-form', method: 'get'},
         div({className: 'w-row'},
           div({className: 'w-col w-col-9'},
@@ -70,7 +70,7 @@ var SearchResultList = React.createClass(_SearchResultList.prototype);
 class _SearchResult{
   render() {
     return Link({href: this.getSolutionLink(), className: 'content-block'},
-      h3({className: 'latest-errors'}, this.props.error.errorLevel,  ': ', this.props.error.errorMessage)
+      h3({className: 'latest-errors'}, this.props.error.level,  ': ', this.props.error.message)
 //      p({className: 'solution-text'}, error.created),
 //      p({className: 'solution-text'}, `${error.programmingLanguage} ${error.programmingLanguageVersion}`)
     );
@@ -78,7 +78,7 @@ class _SearchResult{
 
   getSolutionLink() {
     return routes.web.solution.path
-      .replace(':programmingLanguage', this.props.error.programmingLanguage)
+      .replace(':programmingLanguage', this.props.error.programminglanguage)
       .replace(':errorMessageSlug', this.props.error.uuid);
   }
 }

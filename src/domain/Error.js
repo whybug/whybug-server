@@ -1,5 +1,7 @@
-var Joi = require('joi');
-    uuidGenerator = require('node-uuid');
+var Joi = require('joi'),
+    uuidGenerator = require('node-uuid'),
+    crypto = require('crypto');
+
 
 /**
  * An Error contains info on an error which occurred on a Client.
@@ -16,18 +18,26 @@ export class Error {
     Joi.validate(data, Error.properties(), {skipFunctions: true, abortEarly: false}, (err, values) => {
       if (err) { throw err; }
       for (var value in values) { this[value] = values[value]; }
-    }):
+    });
   }
 
-  static bookshelf() {
-    return {
-      tableName: 'errors',
-      idAttribute: 'uuid',
-    };
+  get checksum() {
+    var text = this.level
+      + this.code
+      + this.message
+      + this.programminglanguage
+      + this.programminglanguage_version
+      + this.os
+      + this.os_version
+      + this.file_path
+      + this.line;
+
+    return crypto.createHash('sha1')
+      .update(text, 'utf8')
+      .digest('hex');
   }
 
   static properties() {
-  {
     return {
       protocol_version: Joi.number().required(),
       uuid: Joi.string().guid().default(uuidGenerator.v4()),
@@ -39,22 +49,19 @@ export class Error {
       message: Joi.string().min(5).required(),
       programminglanguage: Joi.string().max(255).required(),
       programminglanguage_version: Joi.string().max(255).required(),
-      os: Joi.string().max(255).notNullable(),
-      os_version: Joi.string().max(255).notNullable(),
-      file_path: Joi.string().max(255).notNullable(),
+      os: Joi.string().max(255).required(),
+      os_version: Joi.string().max(255).required(),
+      file_path: Joi.string().max(255).required(),
       line: Joi.number().integer().required(),
-      created: Joi.string().isoDate().default((new Date).toISOString())
+      created_at: Joi.date().default(new Date)
     };
   }
 
-  /**
-   * Validate current object.
-   *
-   * @return null
-   * @throws {Error} If validation fails.
-   */
-  validate() {
-    Joi.assert(this, Error.properties());
-  };
+  static bookshelf() {
+    return {
+      tableName: 'errors',
+      idAttribute: 'uuid'
+    };
+  }
 }
 
