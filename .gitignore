@@ -4,3 +4,4 @@ elasticsearch*
 gslint.conf
 npm-debug.log
 node_modules
+envvars
