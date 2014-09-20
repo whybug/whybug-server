@@ -63,17 +63,6 @@ var route = (route, handler, config = {}) => {
   server.route(route);
 };
 
-/**
-
-GroupedError(solution_uuid, project_uuid, slug)
-Error(erroraggregate_uuid)
-Project(name, programming_language, match_query), z. B. facebook-sdk for php
-Solution(description, errorgroup_uuid)
-
-ErrorService
-  - GroupedError: solve(Error)
-  - [GroupedError]: search(query)
- */
 server.pack.register([
   require('bell'),
   require('hapi-as-promised'),
