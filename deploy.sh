@@ -15,7 +15,7 @@ echo "updating dependencies..."
 npm install
 
 echo "running migrations..."
-npm run knex migrate:latest
+. ./envvars && node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js migrate:latest
 
 echo "building assets..."
 node_modules/.bin/webpack --config config/webpack.config.js -p 2<&1
