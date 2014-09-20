@@ -1,0 +1,15 @@
+services:
+  - mysql
+  - elasticsearch
+
+language: node_js
+node_js:
+  - '0.11'
+  - '0.10'
+
+before_script:
+  - mysql -e 'create database whybug;'
+
+env:
+  - MYSQL_USER="travis"
+  - DEBUG=1
