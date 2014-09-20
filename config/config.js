@@ -9,7 +9,8 @@ var config = {
 
 config.web = {
   // Url where to access whybug, NO trailing slash.
-  url: process.env.WEB_URL || 'http://127.0.0.1:8000'
+  url: process.env.WEB_URL || 'http://127.0.0.1:8000',
+  session_password: process.env.SESSION_PASSWORD || ''
 };
 
 config.node = {
