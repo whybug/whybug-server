@@ -30,7 +30,7 @@
     "react-router-component": "^0.20.1",
     "revalidator": "^0.2.0",
     "superagent": "^0.18.2",
-    "traceur": "0.0.58",
+    "traceur": "0.0.58"
   },
   "devDependencies": {
     "chai": "^1.9.1",
