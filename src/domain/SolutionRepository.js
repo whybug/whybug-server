@@ -3,75 +3,65 @@
  * @param {es.Client} esClient
  * @constructor
  */
-var SolutionRepository = function(esClient) {
-  this.es = esClient;
-  this.index = 'wtf';
-  this.type = 'solution';
-};
+class SolutionRepository {
+
+  constructor(es) {
+    this.es = es;
+    this.index = 'whybug';
+    this.type = 'solution';
+  }
 
 
-/**
- * Stores a ErrorLog.
- *
- * @param {ErrorLog} solution
- * @param {callback} callback
- */
-SolutionRepository.prototype.store = function(solution, callback) {
-  this.es.index({
-    index: this.index,
-    type: this.type,
-    id: solution.uuid,
-    body: solution.data
-  }, function(error) {
-    callback(error);
-  });
-};
+  /**
+   * Stores a ErrorLog.
+   *
+   * @param {ErrorLog} solution
+   */
+  async store(solution) {
+    // todo: validate solution
+    return this.es.index({
+      index: this.index,
+      type: this.type,
+      id: solution.uuid,
+      body: solution
+    });
+  }
 
 
-/**
- * Finds suitable solutions for an ErrorLog.
- *
- * @param {ErrorLog} errorLog
- * @param {callback} callback
- */
-SolutionRepository.prototype.findByErrorLog = function(errorLog, callback) {
-  this.es.search({
-    index: this.index,
-    type: this.type,
-    body: {
-      query: {
-        bool: {
-          must: {
-            term: {
-              language: errorLog.data.language,
-              errorLevel: errorLog.data.errorLevel
+  /**
+   * Finds suitable solutions for an Error.
+   *
+   * @param {Error} error
+   */
+  async findByError(error) {
+    return this.es.search({
+      index: this.index,
+      type: this.type,
+      body: {
+        query: {
+          bool: {
+            must: {
+              term: {
+                language: errorLog.data.language,
+                errorLevel: errorLog.data.errorLevel
+              },
+              match: {
+                errorMessage: errorLog.data.errorMessage
+              }
             },
-            match: {
-              errorMessage: errorLog.data.errorMessage
-            }
-          },
-          should: {
-            term: {
-              languageVersion: errorLog.data.languageVersion,
-              framework: errorLog.data.framework
+            should: {
+              term: {
+                languageVersion: errorLog.data.languageVersion,
+                framework: errorLog.data.framework
+              }
             }
           }
         }
       }
+    });
+  }
 
-    }
-  }, function(error, response) {
-    if (error) {
-      return callback([]);
-    }
+  create(solution) {
+  }
 
-    callback(response.hits);
-  });
-};
-
-
-/**
- * @type {Function}
- */
-module.exports = SolutionRepository;
-
+}

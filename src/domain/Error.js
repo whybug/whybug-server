@@ -1,59 +1,60 @@
-var validator = require('revalidator'),
-  uuidGenerator = require('node-uuid');
+var Joi = require('joi');
+    uuidGenerator = require('node-uuid');
 
 /**
- * An Error is a description of an error which groups ErrorLogs and Solutions.
+ * An Error contains info on an error which occurred on a Client.
  *
- * The description of an Error consists of an error message (preferably without dynamic details like line numbers or
- * file paths), an error level and a programming language.
+ * This info can be the error message, error level, used programming language and so on.
  *
- * Errors group related ErrorLogs (at least one) and provide (hopefully) a Solution.
- *
- * @param {ErrorLog} errorLog
+ * @param {array} data
  * @constructor
  */
 export class Error {
 
-  constructor(uuid, data = {}) {
-    this.uuid = uuid || uuidGenerator.v4();
-    // created?
-
-    for (var name in Error.properties()) {
-      this[name] = data[name] || Error.properties()[name].default;
-    }
+  constructor(data = {}) {
+    // Assert valid data and initalize.
+    Joi.validate(data, Error.properties(), {skipFunctions: true, abortEarly: false}, (err, values) => {
+      if (err) { throw err; }
+      for (var value in values) { this[value] = values[value]; }
+    }):
   }
 
-  static properties() {
+  static bookshelf() {
     return {
-      errorLogCount: {required: true, type: 'int', default: 0},
-      errorMessage: {required: true, type: 'string', minLength: 10},
-      errorLevel: {required: true, type: 'string', minLength: 3},
-      programmingLanguage: {required: true, type: 'string', minLength: 5},
-      framework: {type: 'string', minLength: 5, default: ''},
-      errorCode: {type: 'string', minLength: 5, default: ''}
+      tableName: 'errors',
+      idAttribute: 'uuid',
     };
   }
 
-  validate() {
-    return validator.validate(this, { properties: Error.properties() });
+  static properties() {
+  {
+    return {
+      protocol_version: Joi.number().required(),
+      uuid: Joi.string().guid().default(uuidGenerator.v4()),
+      solution_uuid: Joi.string().guid(),
+      api_key: Joi.string().guid(),
+      client_ip: Joi.string().max(255),
+      level: Joi.string().max(255).required(),
+      code: Joi.string().max(255).required(),
+      message: Joi.string().min(5).required(),
+      programminglanguage: Joi.string().max(255).required(),
+      programminglanguage_version: Joi.string().max(255).required(),
+      os: Joi.string().max(255).notNullable(),
+      os_version: Joi.string().max(255).notNullable(),
+      file_path: Joi.string().max(255).notNullable(),
+      line: Joi.number().integer().required(),
+      created: Joi.string().isoDate().default((new Date).toISOString())
+    };
   }
 
   /**
-   * Associates the specified errorLog to this error.
+   * Validate current object.
    *
-   * @param {ErrorLog} errorLog
+   * @return null
+   * @throws {Error} If validation fails.
    */
-  addErrorLog(errorLog) {
-    errorLog.errorUuid = this.uuid;
-
-    // If this error is new, get the error description from the error log.
-    if (!this.errorLogCount) {
-      this.errorMessage = errorLog.errorMessage;
-      this.errorCode = errorLog.errorCode;
-      this.errorLevel = errorLog.errorLevel;
-      this.programmingLanguage = errorLog.programmingLanguage;
-    }
-
-    this.errorLogCount = ++this.errorLogCount || 1;
-  }
+  validate() {
+    Joi.assert(this, Error.properties());
+  };
 }
+

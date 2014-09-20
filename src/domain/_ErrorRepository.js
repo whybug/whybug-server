@@ -1,15 +1,16 @@
 import {ErrorLog} from './ErrorLog';
 
 /**
- * @param {es.Client} esClient
+ * @param {es.Client} es
  * @constructor
  */
-export class ErrorLogRepository
+export class ErrorRepository
 {
-  constructor(es) {
+  constructor(es, bookshelf) {
     this.es = es;
     this.index = 'whybug';
     this.type = 'error_log';
+    this.model = bookshelf.model('ErrorLog', ErrorLog.bookshelf());
   }
 
   findByQuery(query = '*') {
@@ -70,6 +71,9 @@ export class ErrorLogRepository
     }, function (error) {
 
     });
+
+    // Store in Mysql.
+    new (this.model)(errorLog).save();
   }
 
 }

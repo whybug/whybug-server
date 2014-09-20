@@ -7,11 +7,12 @@ import {
   bookshelf,
   userService,
   errorService,
-  errorLogRepository
+  errorRepository
 } from './dependencies';
 
 import {UserProfile} from './domain/UserProfile';
 import {WebApp} from './web/WebApp';
+import {Error} from './domain/Error';
 
 /**
  * Helper to render HTML or return JSON.
@@ -24,12 +25,13 @@ import {WebApp} from './web/WebApp';
 var reactProxy = (callback) => {
   return (request, reply) => {
     if ("X-Requested-With" in request.headers) {
-      // Forward ajax request to the proxied function.
+      // Forward the ajax request to the proxied function.
       callback(request, reply);
     } else {
       var app = new WebApp({
         path: request.path,
-        model: request.auth.credentials
+        params: request.params,
+        user: request.auth.credentials
       });
       ReactAsync.renderComponentToStringWithAsyncState(app, (err, markup) => {
         console.log('render', request.path);
@@ -56,36 +58,52 @@ var route = (route, handler) => {
 };
 
 /**
- * API routes.
- *
- * These all return JSON.
- */
-route(routes.api.create_error, (request, reply) => {
-  errorService
-    .handleNewErrorLog(new ErrorLog(null, request.payload))
-    .then(reply)
-    .catch((validation) => {
-      reply({error: validation.errors});
-    });
-});
 
-route(routes.api.search_errors, (request, reply) => {
-  errorLogRepository.findByQuery(request.query.query)
-    .then(reply)
-    .catch((err) => {reply(err)});
-});
+GroupedError(solution_uuid, project_uuid, slug)
+Error(erroraggregate_uuid)
+Project(name, programming_language, match_query), z. B. facebook-sdk for php
+Solution(description, errorgroup_uuid)
 
-/**
- * Web routes.
- *
- * For AJAX requests these return JSON, otherwise HTML.
+ErrorService
+  - GroupedError: solve(Error)
+  - [GroupedError]: search(query)
  */
-// Routes which might need a session.
-server.pack.register(require('hapi-auth-cookie'), (err) => {
+server.pack.register([
+  require('bell'), 
+  require('hapi-as-promised'),
+  require('hapi-auth-cookie')
+], (err) => {
   if (err) { throw err; }
 
+  /**
+   * API routes.
+   *
+   * These all return JSON.
+   */
+  route(routes.api.create_error, (request, reply) => {
+    // Delete info a client cannot provide.
+    delete request.payload.uuid;
+    delete request.payload.errorgroup_uuid;
+    request.payload.client_ip = request.info.address;
+
+    reply(errorService.solve(new Error(request.payload)));
+  });
+
+  route(routes.api.search_errors, (request, reply) => {
+    errorService.search(request.query.query)
+      .then(reply)
+      .catch((err) => {reply(err)});
+  });
+
+  /**
+   * Web routes.
+   *
+   * For AJAX requests these return JSON, otherwise HTML.
+   */
+
+  // Register session cookie strategy.
   server.auth.strategy('session', 'cookie', {
-    password: 'worldofwalmart', // cookie secret
+    password: config.web.session_password, 
     cookie: 'session', // Cookie name
     isSecure: false, // Terrible idea but required if not using HTTPS
     ttl: 24 * 60 * 60 * 1000 // Set session to 1 day
@@ -101,34 +119,11 @@ server.pack.register(require('hapi-auth-cookie'), (err) => {
     request.auth.session.clear();
     return reply.redirect('/');
   });
-});
-
-// Login routes.
-server.pack.register(require('bell'), (err) => {
-
-  // Login handler for all providers.
-  var login = (provider) => async (request, reply) => {
-    var credentials = request.auth.credentials;
-    console.log(credentials.profile);
-
-    try {
-      // 1. Perform account lookup or registration.
-      var user = await userService.loginWithProvider(provider, credentials.profile);
-
-      // 2. Setup local session.
-      request.auth.session.set(user);
-
-      // 3. Redirect to the application.
-      return reply.redirect(credentials.query.redirect || '/');
-    } catch(e) {
-      console.log('error', e);
-      return reply(e); // todo: use Boom
-    }
-  };
 
   // Register providers.
   UserProfile.providers().forEach((provider) => {
     if (!config[provider].clientId) {return;}
+
     server.auth.strategy(provider, 'bell', {
       provider: provider,
       password: config[provider].password, // random, for cookie encryption
@@ -137,10 +132,22 @@ server.pack.register(require('bell'), (err) => {
       isSecure: false // Terrible idea but required if not using HTTPS
     });
 
-    route(routes.web.login_github, login('github'));
-    route(routes.web.login_twitter, login('twitter'));
-    route(routes.web.login_google, login('google'));
+    route(routes.web.login[provider], login(provider));
   });
+
+  // Login handler for all providers.
+  var login = (provider) => async (request, reply) => {
+    var credentials = request.auth.credentials;
+
+    // 1. Perform account lookup or registration.
+    var user = await userService.loginWithProvider(provider, credentials.profile);
+
+    // 2. Setup local session.
+    request.auth.session.set(user);
+
+    // 3. Redirect to the application.
+    return reply.redirect(credentials.query.redirect || '/');
+  };
 
 });
 

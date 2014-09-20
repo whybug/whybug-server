@@ -30,7 +30,7 @@ export class ErrorRepository {
    * @param errorLog
    * @param callback
    */
-  findSimilarError(errorLog, callback) {
+  findSimilarError(error, callback) {
     this.es.search({
       index: this.index,
       type: this.type,
