@@ -1,26 +1,40 @@
-import {ErrorLog} from '../../src/domain/ErrorLog.js';
+import {Error} from '../../src/domain/Error.js';
 
-describe('ErrorLog', () => {
+describe('Error', () => {
+
+  var error = {
+    "programminglanguage": "php",
+    "programminglanguage_version": "5.4.24",
+    "message": "Cannot access empty property",
+    "code": "1",
+    "level": "exception",
+    "file_path": "/Volumes/com_mit/frontend/vendor/whybug-php/test.php",
+    "line": 10,
+    "os": "Darwin",
+    "os_version": "13.3.0",
+    "protocol_version": 1,
+    "created_at": new Date("2014-09-20T14:54:17.792Z"),
+    "client_ip": "127.0.0.1",
+  };
 
   describe('#constructor', () => {
 
     it('should generate uuid', () => {
-      new ErrorLog(null).uuid.should.be.a('string');
+      new Error(error).uuid.should.be.a('string');
     });
 
     it('should assign existing uuid', () => {
-      var uuid = '4d7bbc0c-fb49-4cf8-a19b-5ae9e0825450';
-      new ErrorLog(uuid).uuid.should.equal(uuid);
+      error.uuid = "1eb138f8-850e-4555-970b-93470604de87";
+      new Error(error).uuid.should.equal(error.uuid);
     });
 
     it('should assign passed data', () => {
-      var data = {errorMessage: "test message"};
-      new ErrorLog(null, data).should.contain(data);
+      new Error(error).should.contain(error);
     });
 
     it('should not assign invalid data', () => {
-      var data = {hans: "löwenzahn"};
-      new ErrorLog(null, data).should.not.contain(data);
+      error.invalid = 'data';
+      (() => new Error(error)).should.throw('invalid is not allowed');
     });
 
   });
@@ -28,7 +42,7 @@ describe('ErrorLog', () => {
   describe('#properties', () => {
 
     it('should return properties', () => {
-      ErrorLog.properties().should.include.keys('version', 'errorLevel', 'errorMessage', 'programmingLanguage');
+      Error.properties().should.include.keys('protocol_version', 'uuid', 'message', 'programminglanguage');
     });
 
   });
