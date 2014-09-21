@@ -10,7 +10,7 @@ export var server = new (require('hapi')).Server(config.node.host, config.node.p
     engines: {
       html: require('handlebars')
     },
-    path: 'src/web/templates'
+    path: 'src/web/common'
   },
   debug:{ request: ['error'] }
 });

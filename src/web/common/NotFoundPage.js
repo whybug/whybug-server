@@ -1,6 +1,6 @@
 var React = require('react');
 
-import {Header} from '../components/Header';
+import {Header} from './ui/Header';
 var {div} = React.DOM;
 
 class _NotFoundPage {

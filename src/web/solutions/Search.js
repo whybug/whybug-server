@@ -6,8 +6,8 @@ var React = require('react'),
 var {section, div, main, a, h1, h2, h3, form, input, p} = React.DOM;
 var {Link} = Router;
 
-import {SolutionStore} from '../stores/SolutionStore';
-import {Section} from './Elements';
+import {SolutionStore} from './SolutionStore';
+import {Section} from '../common/ui/Elements';
 import {WhybugApi} from '../WhybugApi';
 
 

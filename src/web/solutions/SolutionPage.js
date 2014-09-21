@@ -1,9 +1,9 @@
 var React = require('react'),
     Async = require('react-async');
 
-import {Header} from '../components/Header';
-import {Search} from '../components/Search';
-import {Section} from '../components/Elements';
+import {Header} from '../common/ui/Header';
+import {Search} from './Search';
+import {Section} from '../common/ui/Elements';
 
 var {div, h1} = React.DOM;
 

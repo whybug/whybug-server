@@ -6,10 +6,10 @@ var React = require('react'),
 
 var {Location, Locations} = Router;
 
-import {StartPage} from './pages/StartPage';
-import {SolutionPage} from './pages/SolutionPage';
-import {SolutionSearchPage} from './pages/SolutionSearchPage';
-import {NotFoundPage} from './pages/NotFoundPage';
+import {StartPage} from './start/StartPage';
+import {SolutionPage} from './solutions/SolutionPage';
+import {SolutionSearchPage} from './solutions/SolutionSearchPage';
+import {NotFoundPage} from './common/NotFoundPage';
 
 class _WebApp {
   get mixins() { return [Async.Mixin]; }

@@ -1,7 +1,7 @@
 var React = require('react'),
     Router = require('react-router-component'),
-    config = require('../../../config/config'),
-    routes = require('../../../config/routes');
+    config = require('../../../../config/config'),
+    routes = require('../../../../config/routes');
 
 import {NavLink} from './Elements';
 
@@ -9,7 +9,6 @@ var {Link} = Router;
 var {div, a, span, img, nav} = React.DOM;
 
 export var Header = React.createClass({
-
   render() {
     return div({className: 'navbar-section'},
       div({className: 'w-container'},
@@ -42,7 +41,7 @@ export var Header = React.createClass({
   },
 
   renderLoginMenu() {
-    return div({className: 'w-nav-link nav-link', onClick: this.noOp},
+    return div({className: 'w-nav-link nav-link'},
       'Login',
       div({className: 'subnav'},
         a({href: routes.web.login.github.path, className: 'icon-github'}, span({}, 'Github')),
@@ -50,9 +49,6 @@ export var Header = React.createClass({
         a({href: routes.web.login.google.path, className: 'icon-google-square'}, span({}, 'Google'))
       )
     );
-  },
-
-  noOp() {
-
   }
+
 });

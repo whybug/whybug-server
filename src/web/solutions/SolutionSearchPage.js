@@ -1,7 +1,7 @@
 var React = require('react');
 
-import {Header} from '../components/Header';
-import {Search} from '../components/Search';
+import {Header} from '../common/ui/Header';
+import {Search} from './Search';
 
 var {div} = React.DOM;
 

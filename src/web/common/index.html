@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/main.css{{version.cache}}" />
     <title>whybug</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 </head>
@@ -91,7 +91,7 @@
 
     function loadApp() {
         var element = document.createElement("script");
-        element.src = "/js/bundle.js";
+        element.src = "/js/bundle.js{{version.cache}}";
         document.body.appendChild(element);
     }
 
