@@ -1,5 +1,4 @@
 .idea/
-build/*
 elasticsearch*
 gslint.conf
 npm-debug.log
