@@ -42,7 +42,7 @@ export var Header = React.createClass({
   },
 
   renderLoginMenu() {
-    return div({className: 'w-nav-link nav-link'},
+    return div({className: 'w-nav-link nav-link', onClick: this.noOp},
       'Login',
       div({className: 'subnav'},
         a({href: routes.web.login.github.path, className: 'icon-github'}, span({}, 'Github')),
@@ -50,5 +50,9 @@ export var Header = React.createClass({
         a({href: routes.web.login.google.path, className: 'icon-google-square'}, span({}, 'Google'))
       )
     );
+  },
+
+  noOp() {
+
   }
 });
