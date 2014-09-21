@@ -33,6 +33,7 @@ var reactProxy = (callback) => {
         params: request.params,
         user: request.auth.credentials
       });
+
       ReactAsync.renderComponentToStringWithAsyncState(app, (err, markup) => {
         console.log('render', request.path);
         if (err) { console.log('error', err);
@@ -66,7 +67,8 @@ var route = (route, handler, config = {}) => {
 server.pack.register([
   require('bell'),
   require('hapi-as-promised'),
-  require('hapi-auth-cookie')
+  require('hapi-auth-cookie'),
+  require('hapi-cache-buster')
 ], (err) => {
   if (err) { throw err; }
 
