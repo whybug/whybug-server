@@ -38,8 +38,8 @@ class _SearchForm {
               name: 'query',
               id: 'query',
               type: 'text'
-            }),
-            div({className: 'hint-text'}, 'Hint: You can use language:php or language:javascript, type:warning and platform:windows to narrow down your search.')
+            })
+            //div({className: 'hint-text'}, 'Hint: You can use language:php or language:javascript, type:warning and platform:windows to narrow down your search.')
           ),
           div({className: 'w-col w-col-3'},
             input({ className: 'w-button button submit-button', type: 'submit', value: 'Search', dataWait: 'Searching...' })
@@ -95,7 +95,7 @@ class _Search {
     return div({},
       SearchForm({query: this.state.query}),
       SearchResultList({
-        searchResults: errors.map(error => SearchResult({error: error}))
+        searchResults: errors.map(error => SearchResult({key: error.uuid, error: error}))
       })
     );
   }

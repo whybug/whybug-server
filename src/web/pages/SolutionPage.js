@@ -70,7 +70,7 @@ export var SolutionPage = React.createClass({
 
   render() {
     return div({},
-      Header({user: this.props.model}),
+      Header({user: this.props.user}),
       // SolutionHero({solution: this.state.solution))
       // SolutionDetail({solutoin: this.state.solution))
       !this.props.solution || Section({className: 'hero'},

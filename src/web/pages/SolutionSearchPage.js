@@ -8,7 +8,7 @@ var {div} = React.DOM;
 class _SolutionSearchPage {
   render() {
     return div({},
-      Header({user: this.props.model}),
+      Header({user: this.props.user}),
       Search({limit: 10, query: this.getUserQuery()})
    )
   }

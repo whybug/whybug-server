@@ -8,27 +8,22 @@ import {NavLink} from './Elements';
 var {Link} = Router;
 var {div, a, span, img, nav} = React.DOM;
 
-
-
 export var Header = React.createClass({
 
   render() {
     return div({className: 'navbar-section'},
       div({className: 'w-container'},
-        div({className: 'w-nav navbar'},
-          div({className: 'w-container'},
-            Link({href: routes.web.startpage.path, className: 'w-nav-brand brand'}, 'whybug'),
+        div({className: 'w-nav w-row navbar'},
+          div({className:"w-col w-col-1 w-col-small-1 w-clearfix"},
+            Link({href: routes.web.startpage.path, className: 'w-nav-brand brand'}, 'whybug')
+          ),
 
+          div({className: "w-col w-col-11 w-col-small-11 w-clearfix"},
             nav({className: 'w-nav-menu', role: 'navigation'},
               NavLink({href: routes.web.solution_search.path}, 'Solutions'),
               NavLink({href: 'projects'}, 'Projects'),
               NavLink({href: 'installation'}, 'Installation'),
-              NavLink({href: 'about'}, 'About'),
-              this.props.model ? this.renderUserMenu() : this.renderLoginButtons()
-            ),
-
-            div({className: 'w-nav-button'},
-              div({className: "w-icon-nav-menu"})
+              this.props.user ? this.renderUserMenu() : this.renderLoginMenu()
             )
           )
         )
@@ -37,19 +32,23 @@ export var Header = React.createClass({
   },
 
   renderUserMenu() {
-    return div({className: 'login-text'},
-      'Welcome ',
-      a({href: routes.web.logout.path}, img({src: this.props.model.avatar_url, width: 20, height: 20}))
+    return div({className: 'w-nav-link nav-link'},
+      img({className: 'avatar', src: this.props.user.avatar_url, width: 30, height: 30}),
+      div({className: 'subnav'},
+        a({href: routes.web.logout.path}, span({}, 'Account')),
+        a({href: routes.web.logout.path}, span({}, 'Logout'))
+      )
     );
   },
 
-  renderLoginButtons() {
-    return div({className: 'login-text'},
-      'Login with ...',
-      a({href: routes.web.login.github.path, className: 'social-btn icon-github'}),
-      a({href: routes.web.login.twitter.path, className: 'social-btn icon-twitter-square'}),
-      a({href: routes.web.login.google.path, className: 'social-btn icon-googleplus'})
-      //a({href: routes.web.login_facebook.path, className: 'social-btn icon-facebook-square'}),
+  renderLoginMenu() {
+    return div({className: 'w-nav-link nav-link'},
+      'Login',
+      div({className: 'subnav'},
+        a({href: routes.web.login.github.path, className: 'icon-github'}, span({}, 'Github')),
+        a({href: routes.web.login.twitter.path, className: 'icon-twitter-square'}, span({}, 'Twitter')),
+        a({href: routes.web.login.google.path, className: 'icon-google-square'}, span({}, 'Google'))
+      )
     );
   }
 });

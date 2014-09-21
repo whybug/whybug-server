@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    bundle: './src/web/static/js/app.js'
+    bundle: './src/web/assets/js/app.js'
   },
   output: {
     path: 'build/js',

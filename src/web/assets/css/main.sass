@@ -1,0 +1,72 @@
+@import "vendor/icomoon"
+@import "vendor/normalize"
+@import "vendor/webflow"
+@import "vendor/hint"
+@import "whybug.webflow"
+
+body
+  background-color: #F2F2F2
+
+section
+  background-color: white
+
+a
+  cursor: pointer
+  text-decoration: none
+
+
+.login-btn
+  font-family: icomoon
+
+/**
+ * Sub Navigation dropdown
+ */
+
+.nav-link
+  position: relative
+
+.nav-link:hover .subnav
+  display: block
+
+.subnav
+  border-bottom: 3px solid #737373
+  margin-top: 13px
+  background-color: #292929
+  display: none
+  position: absolute
+  width: 100px
+  height: 95px
+  text-align: right
+  margin-left: -47px
+
+.subnav a
+  display: block
+  width: 100%
+  padding: 7px 
+  font-size: 14px
+  -webkit-transition: opacity 250ms ease
+  -o-transition: opacity 250ms ease
+  transition: opacity 250ms ease
+  opacity: 0.25
+  text-align: center
+  color: white
+
+.subnav a:hover
+  opacity: 0.7
+
+.subnav a span
+  padding-left: 5px
+
+@media screen and (max-width: 479px)
+  .w-col-1
+    width: 8.33333333%
+    left: auto
+    right: auto
+
+  .w-col-small-11
+    width: 91.66666667%
+
+.avatar
+  border-radius: 40px
+
+
