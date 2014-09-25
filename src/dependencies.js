@@ -45,7 +45,7 @@ import {UserProfileRepository} from './domain/UserProfileRepository';
 import {UserService} from './domain/UserService.js';
 
 export var solutionRepository = new SolutionRepository(es, bookshelf);
-var errorRepository = new ErrorRepository(es, bookshelf);
+export var errorRepository = new ErrorRepository(es, bookshelf);
 export var solutionService = new SolutionService(solutionRepository, errorRepository);
 var userRepository = new UserRepository(bookshelf);
 var userProfileRepository = new UserProfileRepository(bookshelf);

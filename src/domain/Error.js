@@ -37,13 +37,16 @@ export class Error {
       .digest('hex');
   }
 
+  set checksum(checksum) {}
+
   static properties() {
     return {
       protocol_version: Joi.number().required(),
       uuid: Joi.string().guid().default(uuidGenerator.v4()),
       solution_uuid: Joi.string().guid(),
-      api_key: Joi.string().guid(),
+      api_key: Joi.string().guid().allow(null),
       client_ip: Joi.string().max(255),
+      checksum: Joi.string().max(255),
       level: Joi.string().max(255).required(),
       code: Joi.string().max(255).required(),
       message: Joi.string().min(5).required(),

@@ -86,6 +86,13 @@ server.pack.register([
     reply(solutionService.solve(new Error(request.payload)));
   }, { validate: {payload: Error.properties()}});
 
+
+  // Get a single error.
+  route(routes.api.read_error, (request, reply) => {
+    reply(errorRepository.findByUuid(request.params.error_uuid));
+  });
+
+  // Search errors.
   route(routes.api.search_errors, (request, reply) => {
     reply(solutionService.search(request.query.query));
   });

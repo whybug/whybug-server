@@ -1,36 +1,52 @@
-var React = require('react');
+var React = require('react'),
+    Async = require('react-async');
 
 import {Header} from '../common/ui/Header';
 import {Search} from './Search';
+import {WhybugApi} from '../WhybugApi';
 import {Section} from '../common/ui/Elements';
 
 var {div, h1, h3, form, input, label, textarea} = React.DOM;
 
 export var SolutionCreatePage = React.createClass({
 
+  mixins: [ Async.Mixin ],
+
   getInitialStateAsync(callback) {
-    // todo: add query from url.
-    ErrorStore.findById(this.props.error_id, (error, result) => callback(error, {
-      errors: result
+    WhybugApi.findErrorByUuid(this.props.error_uuid, (error, result) => callback(error, {
+      error: result
     }));
   },
 
   render() {
-    var error = this.props.error_id;
+    var error = this.state.error || {};
 
     return div({},
       Header({user: this.props.user}),
-      Section({className: 'hero'}, h1({}, 'Create a solution')),
-      Section({className: 'grey'}, h3({}, 'Match error'),
-        form({},
-          label({htmlFor: 'description'}, 'Description'),
-          textarea({name: 'description'}),
+      Section({className: 'hero'}, h1({}, error.message || 'Create a solution')),
+      Section({className: 'grey'},
 
-          label({htmlFor: 'exception'}, 'Level'),
-          input({type: 'text', name: 'level', id: 'exception'}),
+      form({},
+        div({className: 'w-row'}),
+          div({className: 'w-col w-col-10'},
+            textarea({id: 'description', required: "required", className: "w-input field textarea", placeholder: 'How to solve this error?'})
+          ),
+          div({className: 'w-col w-col-2'},
+            label({htmlFor: 'level'}, 'Level'),
+            input({type: 'text', name: 'level', id: 'exception'}),
 
-          label({htmlFor: 'php'}, 'Language'),
-          input({type: 'text', name: 'programminglanguage', id: 'php'})
+            label({htmlFor: 'programminglanguage'}, 'Language'),
+            input({type: 'text', name: 'programminglanguage', id: 'programminglanguage'}),
+
+            label({htmlFor: 'programminglanguage_version'}, 'Language version'),
+            input({type: 'text', name: 'programminglanguage_version', id: 'programminglanguage_version'}),
+
+            label({htmlFor: 'os'}, 'Operation system'),
+            input({type: 'text', name: 'os', id: 'os'}),
+
+            label({htmlFor: 'file_path'}, 'File path'),
+            input({type: 'text', name: 'file_path', id: 'file_path'})
+          )
         )
       )
 

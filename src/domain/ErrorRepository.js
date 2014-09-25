@@ -11,6 +11,11 @@ export class ErrorRepository {
     this.model = bookshelf.model('Error', Error.bookshelf());
   }
 
+  async findByUuid(uuid) {
+    var error = await new (this.model)({uuid: uuid}).fetch();
+
+    return error ? new Error(error.attributes) : {};
+  }
 
   async findByQuery(query = '*') {
     var result = await this.es.search({

@@ -28,7 +28,7 @@ module.exports =  {
     // Solutions, returns HTML.
     solution: {
       search: { method: 'GET', path: '/solutions' },
-      create: { method: 'GET', path: '/solutions/create/:error_id' },
+      create: { method: 'GET', path: '/solutions/create/:error_uuid' },
       view: { method: 'GET', path: '/solutions/:programmingLanguage/:errorMessageSlug' }
     },
 
@@ -46,19 +46,19 @@ module.exports =  {
     // Create a new error, with JSON payload. Returns solutions as JSON.
     create_error: { method: 'POST', path: '/api/errors' },
 
-    // Update an existing error, with JSON payload. Returns nothing.
-    //update_error: { method: 'PUT', path: '/api/errors/{error_uuid}' },
+    // Read a error.
+    read_error: { method: 'GET', path: '/api/errors/{error_uuid}' },
 
     // Search for errors.
     search_errors: { method: 'GET', path: '/api/errors' },
 
     // Create a solution to an error, with JSON payload.
-    create_solution: { method: 'POST', path: '/api/errors/{error_uuid}/solutions' },
+    create_solution: { method: 'POST', path: '/api/solutions/{solution_uuid}' },
 
     // Update a solution, with JSON payload.
-    update_solution: { method: 'PUT', path: '/api/errors/{error_uuid}/solutions/{solution_uuid}' },
+    update_solution: { method: 'PUT', path: '/api/solutions/{solution_uuid}' },
 
-    // Update a solution, with JSON payload.
-    delete_solution: { method: 'DELETE', path: '/api/errors/{error_uuid}/solutions/{solution_uuid}' }
+    // Delete a solution, with JSON payload.
+    delete_solution: { method: 'DELETE', path: '/api/solutions/{error_uuid}' }
   }
 };
