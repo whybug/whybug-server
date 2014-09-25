@@ -1,3 +1,5 @@
+var webpack = require('webpack');
+
 module.exports = {
   entry: {
     bundle: './src/web/assets/js/app.js'
@@ -12,5 +14,10 @@ module.exports = {
       {test: /config\/.*\.js$/, loader: 'envify'},
       {test: /(src|config)\/.*\.js$/, loader: 'traceur?experimental=true&runtime=true'}
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      __BROWSER__: true
+    })
+  ]
 };
