@@ -131,6 +131,7 @@ server.pack.register([
     var user = await userService.loginWithProvider(provider, credentials.profile);
 
     // 2. Setup local session.
+    delete user.attributes.email;
     request.auth.session.set(user);
 
     // 3. Redirect to the application.
