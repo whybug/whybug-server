@@ -19,6 +19,19 @@ export class WhybugApi {
   }
 
   /**
+   * Creates a new solution.
+   *
+   * @param solution
+   * @param callback
+   * @returns {*}
+   */
+  static createSolution(solution, callback) {
+    return request(routes.api.create_solution)
+      .send(solution)
+      .end(notify(callback));
+  }
+
+  /**
    * Search for errors by specified query.
    *
    * @deprecated

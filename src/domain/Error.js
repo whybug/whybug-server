@@ -32,12 +32,14 @@ export class Error {
       + this.file_path
       + this.line;
 
-    return crypto.createHash('sha1')
+    return this._checksum || crypto.createHash('sha1')
       .update(text, 'utf8')
       .digest('hex');
   }
 
-  set checksum(checksum) {}
+  set checksum(checksum) {
+    this._checksum = checksum;
+  }
 
   static properties() {
     return {

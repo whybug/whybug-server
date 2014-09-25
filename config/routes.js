@@ -52,8 +52,8 @@ module.exports =  {
     // Search for errors.
     search_errors: { method: 'GET', path: '/api/errors' },
 
-    // Create a solution to an error, with JSON payload.
-    create_solution: { method: 'POST', path: '/api/solutions/{solution_uuid}' },
+    // Create a solution, with JSON payload.
+    create_solution: { method: 'POST', path: '/api/solutions' },
 
     // Update a solution, with JSON payload.
     update_solution: { method: 'PUT', path: '/api/solutions/{solution_uuid}' },

@@ -14,8 +14,8 @@ var Joi = require('joi'),
 export class Solution {
 
   constructor(data = {}) {
-    // Assert valid data and initalize.
-    Joi.validate(data, Solution.properties, {skipFunctions: true, abortEarly: false}, (err, values) => {
+    // Assert valid data and initialize.
+    Joi.validate(data, Solution.properties(), {skipFunctions: true, abortEarly: false}, (err, values) => {
       if (err) { throw err; }
       for (var value in values) { this[value] = values[value]; }
     });
@@ -26,13 +26,14 @@ export class Solution {
       uuid: Joi.string().guid().default(uuidGenerator.v4()),
       slug_long: Joi.string().regex(/^[a-z0-9\-]+$/), // a slug is: small chars, numbers and dashes
       slug_short: Joi.string().alphanum(),
+      description: Joi.string().required(),
       level: Joi.string().max(255).required(),
-      code: Joi.string().max(255).required(),
+      //code: Joi.string().max(255).required(),
       message: Joi.string().min(5).required(),
       programminglanguage: Joi.string().max(255).required(),
       programminglanguage_version: Joi.string().max(255).required(),
-      os: Joi.string().max(255).notNullable(),
-      os_version: Joi.string().max(255).notNullable(),
+      os: Joi.string().max(255).required(),
+      os_version: Joi.string().max(255).required(),
       created_at: Joi.date().default(new Date)
     };
   }
@@ -45,7 +46,11 @@ export class Solution {
   }
 
   get slug_long() {
-    return this.message;
+    return this.uuid;//this.message;
+  }
+
+  get slug_short() {
+    return this.uuid; //this.message;
   }
 
   /**
@@ -53,15 +58,15 @@ export class Solution {
    *
    * @param {Error} error
    */
-  forError(error) {
-    return new Solution({
-      message: error.message,
-      code: error.code,
-      level: error.level,
-      programminglanguage: error.programminglanguage,
-      programminglanguage_version: error.programminglanguage_version,
-      os: error.os,
-      os_version: error.os_version
-    });
-  }
+  //static forError(error) {
+  //  return new Solution({
+  //    message: error.message,
+  //    code: error.code,
+  //    level: error.level,
+  //    programminglanguage: error.programminglanguage,
+  //    programminglanguage_version: error.programminglanguage_version,
+  //    os: error.os,
+  //    os_version: error.os_version
+  //  });
+  //}
 }

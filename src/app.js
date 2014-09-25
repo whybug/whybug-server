@@ -7,12 +7,14 @@ import {
   bookshelf,
   userService,
   solutionService,
+  solutionRepository,
   errorRepository
 } from './dependencies';
 
 import {UserProfile} from './domain/UserProfile';
 import {WebApp} from './web/WebApp';
 import {Error} from './domain/Error';
+import {Solution} from './domain/Solution';
 
 /**
  * Helper to render HTML or return JSON.
@@ -91,6 +93,11 @@ server.pack.register([
   route(routes.api.read_error, (request, reply) => {
     reply(errorRepository.findByUuid(request.params.error_uuid));
   });
+
+  // Create a solution.
+  route(routes.api.create_solution, (request, reply) => {
+    reply(solutionRepository.store(new Solution(request.payload)));
+  }, { validate: {payload: Solution.properties()}});
 
   // Search errors.
   route(routes.api.search_errors, (request, reply) => {

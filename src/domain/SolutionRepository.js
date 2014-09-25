@@ -1,3 +1,4 @@
+import {Solution} from './Solution';
 
 /**
  * @param {es.Client} esClient
@@ -5,10 +6,11 @@
  */
 export class SolutionRepository {
 
-  constructor(es) {
+  constructor(es, bookshelf) {
     this.es = es;
     this.index = 'whybug';
     this.type = 'solutions';
+    this.model = bookshelf.model('Solution', Solution.bookshelf());
   }
 
   /**
@@ -39,23 +41,41 @@ export class SolutionRepository {
    * @param {Solution} solution
    * @returns {Promise}
    */
-  store(solution) {
-    // todo: store to mysql
+  async store(solution) {
+    await Promise.all([
+      this.storeMysql(solution),
+      this.storeEs(solution),
+      this.storePercolator(solution)
+    ]);
 
-    this.es.index({
+    return solution;
+  }
+
+  storeMysql(solution) {
+    return new (this.model)(solution).save({}, {method: 'insert'});
+  }
+
+  storeEs(solution) {
+    return this.es.index({
       index: this.index,
       type: this.type,
       id: solution.uuid,
       body: solution
     });
+  }
 
-    console.log('solution', solution);
+  storePercolator(solution) {
+    return this.es.index({
+      index: this.index,
+      type: '.percolator',
+      id: solution.uuid,
+      body: this.getQueryForSolution(solution)
+    });
+  }
+
+  getQueryForSolution(solution) {
     var terms = {};
     var match = {};
-    var query = {
-      filtered: {query: {match: match},
-      filter: {terms: terms}}
-    };
 
     if (solution.code) { terms.code = solution.code; }
     if (solution.level) { terms.level = solution.level; }
@@ -65,12 +85,14 @@ export class SolutionRepository {
     if (solution.programminglanguage) { terms.programminglanguage = solution.programminglanguage }
     if (solution.programminglanguage_version) { terms.programminglanguage_version = solution.programminglanguage_version }
 
-    return this.es.index({
-      index: this.index,
-      type: '.percolator',
-      id: solution.uuid,
-      body: query
-    });
+    return {
+      query: {
+        filtered: {
+          query: {match: match},
+          filter: {term: terms}
+        }
+      }
+    };
   }
 }
 
