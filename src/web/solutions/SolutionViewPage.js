@@ -36,7 +36,7 @@ class SolutionActions {
   static search(query, callback) {}
 }
 
-export var SolutionPage = React.createClass({
+export var SolutionViewPage = React.createClass({
 
   mixins: [ Async.Mixin ],
 

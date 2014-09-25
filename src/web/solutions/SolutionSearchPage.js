@@ -1,21 +1,48 @@
-var React = require('react');
+var React = require('react'),
+    Async = require('react-async');
 
 import {Header} from '../common/ui/Header';
-import {Search} from './Search';
+import {SearchForm, SearchResultList, SearchResult} from './Search';
+import {Section} from '../common/ui/Elements';
+import {SolutionStore} from './SolutionStore';
 
 var {div} = React.DOM;
 
-class _SolutionSearchPage {
+export var SolutionSearchPage = React.createClass({
+
+  get mixins() { return [Async.Mixin]; },
+
   render() {
+    var errors = this.state.errors || [];
+
     return div({},
       Header({user: this.props.user}),
-      Search({limit: 10, query: this.getUserQuery()})
+      Section({className: 'hero'}, SearchForm({query: this.state.params})),
+
+      Section({className: 'grey'}, SearchResultList({
+        searchResults: errors.map(error => SearchResult({key: error.uuid, error: error}))
+      }))
    )
-  }
+  },
 
-  getUserQuery() {
-    return '';
-  }
-}
+  getInitialStateAsync(callback) {
+    // todo: add query from url.
+    SolutionStore.searchSolutions('', (error, result) => callback(error, {
+      errors: result
+    }));
+  },
 
-export var SolutionSearchPage = React.createClass(_SolutionSearchPage.prototype);
+  componentDidMount() {
+    SolutionStore.attachResultListener(this.onResult);
+  },
+
+  componentWillUnmount() {
+    SolutionStore.removeResultListener(this.onResult)
+  },
+
+  onResult() {
+    this.setState({
+      errors: SolutionStore.state
+    });
+  }
+});

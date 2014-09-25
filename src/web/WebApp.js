@@ -7,7 +7,8 @@ var React = require('react'),
 var {Location, Locations} = Router;
 
 import {StartPage} from './start/StartPage';
-import {SolutionPage} from './solutions/SolutionPage';
+import {SolutionCreatePage} from './solutions/SolutionCreatePage';
+import {SolutionViewPage} from './solutions/SolutionViewPage';
 import {SolutionSearchPage} from './solutions/SolutionSearchPage';
 import {NotFoundPage} from './common/NotFoundPage';
 
@@ -16,16 +17,31 @@ class _WebApp {
 
   getInitialStateAsync(callback) {
     callback(null, {
-      user: this.props.user
+      user: this.props.user,
+      params: this.props.params
     });
   }
 
+  getPages() {
+    return [
+      {path: routes.web.startpage.path, handler: StartPage},
+      {path: routes.web.solution.search.path, handler: SolutionSearchPage},
+      {path: routes.web.solution.create.path, handler: SolutionCreatePage},
+      {path: routes.web.solution.view.path, handler: SolutionViewPage},
+      {path: null, handler: NotFoundPage}
+    ];
+  }
+
   render() {
-    return Locations({path: this.props.path},
-      Location({path: routes.web.startpage.path, handler: StartPage, user: this.state.user}),
-      Location({path: routes.web.solution_search.path, handler: SolutionSearchPage, user: this.state.user}),
-      Location({path: routes.web.solution.path, handler: SolutionPage, user: this.state.user}),
-      Location({path: null, handler: NotFoundPage, user: this.state.user})
+    return this.transferPropsTo(
+      Locations({path: this.props.path},
+        this.getPages().map((page) => Location({
+          path: page.path,
+          handler: page.handler,
+          user: this.state.user,
+          params: this.state.params
+        }))
+      )
     );
   }
 }

@@ -25,11 +25,12 @@ module.exports =  {
     // Logout, only redirect.
     logout: { method: 'GET', path: '/logout', config: { auth: 'session' } },
 
-    // SolutionPage, returns HTML.
-    solution_search: { method: 'GET', path: '/solutions' },
-
-    // ErrorPage, returns HTML.
-    solution: { method: 'GET', path: '/solutions/:programmingLanguage/:errorMessageSlug' },
+    // Solutions, returns HTML.
+    solution: {
+      search: { method: 'GET', path: '/solutions' },
+      create: { method: 'GET', path: '/solutions/create/:error_id' },
+      view: { method: 'GET', path: '/solutions/:programmingLanguage/:errorMessageSlug' }
+    },
 
     // URL shortener, redirects to a solution.
     url_shortener: { method: 'GET', path: '/s/{p*}' }

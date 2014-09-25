@@ -19,9 +19,9 @@ export var Header = React.createClass({
 
           div({className: "w-col w-col-11 w-col-small-11 w-clearfix"},
             nav({className: 'w-nav-menu', role: 'navigation'},
-              NavLink({href: routes.web.solution_search.path}, 'Solutions'),
-              NavLink({href: 'projects'}, 'Projects'),
-              NavLink({href: 'installation'}, 'Installation'),
+              NavLink({href: routes.web.solution.search.path}, 'Solutions'),
+              NavLink({href: '/projects'}, 'Projects'),
+              NavLink({href: '/installation'}, 'Installation'),
               this.props.user ? this.renderUserMenu() : this.renderLoginMenu()
             )
           )
@@ -32,7 +32,7 @@ export var Header = React.createClass({
 
   renderUserMenu() {
     return div({className: 'w-nav-link nav-link'},
-      img({className: 'avatar', src: this.props.user.avatar_url, width: 30, height: 30}),
+      img({className: 'avatar', src: this.props.user.avatar_url, width: 25, height: 25}),
       div({className: 'subnav'},
         a({href: routes.web.logout.path}, span({}, 'Account')),
         a({href: routes.web.logout.path}, span({}, 'Logout'))
