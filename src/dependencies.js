@@ -4,8 +4,10 @@
 export var ReactAsync = require('react-async');
 export var config = require('../config/config');
 export var routes = require('../config/routes');
+export var Joi = require('joi');
+export var Hapi = require('hapi');
 
-export var server = new (require('hapi')).Server(config.node.host, config.node.port, {
+export var server = new Hapi.Server(config.node.host, config.node.port, {
   views: {
     engines: {
       html: require('handlebars')

@@ -1,5 +1,3 @@
-var ejs = require('elastic.js');
-
 import {Error} from './Error';
 
 export class ErrorRepository {
@@ -14,7 +12,7 @@ export class ErrorRepository {
   async findByUuid(uuid) {
     var error = await new (this.model)({uuid: uuid}).fetch();
 
-    return error ? new Error(error.attributes) : {};
+    return error ? new Error(error.attributes) : null;
   }
 
   async findByQuery(query = '*') {
@@ -47,24 +45,52 @@ export class ErrorRepository {
     return result.hits.hits.map((hit) => new Error(hit._source));
   }
 
+
   /**
-   * Returns the most similar Error for the specified ErrorLog
-   * or undefined if none found.
+   * Stores an error.
    *
-   * An Errorlog is similar to an Error if the ErrorLog shares at least the
-   * same programmingLanguage, errorLevel and a 'similar' errorMessage
-   * (x% similarity) with a Error variation.
-   *
-   * If a ErrorLog shares the same programmingLanguageVersion, framework
-   * and/or frameworkVersion the similarity increases.
-   *
-   * In case more than one Error is found, the one with the
-   * most similarity is returned.
-   *
-   * @param error
-   * @param callback
+   * @param {Error} error
    */
-  findSimilarError(error, callback) {
+  store(error) {
+    return Promise.all([
+      this.storeMysql(error),
+      this.storeEs(error)
+    ]);
+  }
+
+  storeMysql(error) {
+    return new (this.model)(error).save({}, {method: 'insert'});
+  }
+
+  storeEs(error) {
+    return this.es.index({
+      index: this.index,
+      type: this.type,
+      id: error.uuid,
+      body: error
+    });
+  }
+}
+
+
+
+/**
+ * Returns the most similar Error for the specified ErrorLog
+ * or undefined if none found.
+ *
+ * An Errorlog is similar to an Error if the ErrorLog shares at least the
+ * same programmingLanguage, errorLevel and a 'similar' errorMessage
+ * (x% similarity) with a Error variation.
+ *
+ * If a ErrorLog shares the same programmingLanguageVersion, framework
+ * and/or frameworkVersion the similarity increases.
+ *
+ * In case more than one Error is found, the one with the
+ * most similarity is returned.
+ *
+ * @param error
+ * @param callback
+ findSimilarError(error, callback) {
     this.es.search({
       index: this.index,
       type: this.type,
@@ -94,7 +120,7 @@ export class ErrorRepository {
     });
   }
 
-  findSimilarError2() {
+ findSimilarError2() {
     return this.search(Error, ejs.Request()
       .size(1)
       .query(
@@ -116,29 +142,4 @@ export class ErrorRepository {
       )
     );
   }
-
-  /**
-   * Stores an error.
-   *
-   * @param {Error} error
-   */
-  store(error) {
-    return Promise.all([
-      this.storeMysql(error),
-      this.storeEs(error)
-    ]);
-  }
-
-  storeMysql(error) {
-    return new (this.model)(error).save({}, {method: 'insert'});
-  }
-
-  storeEs(error) {
-    return this.es.index({
-      index: this.index,
-      type: this.type,
-      id: error.uuid,
-      body: error
-    });
-  }
-}
+ */

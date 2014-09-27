@@ -1,4 +1,5 @@
 var Joi = require('joi'),
+    slug = require('slug'),
     uuidGenerator = require('node-uuid');
 
 /**
@@ -46,11 +47,19 @@ export class Solution {
   }
 
   get slug_long() {
-    return this.uuid;//this.message;
+    return this._slug_long || slug(this.message).toLowerCase();
+  }
+
+  set slug_long(slug_long) {
+    this._slug_long = slug_long;
   }
 
   get slug_short() {
-    return this.uuid; //this.message;
+    return this._slug_short || this.uuid; //this.message;
+  }
+
+  set slug_short(slug_short) {
+    this._slug_short = slug_short;
   }
 
   /**

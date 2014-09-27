@@ -3,6 +3,8 @@ import {
   routes,
   server,
   ReactAsync,
+  Joi,
+  Hapi,
   es,
   bookshelf,
   userService,
@@ -88,11 +90,10 @@ server.pack.register([
     reply(solutionService.solve(new Error(request.payload)));
   }, { validate: {payload: Error.properties()}});
 
-
   // Get a single error.
-  route(routes.api.read_error, (request, reply) => {
-    reply(errorRepository.findByUuid(request.params.error_uuid));
-  });
+  route(routes.api.read_error, async (request, reply) => {
+    reply(await errorRepository.findByUuid(request.params.error_uuid) || Hapi.error.notFound());
+  }, {validate: { params: {error_uuid: Joi.string().guid() }}});
 
   // Create a solution.
   route(routes.api.create_solution, (request, reply) => {
@@ -124,12 +125,11 @@ server.pack.register([
   }));
 
 
-  route(routes.web.url_shortener, (request, reply) => {
+  //route(routes.web.url_shortener, (request, reply) => {
     //var alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     //private static final int    BASE     = ALPHABET.length();
-
-    reply({});
-  });
+    //reply({});
+  //});
 
   // Logout.
   route(routes.web.logout, (request, reply) => {

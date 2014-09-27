@@ -12,7 +12,6 @@
   "dependencies": {
     "bell": "^1.1.0",
     "bookshelf": "^0.7.7",
-    "elastic.js": "^1.2.0",
     "elasticsearch": "^2.4.2",
     "fibers": "^1.0.2",
     "handlebars": "^2.0.0",
@@ -29,7 +28,7 @@
     "react": "^0.11.1",
     "react-async": "^1.0.2",
     "react-router-component": "^0.20.1",
-    "revalidator": "^0.2.0",
+    "slug": "^0.7.1",
     "superagent": "^0.18.2",
     "traceur": "0.0.58"
   },
