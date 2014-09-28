@@ -6,29 +6,53 @@ import {SearchForm, SearchResultList, SearchResult} from './Search';
 import {Section} from '../common/ui/Elements';
 import {SolutionStore} from './SolutionStore';
 
-var {div} = React.DOM;
+var {div, main, label} = React.DOM;
 
 export var SolutionSearchPage = React.createClass({
 
   get mixins() { return [Async.Mixin]; },
 
   render() {
-    var errors = this.state.errors || [];
+    var solutions = this.state.solutions || [];
 
     return div({},
       Header({user: this.props.user}),
       Section({className: 'hero'}, SearchForm({query: this.state.params})),
 
-      Section({className: 'grey'}, SearchResultList({
-        searchResults: errors.map(error => SearchResult({key: error.uuid, error: error}))
-      }))
+      Section({className: 'grey'},
+        div({className: 'w-row'},
+
+          main({className: 'w-col w-col-9'}, this.renderSearchResults(solutions) ),
+
+          div({className: 'w-col w-col-3'},
+            label({htmlFor: 'programminglanguage'}, 'Language'),
+            solutions.aggregations.programminglanguage.buckets.map((agg) => div({}, agg.key + "(" + agg.doc_count + ")")),
+
+            label({htmlFor: 'level'}, 'Level'),
+            solutions.aggregations.level.buckets.map((agg) => div({}, agg.key + "(" + agg.doc_count + ")")),
+
+            label({htmlFor: 'os'}, 'Operating system'),
+            solutions.aggregations.os.buckets.map((agg) => div({}, agg.key + "(" + agg.doc_count + ")"))
+
+            //label({htmlFor: 'project'}, 'Project')
+          )
+        )
+      )
    )
+  },
+
+  renderSearchResults(solutions) {
+    if (solutions.total) {
+      return solutions.solutions.map(solution => SearchResult(solution))
+    }
+
+    return div({}, 'No errors found');
   },
 
   getInitialStateAsync(callback) {
     // todo: add query from url.
     SolutionStore.searchSolutions('', (error, result) => callback(error, {
-      errors: result
+      solutions: result
     }));
   },
 
@@ -42,7 +66,8 @@ export var SolutionSearchPage = React.createClass({
 
   onResult() {
     this.setState({
-      errors: SolutionStore.state
+      solutions: SolutionStore.state
     });
   }
 });
+

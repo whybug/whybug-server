@@ -38,6 +38,62 @@ export class SolutionRepository {
   }
 
   /**
+   * Suggests error messages that could match
+   * the given message.
+   *
+   * @param message
+   *
+   * @return {Promise}
+   */
+  suggestErrorMessages(message) {
+
+  }
+
+  /**
+   * Search solutions
+   */
+  async search(query = '*') {
+    var result = await this.es.search({
+      index: this.index,
+      type: this.type,
+      body: {
+        size: 10,
+        sort: {created_at: 'desc'},
+        query: {
+          filtered: {
+            query: {
+              match: {
+                message: {
+                  query: query,
+                  operator: 'and',
+                  minimum_should_match: '10%',
+                  zero_terms_query: 'all'
+                }
+              }
+            },
+            filter: {
+              exists: { field: 'created_at' }
+            }
+          }
+        },
+        aggregations: {
+          programminglanguage: {terms: {field: "programminglanguage"}},
+          level: {terms: {field: "level"}},
+          os: {terms: {field: "os"}}
+        }
+      }
+    });
+
+    return {
+      total: result.hits.total,
+      solutions: result.hits.hits.map((solution) => new Solution(solution._source)),
+      aggregations: result.aggregations
+    };
+  }
+
+
+
+  /**
    * @param {Solution} solution
    * @returns {Promise}
    */

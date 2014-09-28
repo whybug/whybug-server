@@ -9,42 +9,16 @@ export class ErrorRepository {
     this.model = bookshelf.model('Error', Error.bookshelf());
   }
 
+  /**
+   * Returns the Error for specified uuid or null if not found.
+   *
+   * @return {Error} Error matching UUID, or null if not found.
+   */
   async findByUuid(uuid) {
-    var error = await new (this.model)({uuid: uuid}).fetch();
+    var error = await knex(this.table).where('uuidi', uuid);
 
     return error ? new Error(error.attributes) : null;
   }
-
-  async findByQuery(query = '*') {
-    var result = await this.es.search({
-      index: this.index,
-      type: this.type,
-      body: {
-        size: 10,
-        sort: {created_at: 'desc'},
-        query: {
-          filtered: {
-            query: {
-              match: {
-                errorMessage: {
-                  query: query,
-                  operator: 'and',
-                  minimum_should_match: '10%',
-                  zero_terms_query: 'all'
-                }
-              }
-            },
-            filter: {
-              exists: { field: 'created_at' }
-            }
-          }
-        }
-      }
-    });
-
-    return result.hits.hits.map((hit) => new Error(hit._source));
-  }
-
 
   /**
    * Stores an error.
@@ -58,10 +32,22 @@ export class ErrorRepository {
     ]);
   }
 
+  /**
+   * Stores an error in mysql.
+   *
+   * @param error
+   * @returns {Promise}
+   */
   storeMysql(error) {
     return new (this.model)(error).save({}, {method: 'insert'});
   }
 
+  /**
+   * Stores an error in elasticsearch.
+   *
+   * @param error
+   * @returns {Promise}
+   */
   storeEs(error) {
     return this.es.index({
       index: this.index,

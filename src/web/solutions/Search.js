@@ -2,7 +2,7 @@ var React = require('react'),
     Router = require('react-router-component'),
     routes = require('../../../config/routes');
 
-var {section, div, main, a, h1, h2, h3, form, input, p} = React.DOM;
+var {section, div, main, a, h1, h2, h3, form, label, input, p} = React.DOM;
 var {Link} = Router;
 
 import {SolutionStore} from './SolutionStore';
@@ -48,32 +48,24 @@ export var SearchForm = React.createClass({
   }
 });
 
-export var SearchResultList = React.createClass({
-  render() {
-    return div({className: 'w-row'},
-      main({className: 'w-col w-col-9'},
-        h2({}, 'All error messages'),
-        this.props.searchResults.length ? this.props.searchResults : div({}, 'No errors found')
-      ),
-      div({className: 'w-col w-col-3'}, 'sidebar for filters')
-    );
-  }
-});
-
-
 export var SearchResult = React.createClass({
+  propTypes: {
+    uuid: React.PropTypes.string,
+    level: React.PropTypes.string,
+    message: React.PropTypes.string,
+    programminglangauge: React.PropTypes.string
+  },
+
   render() {
     return Link({href: this.getSolutionLink(), className: 'content-block'},
-      h3({className: 'latest-errors'}, this.props.error.level,  ': ', this.props.error.message)
-//      p({className: 'solution-text'}, error.created),
-//      p({className: 'solution-text'}, `${error.programmingLanguage} ${error.programmingLanguageVersion}`)
+      h3({className: 'latest-errors'}, this.props.level,  ': ', this.props.message)
     );
   },
 
   getSolutionLink() {
     return routes.web.solution.view.path
-      .replace(':programmingLanguage', this.props.error.programminglanguage)
-      .replace(':errorMessageSlug', this.props.error.uuid);
+      .replace(':programmingLanguage', this.props.programminglanguage)
+      .replace(':errorMessageSlug', this.props.uuid);
   }
 });
 

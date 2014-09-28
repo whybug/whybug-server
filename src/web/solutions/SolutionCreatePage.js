@@ -58,10 +58,10 @@ export var SolutionCreatePage = React.createClass({
           ),
 
           div({className: 'w-col w-col-3'},
-            TextInput({text: 'Level', name: 'level', onChange: this.onChange('level'), input: error}),
-            TextInput({text: 'Language', name: 'programminglanguage', onChange: this.onChange('programminglanguage'), input: error}),
-            TextInput({text: 'Language version', name: 'programminglanguage_version', onChange: this.onChange('programminglanguage_version'), input: error}),
-            TextInput({text: 'Operating system', name: 'os', onChange: this.onChange('os'), input: error})
+            TextInput({text: 'Level', name: 'level', onChange: this.onChange('level'), values: error}),
+            TextInput({text: 'Language', name: 'programminglanguage', onChange: this.onChange('programminglanguage'), values: error}),
+            TextInput({text: 'Language version', name: 'programminglanguage_version', onChange: this.onChange('programminglanguage_version'), values: error}),
+            TextInput({text: 'Operating system', name: 'os', onChange: this.onChange('os'), values: error})
             //TextInput({text: 'File path', name: 'file_path', onChange: this.onChange('file_path'), input: error})
 
             // Project?
@@ -77,7 +77,7 @@ export var SolutionCreatePage = React.createClass({
 export var TextInput = React.createClass({
   propTypes: {
     name: React.PropTypes.string,
-    input: React.PropTypes.object,
+    values: React.PropTypes.object,
     onChange: React.PropTypes.func
   },
 
@@ -90,7 +90,7 @@ export var TextInput = React.createClass({
   render() {
     return div({},
       this.props.label ? label({htmlFor: this.props.name}, this.props.text) : null,
-      this.props.input[this.props.name] || "Any"
+      this.props.values[this.props.name] || "Any"
       //input({
       //  type: 'text',
       //  className: 'field',

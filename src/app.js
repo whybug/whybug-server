@@ -100,8 +100,8 @@ server.pack.register([
     reply(solutionRepository.store(new Solution(request.payload)));
   }, { validate: {payload: Solution.properties()}});
 
-  // Search errors.
-  route(routes.api.search_errors, (request, reply) => {
+  // Search solutions.
+  route(routes.api.search_solutions, (request, reply) => {
     reply(solutionService.search(request.query.query));
   });
 

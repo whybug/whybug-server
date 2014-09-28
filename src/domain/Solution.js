@@ -3,17 +3,17 @@ var Joi = require('joi'),
     uuidGenerator = require('node-uuid');
 
 /**
- * An Error is a description of an error which groups ErrorLogs and Solutions.
+ * A solution is a description how to solve a group of errors.
  *
- * The description of an Error consists of an error message (preferably without dynamic details like line numbers or
- * file paths), an error level and a programming language.
- *
- * Errors group related Errors (at least one).
- *
- * @param {ErrorLog} errorLog
  */
 export class Solution {
 
+  /**
+   * Creates a new solution.
+   *
+   * @param data
+   * @throws ValidationError if provided data is invalid.
+   */
   constructor(data = {}) {
     // Assert valid data and initialize.
     Joi.validate(data, Solution.properties(), {skipFunctions: true, abortEarly: false}, (err, values) => {
@@ -22,6 +22,11 @@ export class Solution {
     });
   }
 
+  /**
+   * Returns a hash of valid properties and their Joi validation.
+   *
+   * @returns {Object} Hash of valid properties and their Joi validatoin.
+   */
   static properties() {
     return {
       uuid: Joi.string().guid().default(uuidGenerator.v4()),
@@ -55,27 +60,10 @@ export class Solution {
   }
 
   get slug_short() {
-    return this._slug_short || this.uuid; //this.message;
+    return this._slug_short || this.uuid;
   }
 
   set slug_short(slug_short) {
     this._slug_short = slug_short;
   }
-
-  /**
-   * Creates a solution with a context of specified error.
-   *
-   * @param {Error} error
-   */
-  //static forError(error) {
-  //  return new Solution({
-  //    message: error.message,
-  //    code: error.code,
-  //    level: error.level,
-  //    programminglanguage: error.programminglanguage,
-  //    programminglanguage_version: error.programminglanguage_version,
-  //    os: error.os,
-  //    os_version: error.os_version
-  //  });
-  //}
 }

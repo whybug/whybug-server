@@ -50,7 +50,7 @@ module.exports =  {
     read_error: { method: 'GET', path: '/api/errors/{error_uuid}' },
 
     // Search for errors.
-    search_errors: { method: 'GET', path: '/api/errors' },
+    search_solutions: { method: 'GET', path: '/api/solutions' },
 
     // Create a solution, with JSON payload.
     create_solution: { method: 'POST', path: '/api/solutions' },

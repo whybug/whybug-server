@@ -40,7 +40,7 @@ export class WhybugApi {
    * @returns {*}
    */
   static searchErrors(query, callback) {
-    return request(routes.api.search_errors)
+    return request(routes.api.search_solutions)
       .query({query: query})
       .end(notify(callback));
   }

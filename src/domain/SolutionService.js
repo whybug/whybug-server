@@ -29,6 +29,6 @@ export class SolutionService {
   }
 
   search(query) {
-    return this.errorRepository.findByQuery(query);
+    return this.solutionRepository.search(query);
   }
 }
