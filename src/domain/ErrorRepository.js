@@ -15,7 +15,7 @@ export class ErrorRepository {
    * @return {Error} Error matching UUID, or null if not found.
    */
   async findByUuid(uuid) {
-    var error = await knex(this.table).where('uuidi', uuid);
+    var error = await new (this.model)({uuid: uuid}).fetch();
 
     return error ? new Error(error.attributes) : null;
   }
