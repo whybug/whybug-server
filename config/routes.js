@@ -55,6 +55,9 @@ module.exports =  {
     // Create a solution, with JSON payload.
     create_solution: { method: 'POST', path: '/api/solutions' },
 
+    // Read a solution.
+    read_solution: { method: 'GET', path: '/api/solutions/{solution_uuid}' },
+
     // Update a solution, with JSON payload.
     update_solution: { method: 'PUT', path: '/api/solutions/{solution_uuid}' },
 

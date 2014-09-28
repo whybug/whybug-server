@@ -31,16 +31,18 @@ export class Solution {
     return {
       uuid: Joi.string().guid().default(uuidGenerator.v4()),
       slug_long: Joi.string().regex(/^[a-z0-9\-]+$/), // a slug is: small chars, numbers and dashes
-      slug_short: Joi.string().alphanum(),
+      slug_short: Joi.string().regex(/^[a-z0-9\-]+$/), // a slug is: small chars, numbers and dashes
       description: Joi.string().required(),
       level: Joi.string().max(255).required(),
-      //code: Joi.string().max(255).required(),
+      code: Joi.string().max(255).allow(''),
       message: Joi.string().min(5).required(),
       programminglanguage: Joi.string().max(255).required(),
       programminglanguage_version: Joi.string().max(255).required(),
       os: Joi.string().max(255).required(),
       os_version: Joi.string().max(255).required(),
-      created_at: Joi.date().default(new Date)
+      is_active: Joi.number(),
+      created_at: Joi.date().default(new Date),
+      updated_at: Joi.date().allow(null)
     };
   }
 

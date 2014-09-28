@@ -23,9 +23,7 @@ export class SolutionService {
   async solve(error) {
     await this.errorRepository.store(error);
 
-    var solutions = await this.solutionRepository.findByError(error);
-
-    return solutions;
+    return this.solutionRepository.findByError(error);
   }
 
   search(query) {

@@ -19,6 +19,17 @@ export class WhybugApi {
   }
 
   /**
+   *
+   * @param solutionUuid
+   * @param callback
+   * @returns {Promise}
+   */
+  static findSolutionByUuid(solutionUuid, callback) {
+    return request(routes.api.read_solution, {solution_uuid: solutionUuid})
+      .end(notify(callback));
+  }
+
+  /**
    * Creates a new solution.
    *
    * @param solution

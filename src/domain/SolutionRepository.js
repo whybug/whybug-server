@@ -20,7 +20,7 @@ export class SolutionRepository {
    * We match the current error against those searches.
    *
    * @param {Error} error
-   * @return Promise
+   * @return [Solution]
    */
   async findByError(error) {
     var result = await this.es.percolate({
@@ -31,12 +31,23 @@ export class SolutionRepository {
       }
     });
 
-    return result.matches.map((match) => {
-      // todo: Find matched solutions in mysql.
-      return new Solution({});
-    });
+    var solutions = await new (this.model)({
+      uuid: result.matches.map((match) => match._id)
+    }).fetchAll();
+
+    return solutions.map((solution) => new Solution(solution.attributes));
   }
 
+  /**
+   * Returns the Error for specified uuid or null if not found.
+   *
+   * @return {Error} Error matching UUID, or null if not found.
+   */
+  async findByUuid(uuid) {
+    var solution = await new (this.model)({uuid: uuid}).fetch();
+
+    return solution ? new Solution(solution.attributes) : null;
+  }
   /**
    * Suggests error messages that could match
    * the given message.
@@ -90,8 +101,6 @@ export class SolutionRepository {
       aggregations: result.aggregations
     };
   }
-
-
 
   /**
    * @param {Solution} solution

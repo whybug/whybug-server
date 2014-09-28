@@ -3,38 +3,10 @@ var React = require('react'),
 
 import {Header} from '../common/ui/Header';
 import {Search} from './Search';
+import {WhybugApi} from '../WhybugApi';
 import {Section} from '../common/ui/Elements';
 
 var {div, h1} = React.DOM;
-
-/*
-common/
-  ui/
-    Header
-    Footer
-    Links
-    Buttons
-  Dispatcher
-  NotFoundPage
-
-solutions/
-  SolutionStore (selected, searchResults)
-  SolutionSearchPage
-  SolutionPage
-  SolutionActions (select, search)
-
-*/
-
-class SolutionActions {
-  static select(solutionSlug, callback) {
-    Dispatcher.updateStores({
-      actionType: 'solution.search',
-      solutionSlug: solutionSlug,
-      callback: callback
-    });
-  }
-  static search(query, callback) {}
-}
 
 export var SolutionViewPage = React.createClass({
 
@@ -48,38 +20,27 @@ export var SolutionViewPage = React.createClass({
    * Select the solution given by the router.
    */
   getInitialStateAsync(callback) {
-    callback(null, {solution: {}});
-    //SolutionActions.select(this.props.errorMessageSlug, (error, result) => callback(error, {
-    //  solution: result
-    //}));
-  },
-
-  componentDidMount() {
-    //SolutionStore.addSelectListener(this.onSelect);
-  },
-
-  componentWillUnmount() {
-    //SolutionStore.removeSelectListener(this.onSelect);
-  },
-
-  onSelect() {
-    this.setState({
-      //solution: SolutionStore.selectedSolution
-    });
+    WhybugApi.findSolutionByUuid(this.props.errorMessageSlug, (err, solution) => callback(err, {
+      solution: solution
+    }));
   },
 
   render() {
+    console.log(this.state);
+    var solution = this.state.solution || {};
+
     return div({},
       Header({user: this.props.user}),
       // SolutionHero({solution: this.state.solution))
       // SolutionDetail({solutoin: this.state.solution))
-      !this.props.solution || Section({className: 'hero'},
-        h1({}, this.props.solution.errorMessage)
+      !solution || Section({className: 'hero'},
+        h1({}, solution.message)
       ),
-      div({}, 'solution page')
+      Section({className: 'grey'},
+        div({}, solution.description)
+      )
    )
   }
-
 
 });
 

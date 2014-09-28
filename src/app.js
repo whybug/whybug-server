@@ -95,6 +95,15 @@ server.pack.register([
     reply(await errorRepository.findByUuid(request.params.error_uuid) || Hapi.error.notFound());
   }, {validate: { params: {error_uuid: Joi.string().guid() }}});
 
+  // Get a single solution.
+  route(routes.api.read_solution, async (request, reply) => {
+    try {
+      reply(await solutionRepository.findByUuid(request.params.solution_uuid) || Hapi.error.notFound());
+    } catch(e) {
+      reply(Hapi.error.internal(e))
+    }
+  }, {validate: { params: {solution_uuid: Joi.string().guid() }}});
+
   // Create a solution.
   route(routes.api.create_solution, (request, reply) => {
     reply(solutionRepository.store(new Solution(request.payload)));
