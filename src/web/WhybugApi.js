@@ -45,12 +45,11 @@ export class WhybugApi {
   /**
    * Search for errors by specified query.
    *
-   * @deprecated
    * @param query
    * @param callback
    * @returns {*}
    */
-  static searchErrors(query, callback) {
+  static searchSolutions(query, callback) {
     return request(routes.api.search_solutions)
       .query({query: query})
       .end(notify(callback));

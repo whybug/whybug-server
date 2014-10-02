@@ -4,10 +4,8 @@ var React = require('react'),
     routes = require('../../../config/routes'),
     Spinner = require('react-spinkit');
 
-
 import {Header} from '../common/ui/Header';
 import {Section} from '../common/ui/Elements';
-import {SolutionStore} from './SolutionStore';
 import {WhybugApi} from '../WhybugApi';
 
 var {Link} = Router;
@@ -18,7 +16,7 @@ export var SolutionSearchPage = React.createClass({
   get mixins() { return [Async.Mixin]; },
 
   getInitialStateAsync(callback) {
-    WhybugApi.searchErrors(this.props.query, (error, result) => callback(error, {
+    WhybugApi.searchSolutions(this.props.query, (error, result) => callback(error, {
       solutions: result
     }));
   },
@@ -33,7 +31,7 @@ export var SolutionSearchPage = React.createClass({
   onSearch(query, callback) {
     this.setState({loading: true});
 
-    WhybugApi.searchErrors(query, this.onResult);
+    WhybugApi.searchSolutions(query, this.onResult);
   },
 
   render() {
