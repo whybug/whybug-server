@@ -4,6 +4,7 @@ var React = require('react'),
 import {Header} from '../common/ui/Header';
 import {WhybugApi} from '../WhybugApi';
 import {Section} from '../common/ui/Elements';
+import {NotFoundPage} from '../common/NotFoundPage';
 
 var {div, h1} = React.DOM;
 
@@ -19,14 +20,22 @@ export var SolutionViewPage = React.createClass({
    * Select the solution given by the router.
    */
   getInitialStateAsync(callback) {
-    WhybugApi.findSolutionByUuid(this.props.slug, (err, solution) => callback(err, {
-      solution: solution
-    }));
+    WhybugApi.findSolutionByUuid(this.props.slug, (error, solution) => {
+      if (error) {
+        callback(null, {});
+      } else {
+        callback(null, { solution: solution });
+      }
+    });
   },
 
   render() {
-    console.log(this.state);
-    var solution = this.state.solution || {};
+    var solution = this.state.solution;
+
+    if (!solution) {
+      return NotFoundPage({});
+    }
+    debugger;
 
     return div({},
       Header({user: this.props.user}),
