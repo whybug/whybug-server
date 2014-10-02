@@ -31,9 +31,7 @@ export var SolutionCreatePage = React.createClass({
   },
 
   onChange(field) {
-    debugger;
     return (event) => {
-      console.log(event);
       var state = {solution: {}};
       state.solution[field] = event.target.value;
       this.setState(state);
