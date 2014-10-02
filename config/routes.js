@@ -29,7 +29,7 @@ module.exports =  {
     solution: {
       search: { method: 'GET', path: '/solutions' },
       create: { method: 'GET', path: '/solutions/create/:error_uuid' },
-      view: { method: 'GET', path: '/solutions/:programmingLanguage/:errorMessageSlug' }
+      view: { method: 'GET', path: '/solutions/:language/:slug' }
     },
 
     // URL shortener, redirects to a solution.
