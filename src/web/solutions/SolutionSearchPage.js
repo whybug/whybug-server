@@ -142,7 +142,7 @@ export var SearchResult = React.createClass({
 
   getSolutionLink() {
     return routes.web.solution.view.path
-      .replace(':programmingLanguage', this.props.programminglanguage)
-      .replace(':errorMessageSlug', this.props.uuid);
+      .replace(':language', this.props.programminglanguage)
+      .replace(':slug', this.props.uuid);
   }
 });

@@ -1,72 +1,97 @@
 var React = require('react'),
-    Async = require('react-async');
+    Async = require('react-async'),
+    NavigatableMixin = require('react-router-component').NavigatableMixin,
+    routes = require('../../../config/routes'),
+    Spinner = require('react-spinkit'),
+    MarkdownTextarea = require('react-markdown-textarea');
+
 
 import {Header} from '../common/ui/Header';
 import {WhybugApi} from '../WhybugApi';
 import {Section} from '../common/ui/Elements';
 
-var {div, h1, h3, form, input, label, textarea} = React.DOM;
+var {div, h1, h3, form, input, button, label, textarea} = React.DOM;
 
 export var SolutionCreatePage = React.createClass({
 
-  mixins: [ Async.Mixin ],
+  mixins: [ Async.Mixin, NavigatableMixin],
 
   getInitialStateAsync(callback) {
     WhybugApi.findErrorByUuid(this.props.error_uuid, (err, error) => callback(err, {
-      message: error.message,
-      level: error.level,
-      programminglanguage: error.programminglanguage,
-      programminglanguage_version: error.programminglanguage_version,
-      os: error.os,
-      os_version: error.os_version
-      //file_path: error.file_path
+      solution: {
+        message: error.message,
+        level: error.level,
+        programminglanguage: error.programminglanguage,
+        programminglanguage_version: error.programminglanguage_version,
+        os: error.os,
+        os_version: error.os_version
+        //file_path: error.file_path
+      }
     }));
   },
 
-  getInitialState: function() {
-    return {saving: false};
-  },
-
   onChange(field) {
+    debugger;
     return (event) => {
-      var state = {};
-      state[field] = event.target.value;
+      console.log(event);
+      var state = {solution: {}};
+      state.solution[field] = event.target.value;
       this.setState(state);
     }
   },
 
-  onSubmit(e) {
-    e.preventDefault();
-    console.log(this.state);
-    this.state.saving = true;
-    WhybugApi.createSolution(this.state, (err, error) => {
-      this.state.saving = false;
-      console.log('response', err, error);
+  onSubmit(description) {
+    var state = this.state;
+    state.saving = true;
+    state.solution.description = description;
+    this.setState(state);
+
+    WhybugApi.createSolution(this.state.solution, (error, solution) => {
+      console.log('response', error, solution);
+
+      this.setState({saving: false});
+
+      if (error) { return; }
+
+      var viewPage = routes.web.solution.view.path
+        .replace(':language', solution.programminglanguage)
+        .replace(':slug', solution.uuid);
+      this.navigate(viewPage);
     });
+
+    return false;
   },
 
   render() {
-    var error = this.state || {};
+    var solution = this.state.solution || {};
 
     return div({},
       Header({user: this.props.user}),
-      Section({className: 'hero'}, h1({}, error.message || 'Create a solution')),
+      Section({className: 'hero'}, h1({}, solution.message || 'Create a solution')),
       Section({className: 'grey'},
 
-      form({onSubmit: this.onSubmit},
+      form({},
         div({className: 'w-row'},
 
           div({className: 'w-col w-col-9'},
-            textarea({id: 'description', onChange: this.onChange('description'), required: "required", className: "w-input field textarea", placeholder: 'How to solve this error?'}),
-            input({className: 'button', type: 'submit', value: 'Create'}),
-            input({className: 'button', type: 'button', value: 'Preview'})
+            MarkdownTextarea({
+              id: 'description',
+              onSave: this.onSubmit,
+              saving: this.state.saving,
+              spinner: Spinner,
+              rows: 6,
+              required: "required",
+              className: "w-input field textarea",
+              placeholder: 'How to solve this error?',
+              buttonText: 'Create'
+            })
           ),
 
           div({className: 'w-col w-col-3'},
-            TextInput({text: 'Level', name: 'level', onChange: this.onChange('level'), values: error}),
-            TextInput({text: 'Language', name: 'programminglanguage', onChange: this.onChange('programminglanguage'), values: error}),
-            TextInput({text: 'Language version', name: 'programminglanguage_version', onChange: this.onChange('programminglanguage_version'), values: error}),
-            TextInput({text: 'Operating system', name: 'os', onChange: this.onChange('os'), values: error})
+            TextInput({text: 'Level', name: 'level', onChange: this.onChange('level'), values: solution}),
+            TextInput({text: 'Language', name: 'programminglanguage', onChange: this.onChange('programminglanguage'), values: solution}),
+            TextInput({text: 'Language version', name: 'programminglanguage_version', onChange: this.onChange('programminglanguage_version'), values: solution}),
+            TextInput({text: 'Operating system', name: 'os', onChange: this.onChange('os'), values: solution})
             //TextInput({text: 'File path', name: 'file_path', onChange: this.onChange('file_path'), input: error})
 
             // Project?

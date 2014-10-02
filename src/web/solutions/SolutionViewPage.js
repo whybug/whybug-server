@@ -12,14 +12,14 @@ export var SolutionViewPage = React.createClass({
   mixins: [ Async.Mixin ],
 
   propTypes: {
-      errorMessageSlug: React.PropTypes.string.isRequired
+      slug: React.PropTypes.string.isRequired
   },
 
   /**
    * Select the solution given by the router.
    */
   getInitialStateAsync(callback) {
-    WhybugApi.findSolutionByUuid(this.props.errorMessageSlug, (err, solution) => callback(err, {
+    WhybugApi.findSolutionByUuid(this.props.slug, (err, solution) => callback(err, {
       solution: solution
     }));
   },
