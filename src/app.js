@@ -92,7 +92,11 @@ server.pack.register([
 
   // Get a single error.
   route(routes.api.read_error, async (request, reply) => {
-    reply(await errorRepository.findByUuid(request.params.error_uuid) || Hapi.error.notFound());
+    try {
+      reply(await errorRepository.findByUuid(request.params.error_uuid) || Hapi.error.notFound());
+    } catch(e) {
+      reply(Hapi.error.internal(e))
+    }
   }, {validate: { params: {error_uuid: Joi.string().guid() }}});
 
   // Get a single solution.
