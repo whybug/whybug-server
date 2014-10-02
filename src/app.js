@@ -35,6 +35,7 @@ var reactProxy = (callback) => {
       var app = new WebApp({
         path: request.path,
         params: request.params,
+        query: request.query,
         user: request.auth.credentials
       });
 

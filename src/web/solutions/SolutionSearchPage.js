@@ -1,6 +1,7 @@
 var React = require('react'),
     Async = require('react-async'),
     Router = require('react-router-component'),
+    NavigatableMixin = require('react-router-component').NavigatableMixin,
     routes = require('../../../config/routes'),
     Spinner = require('react-spinkit');
 
@@ -13,11 +14,13 @@ var {section, div, main, a, h1, h2, h3, form, label, input, p} = React.DOM;
 
 export var SolutionSearchPage = React.createClass({
 
-  get mixins() { return [Async.Mixin]; },
+  get mixins() { return [Async.Mixin, NavigatableMixin]; },
 
   getInitialStateAsync(callback) {
-    WhybugApi.searchSolutions(this.props.query, (error, result) => callback(error, {
-      solutions: result
+    var query = this.props.query.query;
+    WhybugApi.searchSolutions(query, (error, result) => callback(error, {
+      solutions: result,
+      query: query
     }));
   },
 
@@ -28,9 +31,12 @@ export var SolutionSearchPage = React.createClass({
     });
   },
 
-  onSearch(query, callback) {
-    this.setState({loading: true});
-
+  onSearch(query) {
+    // todo: this.navigate(routes.web.solution.search.path + "?query=" + query);
+    this.setState({
+      loading: true,
+      query: query
+    });
     WhybugApi.searchSolutions(query, this.onResult);
   },
 
@@ -39,7 +45,7 @@ export var SolutionSearchPage = React.createClass({
 
     return div({},
       Header({user: this.props.user}),
-      Section({className: 'hero'}, SearchForm({query: this.state.params, searchCallback: this.onSearch})),
+      Section({className: 'hero'}, SearchForm({query: this.state.query, searchCallback: this.onSearch})),
 
       Section({className: 'grey'},
         div({className: 'w-row'},
@@ -88,8 +94,16 @@ export var SolutionSearchPage = React.createClass({
 
 
 export var SearchForm = React.createClass({
+
+  getInitialState() {
+    return {
+      query: this.props.query
+    };
+  },
+
   onChange(event) {
     clearTimeout(this.timeout);
+    this.setState({query: event.target.value});
     this.timeout = setTimeout(this.onSubmit, 500);
   },
 
@@ -97,7 +111,7 @@ export var SearchForm = React.createClass({
     if (event) event.preventDefault();
     clearTimeout(this.timeout);
 
-    this.props.searchCallback(document.getElementById('query').value);
+    this.props.searchCallback(this.state.query);
   },
 
   render() {
@@ -109,7 +123,7 @@ export var SearchForm = React.createClass({
             input({
               placeholder: 'Enter error messsage...',
               onChange: this.onChange,
-              value: this.props.query,
+              value: this.state.query,
               className: 'w-input field',
               name: 'query',
               id: 'query',

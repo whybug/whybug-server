@@ -12,15 +12,18 @@ import {SolutionViewPage} from './solutions/SolutionViewPage';
 import {SolutionSearchPage} from './solutions/SolutionSearchPage';
 import {NotFoundPage} from './common/NotFoundPage';
 
-class _WebApp {
-  get mixins() { return [Async.Mixin]; }
+
+export var WebApp = React.createClass({displayName: 'WebApp',
+
+  mixins: [ Async.Mixin ],
 
   getInitialStateAsync(callback) {
     callback(null, {
       user: this.props.user,
-      params: this.props.params
+      params: this.props.params,
+      query: this.props.query
     });
-  }
+  },
 
   getPages() {
     return [
@@ -30,7 +33,7 @@ class _WebApp {
       {path: routes.web.solution.view.path, handler: SolutionViewPage},
       {path: null, handler: NotFoundPage}
     ];
-  }
+  },
 
   render() {
     return this.transferPropsTo(
@@ -39,11 +42,10 @@ class _WebApp {
           path: page.path,
           handler: page.handler,
           user: this.state.user,
-          params: this.state.params
+          params: this.state.params,
+          query: this.state.query
         }))
       )
     );
   }
-}
-
-export var WebApp = React.createClass(_WebApp.prototype);
+});
