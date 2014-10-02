@@ -63,7 +63,13 @@ export class WhybugApi {
  * @returns {Function}
  */
 var notify = (callback) => {
-  return (error, response) => callback(error, response.body);
+  return (error, response) => {
+    if (response.status !== 200) {
+      callback(response.body, null);
+    } else {
+      callback(error, response.body);
+    }
+  }
 };
 
 /**
