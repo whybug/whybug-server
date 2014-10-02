@@ -2,7 +2,6 @@ var React = require('react'),
     Async = require('react-async');
 
 import {Header} from '../common/ui/Header';
-import {Search} from './Search';
 import {WhybugApi} from '../WhybugApi';
 import {Section} from '../common/ui/Elements';
 
@@ -24,6 +23,10 @@ export var SolutionCreatePage = React.createClass({
     }));
   },
 
+  getInitialState: function() {
+    return {saving: false};
+  },
+
   onChange(field) {
     return (event) => {
       var state = {};
@@ -35,7 +38,9 @@ export var SolutionCreatePage = React.createClass({
   onSubmit(e) {
     e.preventDefault();
     console.log(this.state);
+    this.state.saving = true;
     WhybugApi.createSolution(this.state, (err, error) => {
+      this.state.saving = false;
       console.log('response', err, error);
     });
   },

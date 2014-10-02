@@ -28,6 +28,8 @@
     "react": "^0.11.1",
     "react-async": "^1.0.2",
     "react-router-component": "^0.20.1",
+    "react-spinkit": "^0.5.0",
+    "react-textarea-autosize": "^1.0.3",
     "slug": "^0.7.1",
     "superagent": "^0.18.2",
     "traceur": "0.0.58"
@@ -39,6 +41,7 @@
     "mocha": "^1.21.4",
     "sinon": "^1.10.3",
     "sinon-chai": "^2.5.0",
+    "supertest": "^0.13.0",
     "traceur-loader": "^0.4.0",
     "webpack": "^1.4.0-beta5"
   }

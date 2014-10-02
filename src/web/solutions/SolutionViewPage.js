@@ -2,7 +2,6 @@ var React = require('react'),
     Async = require('react-async');
 
 import {Header} from '../common/ui/Header';
-import {Search} from './Search';
 import {WhybugApi} from '../WhybugApi';
 import {Section} from '../common/ui/Elements';
 
