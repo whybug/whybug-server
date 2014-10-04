@@ -8,8 +8,8 @@ export class SolutionRepository {
 
   constructor(es, bookshelf) {
     this.es = es;
-    this.index = 'whybug';
-    this.type = 'solutions';
+    this.index = 'solutions';
+    this.type = 'solution';
     this.model = bookshelf.model('Solution', Solution.bookshelf());
   }
 
@@ -121,6 +121,7 @@ export class SolutionRepository {
   }
 
   storeEs(solution) {
+    console.log(solution.uuid);
     return this.es.index({
       index: this.index,
       type: this.type,
@@ -159,30 +160,25 @@ export class SolutionRepository {
       }
     };
   }
+
+  async reindex() {
+    try {
+      var exists = await this.es.indices.exists({index: this.index});
+      if (exists) {
+        await this.es.indices.delete({index: this.index, force: true});
+      }
+      await this.es.indices.create({
+        index: this.index,
+        type: this.type,
+        body: require('../../config/elasticsearch/'  + this.index + '.js')
+      });
+
+      var entries = await new (this.model)().fetchAll();
+      entries.map((entry) => this.storeEs(entry.attributes));
+    } catch(e) {
+      console.log(e);
+      throw e;
+    }
+  }
 }
 
-//return this.es.search({
-//  index: this.index,
-//  type: this.type,
-//  body: {
-//    query: {
-//      bool: {
-//        must: {
-//          term: {
-//            language: errorLog.data.language,
-//            errorLevel: errorLog.data.errorLevel
-//          },
-//          match: {
-//            errorMessage: errorLog.data.errorMessage
-//          }
-//        },
-//        should: {
-//          term: {
-//            languageVersion: errorLog.data.languageVersion,
-//            framework: errorLog.data.framework
-//          }
-//        }
-//      }
-//    }
-//  }
-//});
