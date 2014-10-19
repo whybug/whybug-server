@@ -40,8 +40,12 @@ export var InstallationPage = React.createClass({
       Header({user: this.props.user}),
       Section({className: 'hero'}, h1({}, 'Installation')),
       Section({className: 'grey'},
-        this.renderLanguagePicker(),
-        this.renderInstructions()
+        div({className: 'w-row'},
+          div({className: 'w-col'},
+            this.renderLanguagePicker(),
+            this.renderInstructions()
+          )
+        )
       )
     );
   },
