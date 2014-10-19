@@ -10,6 +10,7 @@ import {StartPage} from './start/StartPage';
 import {SolutionCreatePage} from './solutions/SolutionCreatePage';
 import {SolutionViewPage} from './solutions/SolutionViewPage';
 import {SolutionSearchPage} from './solutions/SolutionSearchPage';
+import {InstallationPage} from './installation/InstallationPage';
 import {NotFoundPage} from './common/NotFoundPage';
 
 
@@ -31,6 +32,8 @@ export var WebApp = React.createClass({displayName: 'WebApp',
       {path: routes.web.solution.search.path, handler: SolutionSearchPage},
       {path: routes.web.solution.create.path, handler: SolutionCreatePage},
       {path: routes.web.solution.view.path, handler: SolutionViewPage},
+      {path: routes.web.installation.index.path, handler: InstallationPage},
+      {path: routes.web.installation.language.path, handler: InstallationPage},
       {path: null, handler: NotFoundPage}
     ];
   },

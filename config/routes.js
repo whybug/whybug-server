@@ -32,6 +32,12 @@ module.exports =  {
       view: { method: 'GET', path: '/solutions/:language/:slug' }
     },
 
+    // Installation, return HTML.
+    installation: {
+      index: { method: 'GET', path: '/installation', config: { cache: cache_2min} },
+      language: { method: 'GET', path: '/installation/:language', config: { cache: cache_2min} }
+    },
+
     // URL shortener, redirects to a solution.
     url_shortener: { method: 'GET', path: '/s/{p*}' }
   },

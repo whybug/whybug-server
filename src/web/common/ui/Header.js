@@ -21,7 +21,7 @@ export var Header = React.createClass({
             nav({className: 'w-nav-menu', role: 'navigation'},
               NavLink({href: routes.web.solution.search.path}, 'Solutions'),
               NavLink({href: '/projects'}, 'Projects'),
-              NavLink({href: '/installation'}, 'Installation'),
+              NavLink({href: routes.web.installation.index.path}, 'Installation'),
               this.props.user ? this.renderUserMenu() : this.renderLoginMenu()
             )
           )
