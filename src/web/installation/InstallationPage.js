@@ -63,12 +63,11 @@ export var InstallationPage = React.createClass({
     if (this.props.language) {
       var language = this.getAllLanguages()
         .filter((lang) => lang.slug === this.props.language)[0] || {};
-      console.log(language);
 
       return language.content({}) || div({}, 'not found');
     }
 
-    return div({}, 'General');
+    return div({}, 'Please choose a language.');
   }
 
 });
