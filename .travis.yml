@@ -1,26 +1,26 @@
 services:
-  - mysql
-  - elasticsearch
+- mysql
+- elasticsearch
 
 language: node_js
+
 node_js:
-  - '0.10'
-  - '0.11'
+- '0.10'
+- '0.11'
 
 before_script:
-  - mysql -e 'create database whybug;'
+- mysql -e 'create database whybug;'
 
 after_success:
-  - /bin/bash bin/metrics_travis.sh
+- "/bin/bash bin/metrics_travis.sh"
 
 matrix:
   fast_finish: true
   allow_failures:
-    - node_js: '0.11'
+  - node_js: '0.11'
 
 env:
   global:
-    - MYSQL_USER: travis
-    - DEBUG: 1
-    - secure: "BW22uq0HKHYx2kpVSmd9bkZ7GD09jhY1NOm3LdU7e9GgQkZDDF1b9qn13OXFh9D1uRkz8DD7YKN5S6mxpEne9LgZK0wFcw2i/CQTf8N0kyOXlTIopOtkm5rW7ihJSk2aehXxdtuSgb8O32Ko6Cxyio8rfkAnO2cz/onGVk+wvfM="
-
+  - MYSQL_USER: travis
+  - DEBUG: 1
+  - secure: EbUMl2PXONzF+gYkCEsAnVbB1694noPE+AhCmhdVM6VC1A7nToA9mmTpJ89iVsj8vk6F6lfeqCIwfWgpqpLX/uleOfN2cRvYZUcuSppq4cPpSV2ehumOSBiKj1bWSthe9T1w7HmmlRKgd65dy+GU7CluvSzSz2nHVthGWdvEpsk=
