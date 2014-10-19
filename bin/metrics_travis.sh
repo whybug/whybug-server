@@ -11,12 +11,9 @@ fi
 
 /bin/bash bin/run-command-on-git-revisions.sh master^ master "sh bin/metrics_on_this_rev.sh >> metrics_on_revision.csv"
 
->&2 echo $GIT_NAME
->&2 echo $GIT_EMAIL
->&2 echo $GH_TOKEN
-
 git config --global user.email "mail@adrian-philipp.com"
 git config --global user.name "Adrian Philipp"
+git remote set-url origin "https://${GH_TOKEN}@github.com/whybug/whybug-server.git"
 
 git fetch origin +gh-pages:gh-pages
 git checkout gh-pages
