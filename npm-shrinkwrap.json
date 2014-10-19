@@ -117,6 +117,11 @@
       "from": "chai-as-promised@>=4.1.1-0 <5.0.0-0",
       "resolved": "https://registry.npmjs.org/chai-as-promised/-/chai-as-promised-4.1.1.tgz"
     },
+    "chai-react": {
+      "version": "0.0.4",
+      "from": "chai-react@0.0.4",
+      "resolved": "https://registry.npmjs.org/chai-react/-/chai-react-0.0.4.tgz"
+    },
     "elasticsearch": {
       "version": "2.4.3",
       "from": "elasticsearch@>=2.4.2-0 <3.0.0-0",
@@ -441,7 +446,7 @@
         },
         "lru-cache": {
           "version": "2.5.0",
-          "from": "lru-cache@>=2.5.0-0 <2.6.0-0",
+          "from": "lru-cache@>=2.0.0-0 <3.0.0-0",
           "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.5.0.tgz"
         },
         "semver": {
@@ -634,7 +639,7 @@
         },
         "inherits": {
           "version": "2.0.1",
-          "from": "inherits@>=2.0.1-0 <2.1.0-0",
+          "from": "inherits@>=2.0.0-0 <3.0.0-0",
           "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
         },
         "lodash": {
@@ -656,7 +661,7 @@
         },
         "readable-stream": {
           "version": "1.1.13",
-          "from": "readable-stream@>=1.1.13-0 <2.0.0-0",
+          "from": "readable-stream@>=1.1.12-0 <2.0.0-0",
           "resolved": "https://registry.npmjs.org/readable-stream/-/readable-stream-1.1.13.tgz",
           "dependencies": {
             "core-util-is": {
@@ -871,7 +876,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@>=0.2.0-0 <0.3.0-0",
+                  "from": "ansi-regex@>=0.2.1-0 <0.3.0-0",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -883,7 +888,7 @@
               "dependencies": {
                 "ansi-regex": {
                   "version": "0.2.1",
-                  "from": "ansi-regex@>=0.2.0-0 <0.3.0-0",
+                  "from": "ansi-regex@>=0.2.1-0 <0.3.0-0",
                   "resolved": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-0.2.1.tgz"
                 }
               }
@@ -1384,6 +1389,42 @@
       "version": "0.5.0",
       "from": "react-spinkit@>=0.5.0-0 <0.6.0-0",
       "resolved": "https://registry.npmjs.org/react-spinkit/-/react-spinkit-0.5.0.tgz"
+    },
+    "react-test-utils": {
+      "version": "0.0.1",
+      "from": "react-test-utils@0.0.1",
+      "resolved": "https://registry.npmjs.org/react-test-utils/-/react-test-utils-0.0.1.tgz",
+      "dependencies": {
+        "envify": {
+          "version": "0.2.0",
+          "from": "envify@>=0.2.0-0 <0.3.0-0",
+          "resolved": "https://registry.npmjs.org/envify/-/envify-0.2.0.tgz",
+          "dependencies": {
+            "through": {
+              "version": "2.3.6",
+              "from": "through@>=2.3.4-0 <2.4.0-0",
+              "resolved": "https://registry.npmjs.org/through/-/through-2.3.6.tgz"
+            },
+            "falafel": {
+              "version": "0.2.1",
+              "from": "falafel@>=0.2.1-0 <0.3.0-0",
+              "resolved": "https://registry.npmjs.org/falafel/-/falafel-0.2.1.tgz",
+              "dependencies": {
+                "esprima": {
+                  "version": "1.1.0-dev",
+                  "from": "git://github.com/substack/esprima#is-keyword",
+                  "resolved": "git://github.com/substack/esprima#0a7f8489a11b44b019ce168506f535f22d0be290"
+                }
+              }
+            }
+          }
+        },
+        "react": {
+          "version": "0.8.0",
+          "from": "react@>=0.8.0-0 <0.9.0-0",
+          "resolved": "https://registry.npmjs.org/react/-/react-0.8.0.tgz"
+        }
+      }
     },
     "react-tools": {
       "version": "0.11.2",
@@ -2177,7 +2218,7 @@
                 },
                 "inherits": {
                   "version": "2.0.1",
-                  "from": "inherits@>=2.0.1-0 <2.1.0-0",
+                  "from": "inherits@>=2.0.0-0 <3.0.0-0",
                   "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz"
                 }
               }

@@ -38,8 +38,10 @@
   "devDependencies": {
     "chai": "^1.9.1",
     "chai-as-promised": "^4.1.1",
+    "chai-react": "0.0.4",
     "envify-loader": "^0.1.0",
     "mocha": "^1.21.4",
+    "react-test-utils": "0.0.1",
     "sinon": "^1.10.3",
     "sinon-chai": "^2.5.0",
     "supertest": "^0.13.0",
