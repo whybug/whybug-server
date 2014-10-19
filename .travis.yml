@@ -11,7 +11,7 @@ before_script:
   - mysql -e 'create database whybug;'
 
 after_script:
-  - sh bin/metrics_travis.sh
+  - /bin/bash bin/metrics_travis.sh
 
 matrix:
   fast_finish: true
