@@ -11,6 +11,13 @@ fi
 
 /bin/bash bin/run-command-on-git-revisions.sh master^ master "sh bin/metrics_on_this_rev.sh >> metrics_on_revision.csv"
 
+echo $GIT_NAME
+echo $GIT_EMAIL
+echo $GH_TOKEN
+
+git config --global user.email "mail@adrian-philipp.com"
+git config --global user.name "Adrian Philipp"
+
 git fetch origin +gh-pages:gh-pages
 git checkout gh-pages
 cat metrics_on_revision.csv >> metrics.csv

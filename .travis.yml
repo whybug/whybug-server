@@ -20,7 +20,7 @@ matrix:
 
 env:
   global:
-    -  MYSQL_USER: travis
+    - MYSQL_USER: travis
     - DEBUG: 1
     - secure: "BW22uq0HKHYx2kpVSmd9bkZ7GD09jhY1NOm3LdU7e9GgQkZDDF1b9qn13OXFh9D1uRkz8DD7YKN5S6mxpEne9LgZK0wFcw2i/CQTf8N0kyOXlTIopOtkm5rW7ihJSk2aehXxdtuSgb8O32Ko6Cxyio8rfkAnO2cz/onGVk+wvfM="
 
