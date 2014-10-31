@@ -8,11 +8,13 @@ export var PHPInstructions = React.createClass({
     return div({dangerouslySetInnerHTML: {'__html': marked(`
 ### PHP Instructions
 
-Checkout the [whybug-php](https://github.com/whybug/whybug-php) repository.
+1. Download the [whybug.phar](https://github.com/whybug/whybug-php/raw/master/dist/whybug.phar) file
+and put it somewhere on your system, for example \`/usr/local/lib/\`.
 
-Add to your \`php.ini\`:
+2. Add the phar file to the \`auto_prepend_file\` setting in your \`php.ini\`.
 
-    auto_prepend_file = [install-directory]/auto_pretend.php
+        # Add to php.ini
+        auto_prepend_file = /usr/local/lib/whybug.phar
 
     `)}});
   }
