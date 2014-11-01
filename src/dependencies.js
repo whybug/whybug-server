@@ -14,7 +14,10 @@ export var server = new Hapi.Server(config.node.host, config.node.port, {
     },
     path: 'src/web/common'
   },
-  debug:{ request: ['error'] }
+  debug:{ request: ['error'] },
+  cors: {
+    methods: ['POST']
+  }
 });
 
 export var es = new (require('elasticsearch')).Client({

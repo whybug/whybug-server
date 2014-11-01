@@ -66,6 +66,9 @@ var route = (route, handler, config = {}) => {
       route.config[setting] = config[setting];
     }
   }
+  if (!route.config.cors) {
+    route.config.cors = false;
+  }
   server.route(route);
 };
 
