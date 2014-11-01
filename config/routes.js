@@ -50,7 +50,7 @@ module.exports =  {
    */
   api: {
     // Create a new error, with JSON payload. Returns solutions as JSON.
-    create_error: { method: 'POST', path: '/api/errors' },
+    create_error: { method: 'POST', path: '/api/errors', config: { cors: true } },
 
     // Read a error.
     read_error: { method: 'GET', path: '/api/errors/{error_uuid}' },
