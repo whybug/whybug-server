@@ -12,6 +12,43 @@ import {WhybugApi} from '../WhybugApi';
 var {Link} = Router;
 var {section, div, main, a, h1, h2, h3, form, label, input, p} = React.DOM;
 
+/**
+ * Displays a list of unresolved errors.
+ */
+var UnsolvedErrors = React.createClass({
+  get mixins() { return [Async.Mixin, NavigatableMixin]; },
+
+  getInitialStateAsync(callback) {
+    WhybugApi.findUnsolvedErrors((error, result) => callback(error, {
+      unsolved_errors: result
+    }));
+  },
+
+  render() {
+    if (this.state.unsolved_errors) {
+      return div({}, this.state.unsolved_errors.map(error => {
+        error.key = error.uuid;
+        return Link({href: this.getSolutionLinkForError(error), className: 'content-block'},
+          h3({className: 'latest-errors'}, error.level,  ': ', error.message)
+        );
+      }));
+    }
+
+    return div({}, 'No unsolved errors found');
+  },
+
+  /**
+   * Returns a link to create a solution based on
+   * the specified error.
+   *
+   * @param error
+   * @returns {string}
+   */
+  getSolutionLinkForError(error) {
+    return routes.web.solution.create.path.replace(':error_uuid', error.uuid);
+  }
+});
+
 export var SolutionSearchPage = React.createClass({
 
   get mixins() { return [Async.Mixin, NavigatableMixin]; },
@@ -50,7 +87,11 @@ export var SolutionSearchPage = React.createClass({
       Section({className: 'grey'},
         div({className: 'w-row'},
 
-          main({className: 'w-col w-col-9'}, this.renderSearchResults(solutions)),
+          main({className: 'w-col w-col-9'},
+            this.renderSearchResults(solutions),
+            h3({}, 'Unresolved errors'),
+            UnsolvedErrors({})
+          ),
 
           div({className: 'w-col w-col-3'},
             label({htmlFor: 'programminglanguage'}, 'Language'),

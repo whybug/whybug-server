@@ -20,6 +20,16 @@ export class WhybugApi {
 
   /**
    *
+   * @param callback
+   * @returns {Promise}
+   */
+  static findUnsolvedErrors(callback) {
+    return request(routes.api.unsolved_errors)
+      .end(notify(callback));
+  }
+
+  /**
+   *
    * @param solutionUuid
    * @param callback
    * @returns {Promise}
