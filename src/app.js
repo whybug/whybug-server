@@ -103,6 +103,12 @@ server.pack.register([
     }
   }, {validate: { params: {error_uuid: Joi.string().guid() }}});
 
+
+  // Get unsolved errors.
+  route(routes.api.unsolved_errors, (request, reply) => {
+    reply(errorRepository.findUnsolvedErrors());
+  });
+
   // Get a single solution.
   route(routes.api.read_solution, async (request, reply) => {
     try {

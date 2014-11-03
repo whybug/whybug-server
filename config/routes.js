@@ -32,7 +32,7 @@ module.exports =  {
       view: { method: 'GET', path: '/solutions/:language/:slug' }
     },
 
-    // Installation, return HTML.
+    // Installation, returns HTML.
     installation: {
       index: { method: 'GET', path: '/installation', config: { cache: cache_2min} },
       language: { method: 'GET', path: '/installation/:language', config: { cache: cache_2min} }
@@ -54,6 +54,9 @@ module.exports =  {
 
     // Read a error.
     read_error: { method: 'GET', path: '/api/errors/{error_uuid}' },
+
+    // List of unsolved errors.
+    unsolved_errors: { method: 'GET', path: '/api/errors/unsolved' },
 
     // Search for errors.
     search_solutions: { method: 'GET', path: '/api/solutions' },

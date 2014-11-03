@@ -6,10 +6,13 @@ import {Solution} from './Solution';
  */
 export class SolutionRepository {
 
+  static get INDEX() { return 'solutions'; }
+  static get TYPE() { return 'solution'; }
+
   constructor(es, bookshelf) {
     this.es = es;
-    this.index = 'solutions';
-    this.type = 'solution';
+    this.index = SolutionRepository.INDEX;
+    this.type = SolutionRepository.TYPE;
     this.model = bookshelf.model('Solution', Solution.bookshelf());
   }
 
