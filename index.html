@@ -163,6 +163,9 @@
     <div id="js_unused-chart" class="chart">
       <div class="title">Unused Javascript Variables</div>
     </div>
+    <div id="datetime-chart" class="chart">
+      <div class="title">Day</div>
+    </div>
   </div>
 
   <aside id="totals"><span id="active">-</span> of <span id="total">-</span> refs selected.</aside>
@@ -177,7 +180,7 @@
 <script>
 
 // (It's CSV, but GitHub Pages only gzip's JSON at the moment.)
-d3.csv("metrics.csv", function(error, metrics) {
+d3.csv("metrics.csv", function(error, data) {
   // Various formatters.
   var formatNumber = d3.format(",d"),
     formatChange = d3.format("+,d"),
@@ -188,25 +191,42 @@ d3.csv("metrics.csv", function(error, metrics) {
   var nestByRef = d3.nest()
     .key(function(d) { return d3.ref; });
 
-  var refs = [];
+  var refs = {};
+  var metrics = [];
 
   // A little coercion, since the CSV is untyped.
-  metrics.forEach(function(d) {
+  data.forEach(function(d) {
     if (!refs[d.ref]) {
       refs[d.ref] = {ref: d.ref};
     }
 
-    refs[d.ref][d.metric] = +d.value;
+    refs[d.ref][d.metric] = d.value;
+  });
+
+  metrics = d3.values(refs);
+  refs = d3.keys(refs);
+
+  // A little coercion, since the CSV is untyped.
+  metrics.forEach(function(d, i) {
+    d.index = i;
+    d.datetime = new Date(d.datetime);
+    d.js_size_kb = +d.js_size_kb;
+    d.js_unused = +d.js_unused;
   });
 
 
   // Create the crossfilter for the relevant dimensions and groups.
-  var ref = crossfilter(d3.values(refs)),
+  var ref = crossfilter(metrics),
     all = ref.groupAll(),
     js_size_kb = ref.dimension(function(d) { return d.js_size_kb; }),
     js_size_kbs = js_size_kb.group(function(d) { return Math.floor(d / 5) * 5; }),
     js_unused = ref.dimension(function(d) { return d.js_unused }),
-    js_unuseds = js_unused.group(function(d) { return Math.floor(d / 5) * 5; });
+    js_unuseds = js_unused.group(function(d) { return Math.floor(d / 5) * 5; }),
+    datetime = ref.dimension(function(d) { return d.datetime}),
+    datetimes = datetime.group(d3.time.day);
+
+  var threeMonthAgo = new Date();
+  threeMonthAgo.setMonth(threeMonthAgo.getMonth() - 3);
 
   var charts = [
 
@@ -214,24 +234,23 @@ d3.csv("metrics.csv", function(error, metrics) {
       .dimension(js_size_kb)
       .group(js_size_kbs)
       .x(d3.scale.linear()
-        .domain([0, d3.max(js_size_kb)])
-        .rangeRound([0, 10 * 24])),
+        .domain([150, 1000])
+        .rangeRound([0, 10 * 20])),
 
     barChart()
       .dimension(js_unused)
       .group(js_unuseds)
       .x(d3.scale.linear()
-        .domain([0, d3.max(js_unuseds)])
-        .rangeRound([0, 10 * 21]))
+        .domain([0, 100])
+        .rangeRound([0, 10 * 21])),
 
-//    barChart()
-//      .dimension(date)
-//      .group(dates)
-//      .round(d3.time.day.round)
-//      .x(d3.time.scale()
-//        .domain([new Date(2001, 0, 1), new Date(2001, 3, 1)])
-//        .rangeRound([0, 10 * 90]))
-//      .filter([new Date(2001, 1, 1), new Date(2001, 2, 1)])
+    barChart()
+      .dimension(datetime)
+      .group(datetimes)
+      .round(d3.time.day.round)
+      .x(d3.time.scale()
+        .domain([threeMonthAgo, new Date])
+        .rangeRound([0, 10 * 90]))
 
   ];
 
@@ -293,7 +312,7 @@ d3.csv("metrics.csv", function(error, metrics) {
 //      date.exit().remove();
 
       var ref = d3.select(this).selectAll(".ref")
-        .data(d3.values(refs), function(d) { return d.ref; });
+        .data(metrics, function(d) { return d.ref; });
 
       var refsEnter = ref.enter().append("tr")
         .attr("class", "refs");
