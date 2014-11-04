@@ -266,11 +266,7 @@ d3.csv("metrics.csv", function(error, metrics) {
 
   // Like d3.time.format, but faster.
   function parseDate(d) {
-    return new Date(2001,
-      d.substring(0, 2) - 1,
-      d.substring(2, 4),
-      d.substring(4, 6),
-      d.substring(6, 8));
+    return new Date(d);
   }
 
   window.filter = function(filters) {
