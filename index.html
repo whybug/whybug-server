@@ -311,11 +311,11 @@ d3.csv("metrics.csv", function(error, data) {
 //        .text(function(d) { return formatDate(d.values[0].date); });
 //      date.exit().remove();
 
-      var ref = d3.select(this).selectAll(".list")
+      var ref = d3.select(this).selectAll(".metric")
         .data(metrics, function(d) { return d.ref; });
 
       var refsEnter = ref.enter().append("tr")
-        .attr("class", "refs");
+        .attr("class", "metric");
 
       refsEnter.append("td")
         .attr("class", "datetime")
