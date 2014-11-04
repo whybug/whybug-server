@@ -1,28 +1,40 @@
 ref,metric,value
 605e72c,js_unused, 19
 605e72c,js_size_kb,252
+605e72c,datetime,2014-10-19T19:00:04
 0b4d04a,js_unused, 19
 0b4d04a,js_size_kb,252
+0b4d04a,datetime,2014-10-19T19:00:04
 c3bad27,js_unused, 19
 c3bad27,js_size_kb,252
+c3bad27,datetime,2014-10-19T19:00:04
 ad6618b,js_unused, 19
 ad6618b,js_size_kb,252
+ad6618b,datetime,2014-10-19T19:00:04
 cd9fb88,js_unused,19
 cd9fb88,js_size_kb,252
+cd9fb88,datetime,2014-10-19T19:00:04
 193d4ee,js_unused,19
 193d4ee,js_size_kb,252
+193d4ee,datetime,2014-10-19T19:00:04
 363efd6,js_unused,19
 363efd6,js_size_kb,252
+363efd6,datetime,2014-10-19T19:00:04
 8f9186e,js_unused,19
 8f9186e,js_size_kb,412
+8f9186e,datetime,2014-10-31T19:00:04
 7aeb266,js_unused,19
 7aeb266,js_size_kb,412
+7aeb266,datetime,2014-11-01T19:00:04
 3ca2972,js_unused,19
 3ca2972,js_size_kb,412
+3ca2972,datetime,2014-11-01T19:00:04
 e5e54a0,js_unused,19
 e5e54a0,js_size_kb,412
+e5e54a0,datetime,2014-11-03T19:00:04
 57e4c1c,js_unused,19
 57e4c1c,js_size_kb,412
+57e4c1c,datetime,2014-11-03T19:00:04
 4824a23,js_unused,19
 4824a23,js_size_kb,412
 4824a23,datetime,2014-11-04T19:00:04
