@@ -25,7 +25,7 @@ export class ErrorRepository {
    * @return {Error[]} List of unsolved errors.
    */
   async findUnsolvedErrors() {
-    var errors = await this.model.query().groupBy('checksum').select();
+    var errors = await this.model.query().groupBy('checksum').havingRaw('SUM(hidden) = 0').select();
     let query = {
       "percolate" : {
         "index" : SolutionRepository.INDEX,
