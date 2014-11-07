@@ -5,6 +5,7 @@ import {Header} from '../common/ui/Header';
 import {WhybugApi} from '../WhybugApi';
 import {Section} from '../common/ui/Elements';
 import {NotFoundPage} from '../common/NotFoundPage';
+import {Markdown} from '../common/ui/Markdown';
 
 var {div, h1} = React.DOM;
 
@@ -35,7 +36,6 @@ export var SolutionViewPage = React.createClass({
     if (!solution) {
       return NotFoundPage({});
     }
-    debugger;
 
     return div({},
       Header({user: this.props.user}),
@@ -45,7 +45,7 @@ export var SolutionViewPage = React.createClass({
         h1({}, solution.message)
       ),
       Section({className: 'grey'},
-        div({}, solution.description)
+        Markdown({text: solution.description})
       )
    )
   }

@@ -1,11 +1,10 @@
-var React = require('react'),
-  marked = require('marked');
+var React = require('react');
 
-var {div} = React.DOM;
+import {Markdown} from '../common/ui/Markdown';
 
 export var PHPInstructions = React.createClass({
   render() {
-    return div({dangerouslySetInnerHTML: {'__html': marked(`
+    return Markdown({text: `
 ### PHP Instructions
 
 1. Download the [whybug.phar](https://github.com/whybug/whybug-php/raw/master/dist/whybug.phar) file
@@ -16,26 +15,26 @@ and put it somewhere on your system, for example \`/usr/local/lib/\`.
         # Add to php.ini
         auto_prepend_file = /usr/local/lib/whybug.phar
 
-    `)}});
+    `});
   }
 });
 
 export var RubyInstructions = React.createClass({
   render() {
-    return div({dangerouslySetInnerHTML: {'__html': marked(`
+    return Markdown({text: `
 ### Ruby Instructions
 
 No ruby support yet.
-    `)}});
+    `});
   }
 });
 
 export var JavascriptInstructions = React.createClass({
   render() {
-    return div({dangerouslySetInnerHTML: {'__html': marked(`
+    return Markdown({text: `
 ### Javascript Instructions
 
 No javascript support yet.
-    `)}});
+    `});
   }
 });
