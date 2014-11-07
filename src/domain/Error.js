@@ -58,6 +58,7 @@ export class Error {
       os_version: Joi.string().max(255).required(),
       file_path: Joi.string().max(255).required(),
       line: Joi.number().integer().required(),
+      hidden: Joi.number().integer().min(0).max(1).default(0),
       created_at: Joi.date().default(new Date)
     };
   }
