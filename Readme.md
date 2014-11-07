@@ -22,5 +22,5 @@ Requires:
 #### Migrations
 
  * `npm run knex migrate:latest` run all migrations
- * `npm run knex migrate:roolback` undo latest migration
+ * `npm run knex migrate:rollback` undo latest migration
  * `npm run knex migrate:make [migration_name]` creates a new migration
