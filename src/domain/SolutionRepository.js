@@ -124,7 +124,6 @@ export class SolutionRepository {
   }
 
   storeEs(solution) {
-    console.log(solution.uuid);
     return this.es.index({
       index: this.index,
       type: this.type,

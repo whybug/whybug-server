@@ -25,7 +25,7 @@ export class Solution {
   /**
    * Returns a hash of valid properties and their Joi validation.
    *
-   * @returns {Object} Hash of valid properties and their Joi validatoin.
+   * @returns {Object} Hash of valid properties and their Joi validation.
    */
   static properties() {
     return {
