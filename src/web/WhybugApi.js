@@ -117,8 +117,13 @@ var request = (route, pathParams = {}) => {
     }
   }
 
-  console.log("COOOOKIIIIIIIEEEEEE-------------", WhybugApi.cookie);
-  return superagent(route.method, config.web.url + path)
-    .set('Cookie', WhybugApi.cookie)
+  var http = superagent(route.method, config.web.url + path)
     .set('Accept', 'application/json');
+
+  if (WhybugApi.cookie) {
+    http.set('Cookie', WhybugApi.cookie);
+  }
+
+  return http;
 };
+
