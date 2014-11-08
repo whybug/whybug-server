@@ -42,6 +42,7 @@ export var bookshelf = require('bookshelf')(knex);
 bookshelf.plugin('registry');
 
 import {ErrorRepository} from './domain/ErrorRepository';
+import {ErrorService} from './domain/ErrorService';
 import {SolutionRepository} from './domain/SolutionRepository';
 import {SolutionService} from './domain/SolutionService';
 import {UserRepository} from './domain/UserRepository';
@@ -51,6 +52,7 @@ import {UserService} from './domain/UserService.js';
 
 export var solutionRepository = new SolutionRepository(es, bookshelf);
 export var errorRepository = new ErrorRepository(es, bookshelf);
+export var errorService = new ErrorService(errorRepository);
 export var solutionService = new SolutionService(solutionRepository, errorRepository);
 var userRepository = new UserRepository(bookshelf);
 var userProfileRepository = new UserProfileRepository(bookshelf);
