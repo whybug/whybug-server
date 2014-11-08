@@ -58,8 +58,11 @@ export class ErrorRepository {
    * Stores an error.
    *
    * @param {Error} error
+   * @param {boolean} update
+   *
+   * @return {Promise}
    */
-  store(error) {
-    return new (this.model)(error).save({}, {method: 'insert'});
+  store(error, update = false) {
+    return new (this.model)(error).save({}, {method: update ? 'update' : 'insert'});
   }
 }
