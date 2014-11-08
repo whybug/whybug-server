@@ -45,7 +45,11 @@ export var SolutionViewPage = React.createClass({
         h1({}, solution.message)
       ),
       Section({className: 'grey'},
-        Markdown({text: solution.description})
+        div({className: 'w-row'},
+          div({className: 'w-col w-col-12'},
+            Markdown({text: solution.description})
+          )
+        )
       )
    )
   }

@@ -44,7 +44,7 @@ export var Header = React.createClass({
     return div({className: 'w-nav-link nav-link'},
       'Login',
       div({className: 'subnav'},
-        a({href: routes.web.login.github.path, className: 'icon-github'}, span({}, 'Github')),
+        a({href: routes.web.login.github.path, className: 'icon-github-round'}, span({}, 'Github')),
         a({href: routes.web.login.twitter.path, className: 'icon-twitter-square'}, span({}, 'Twitter')),
         a({href: routes.web.login.google.path, className: 'icon-google-square'}, span({}, 'Google'))
       )
