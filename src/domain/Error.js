@@ -37,9 +37,7 @@ export class Error {
       .digest('hex');
   }
 
-  set checksum(checksum) {
-    this._checksum = checksum;
-  }
+  set checksum(checksum) { }
 
   static properties() {
     return {
