@@ -10,13 +10,40 @@ import {Section} from '../common/ui/Elements';
 import {WhybugApi} from '../WhybugApi';
 
 var {Link} = Router;
-var {section, div, main, a, h1, h2, h3, form, label, input, p} = React.DOM;
+var {section, div, main, a, ul, li, h1, h2, h3, form, label, input, p, span} = React.DOM;
+
+
+var UnsolvedError = React.createClass({
+
+  render() {
+    var error = this.props.error;
+    return Link({href: this.getSolutionLinkForError(), className: 'content-block'},
+      h3({className: 'latest-errors'}, error.level,  ': ', error.message),
+      span({className: 'button', onClick: this.handleHide}, 'hide')
+    );
+  },
+
+  /**
+   * Returns a link to create a solution based on
+   * the specified error.
+   *
+   * @returns {string}
+   */
+  getSolutionLinkForError() {
+    return routes.web.solution.create.path.replace(':error_uuid', this.props.error.uuid);
+  },
+
+  handleHide(event) {
+    event.preventDefault();
+    this.props.onHide(this.props.error);
+  }
+});
 
 /**
  * Displays a list of unresolved errors.
  */
-var UnsolvedErrors = React.createClass({
-  get mixins() { return [Async.Mixin, NavigatableMixin]; },
+var UnsolvedErrorList = React.createClass({
+  get mixins() { return [Async.Mixin]; },
 
   getInitialStateAsync(callback) {
     WhybugApi.findUnsolvedErrors((error, result) => callback(error, {
@@ -26,26 +53,22 @@ var UnsolvedErrors = React.createClass({
 
   render() {
     if (this.state.unsolved_errors) {
-      return div({}, this.state.unsolved_errors.map(error => {
-        error.key = error.uuid;
-        return Link({href: this.getSolutionLinkForError(error), className: 'content-block'},
-          h3({className: 'latest-errors'}, error.level,  ': ', error.message)
-        );
-      }));
+      return div({}, this.state.unsolved_errors.map(error => UnsolvedError({
+        key: error.uuid,
+        error: error,
+        onHide: this.handleHideError
+      })));
     }
 
     return div({}, 'No unsolved errors found');
   },
 
-  /**
-   * Returns a link to create a solution based on
-   * the specified error.
-   *
-   * @param error
-   * @returns {string}
-   */
-  getSolutionLinkForError(error) {
-    return routes.web.solution.create.path.replace(':error_uuid', error.uuid);
+  handleHideError(error) {
+    WhybugApi.hideError(error, () => {
+      this.setState({
+        unsolved_errors: this.state.unsolved_errors.filter(unresolved_error => unresolved_error.uuid !== error.uuid)
+      })
+    });
   }
 });
 
@@ -89,21 +112,13 @@ export var SolutionSearchPage = React.createClass({
 
           main({className: 'w-col w-col-9'},
             this.renderSearchResults(solutions),
-            h3({}, 'Unresolved errors'),
-            UnsolvedErrors({})
+            this.props.user ?  h3({}, 'Unresolved errors', UnsolvedErrorList({})) : ''
           ),
 
           div({className: 'w-col w-col-3'},
-            label({htmlFor: 'programminglanguage'}, 'Language'),
-            solutions.aggregations.programminglanguage.buckets.map((agg) => div({}, agg.key + "(" + agg.doc_count + ")")),
-
-            label({htmlFor: 'level'}, 'Level'),
-            solutions.aggregations.level.buckets.map((agg) => div({}, agg.key + "(" + agg.doc_count + ")")),
-
-            label({htmlFor: 'os'}, 'Operating system'),
-            solutions.aggregations.os.buckets.map((agg) => div({}, agg.key + "(" + agg.doc_count + ")"))
-
-            //label({htmlFor: 'project'}, 'Project')
+            SearchResultAggregation({agg: 'programminglanguage', title: 'Language', solutions: solutions}),
+            SearchResultAggregation({agg: 'level', title: 'Level', solutions: solutions}),
+            SearchResultAggregation({agg: 'os', title: 'Operating system', solutions: solutions})
           )
         )
       )
@@ -125,12 +140,22 @@ export var SolutionSearchPage = React.createClass({
     }
 
     return div({}, 'No errors found');
-  },
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state != nextState;
   }
 
+
+});
+
+export var SearchResultAggregation = React.createClass({
+
+  render() {
+    var aggs = this.props.solutions.aggregations[this.props.agg];
+    return div({},
+      label({htmlFor: this.props.agg}, this.props.title),
+      ul({},
+        aggs.buckets.map(agg => li({key: agg.key}, agg.key + "(" + agg.doc_count + ")"))
+      )
+    )
+  }
 });
 
 

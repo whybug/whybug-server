@@ -8,6 +8,7 @@ import {
   es,
   bookshelf,
   userService,
+  errorService,
   solutionService,
   solutionRepository,
   errorRepository
@@ -17,6 +18,7 @@ import {UserProfile} from './domain/UserProfile';
 import {WebApp} from './web/WebApp';
 import {Error} from './domain/Error';
 import {Solution} from './domain/Solution';
+import {WhybugApi} from './web/WhybugApi';
 
 /**
  * Helper to render HTML or return JSON.
@@ -38,6 +40,8 @@ var reactProxy = (callback) => {
         query: request.query,
         user: request.auth.credentials
       });
+
+      WhybugApi.setCookie(request.headers.cookie);
 
       ReactAsync.renderComponentToStringWithAsyncState(app, (err, markup) => {
         console.log('render', request.path);
@@ -80,6 +84,14 @@ server.pack.register([
 ], (err) => {
   if (err) { throw err; }
 
+  // Register session cookie strategy.
+  server.auth.strategy('session', 'cookie', {
+    password: config.web.session_password,
+    cookie: 'session', // Cookie name
+    isSecure: false, // Terrible idea but required if not using HTTPS
+    ttl: 24 * 60 * 60 * 1000 * 30 // Set session to 30 days
+  });
+
   /**
    * API routes.
    *
@@ -109,6 +121,11 @@ server.pack.register([
     reply(errorRepository.findUnsolvedErrors());
   });
 
+  // Post hidden error.
+  route(routes.api.hidden_errors, async (request, reply) => {
+    reply(await errorService.hideError(new Error(request.payload)) || Hapi.error.notFound());
+  }, { validate: {payload: Error.properties()}});
+
   // Get a single solution.
   route(routes.api.read_solution, async (request, reply) => {
     try {
@@ -134,13 +151,6 @@ server.pack.register([
    * For AJAX requests these return JSON, otherwise HTML.
    */
 
-  // Register session cookie strategy.
-  server.auth.strategy('session', 'cookie', {
-    password: config.web.session_password,
-    cookie: 'session', // Cookie name
-    isSecure: false, // Terrible idea but required if not using HTTPS
-    ttl: 24 * 60 * 60 * 1000 // Set session to 1 day
-  });
 
   // Generic handler for server rendering.
   route({ method: '*', path: '/{p*}', config: { auth: { mode: 'try', strategy: 'session' } } }, reactProxy((request, reply) => {
@@ -169,6 +179,8 @@ server.pack.register([
 
     // 2. Setup local session.
     delete user.attributes.email;
+    delete user.attributes.created_at;
+    delete user.attributes.updated_at;
     request.auth.session.set(user);
 
     // 3. Redirect to the application.

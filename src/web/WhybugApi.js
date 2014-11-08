@@ -53,6 +53,19 @@ export class WhybugApi {
   }
 
   /**
+   * Hides an error.
+   *
+   * @param error
+   * @param callback
+   * @returns {Promise}
+   */
+  static hideError(error, callback) {
+    return request(routes.api.hidden_errors)
+      .send(error)
+      .end(notify(callback));
+  }
+
+  /**
    * Search for errors by specified query.
    *
    * @param query
@@ -63,6 +76,10 @@ export class WhybugApi {
     return request(routes.api.search_solutions)
       .query({query: query})
       .end(notify(callback));
+  }
+
+  static setCookie(cookie) {
+    WhybugApi.cookie = cookie;
   }
 }
 
@@ -100,6 +117,8 @@ var request = (route, pathParams = {}) => {
     }
   }
 
+  console.log("COOOOKIIIIIIIEEEEEE-------------", WhybugApi.cookie);
   return superagent(route.method, config.web.url + path)
+    .set('Cookie', WhybugApi.cookie)
     .set('Accept', 'application/json');
 };
