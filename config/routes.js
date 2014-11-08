@@ -56,7 +56,10 @@ module.exports =  {
     read_error: { method: 'GET', path: '/api/errors/{error_uuid}' },
 
     // List of unsolved errors.
-    unsolved_errors: { method: 'GET', path: '/api/errors/unsolved' },
+    unsolved_errors: { method: 'GET', path: '/api/errors/unsolved', config: { auth: 'session' } },
+
+    // List of hidden errors.
+    hidden_errors: { method: 'POST', path: '/api/errors/hidden' },
 
     // Search for errors.
     search_solutions: { method: 'GET', path: '/api/solutions' },
