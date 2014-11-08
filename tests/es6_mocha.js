@@ -13,5 +13,5 @@ chai.use(function (chai, utils) { return chaiReact(chai, utils, React) });
 // Traceur will compile all JS aside from node modules
 Traceur.require.makeDefault(function(filename) {
   return !(/node_modules/.test(filename));
-}, {experimental: true});
+}, {asyncFunctions: true});
 
