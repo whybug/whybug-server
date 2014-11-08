@@ -10,16 +10,16 @@
     "test": "node_modules/.bin/mocha tests --require tests/es6_mocha.js --recursive"
   },
   "dependencies": {
-    "bell": "^1.1.0",
-    "bookshelf": "^0.7.7",
-    "elasticsearch": "^2.4.2",
+    "bell": "^1.3.0",
+    "bookshelf": "^0.7.9",
+    "elasticsearch": "^3.0.0",
     "fibers": "^1.0.2",
     "handlebars": "^2.0.0",
-    "hapi": "^6.8.1",
-    "hapi-as-promised": "^1.0.0",
+    "hapi": "^7.5.0",
+    "hapi-as-promised": "^1.0.1",
     "hapi-auth-cookie": "^1.3.2",
     "hapi-cache-buster": "^0.2.0",
-    "joi": "^4.6.2",
+    "joi": "^4.8.0",
     "knex": "^0.6.22",
     "marked": "^0.3.2",
     "mysql": "^2.5.0",
@@ -44,7 +44,7 @@
     "sinon": "^1.10.3",
     "sinon-chai": "^2.5.0",
     "supertest": "^0.13.0",
-    "traceur-loader": "^0.4.0",
+    "traceur-loader": "^0.6.1",
     "webpack": "^1.4.0-beta5"
   }
 }

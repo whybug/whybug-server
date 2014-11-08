@@ -21,13 +21,13 @@ import {Solution} from './domain/Solution';
 import {WhybugApi} from './web/WhybugApi';
 
 /**
- * Helper to render HTML or return JSON.
- *
- * If a request is non ajax, return the server rendered HTML, otherwise call the callback.
- *
- * @param callback
- * @returns {Function}
- */
+* Helper to render HTML or return JSON.
+*
+* If a request is non ajax, return the server rendered HTML, otherwise call the callback.
+*
+* @param callback
+* @returns {Function}
+*/
 var reactProxy = (callback) => {
   return (request, reply) => {
     if ("X-Requested-With" in request.headers) {
@@ -56,12 +56,12 @@ var reactProxy = (callback) => {
 };
 
 /**
- * Helper to add a handler to a route definition and add it to the server.
- *
- * @param route
- * @param handler
- * @param config
- */
+* Helper to add a handler to a route definition and add it to the server.
+*
+* @param route
+* @param handler
+* @param config
+*/
 var route = (route, handler, config = {}) => {
   route.config = route.config || {};
   route.config.handler = handler;

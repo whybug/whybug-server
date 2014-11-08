@@ -8,17 +8,20 @@ export var Joi = require('joi');
 export var Hapi = require('hapi');
 
 export var server = new Hapi.Server(config.node.host, config.node.port, {
-  views: {
-    engines: {
-      html: require('handlebars')
-    },
-    path: 'src/web/common'
-  },
-  debug:{ request: ['error'] },
+  debug: { request: ['error'] },
   cors: {
     methods: ['POST']
   }
 });
+
+// Register main layout.
+server.views({
+  engines: {
+    html: require('handlebars')
+  },
+  path: 'src/web/common'
+});
+
 
 export var es = new (require('elasticsearch')).Client({
   host: config.elasticsearch.host + ':' + config.elasticsearch.port,
