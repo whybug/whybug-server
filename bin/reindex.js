@@ -8,6 +8,9 @@ traceur.require.makeDefault(function(filename) {
 
 
 var solutionRepository = require('../src/dependencies').solutionRepository;
-solutionRepository.reindex();
+solutionRepository.reindex().then(function() {
+  process.exit();
+});
+
 
 
