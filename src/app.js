@@ -210,6 +210,24 @@ server.route({ method: 'GET', path: '/css/{p*}', config: {cache: cache_2weeks,  
 server.route({ method: 'GET', path: '/js/{p*}', config: {cache: cache_2weeks, handler: { directory: { path: './build/js/', listing: false, index: true } } } });
 server.route({ method: 'GET', path: '/fonts/{p*}', config: {cache: cache_2weeks, handler: { directory: { path: './src/web/assets/fonts/', listing: false, index: true } } } });
 
+
+// Setup logging.
+server.pack.register({
+  plugin: require('good'),
+  options: {
+    opsInterval: 60 * 1000, // every minute
+    extendedRequests: true,
+    reporters: [{
+        reporter: require('good-console'),
+        args: config.log[config.debug ? 'dev' : 'prod']
+      }
+    ]
+  }
+}, (err) => {
+  if (err) {
+    console.log(err);
+  }
+});
 // Start the server.
 server.start(() => {
   console.log('Server started at: ' + server.info.uri);

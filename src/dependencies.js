@@ -25,7 +25,7 @@ server.views({
 
 export var es = new (require('elasticsearch')).Client({
   host: config.elasticsearch.host + ':' + config.elasticsearch.port,
-  log: config.debug ? 'trace' : 'warning'
+  log: require('elasticsearch-hapi-logger')(server)
 });
 
 var knex = require('knex')({

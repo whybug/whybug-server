@@ -51,6 +51,20 @@ if (typeof __BROWSER__ == 'undefined' || __BROWSER__ === false) {
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || ''
   };
+
+  // See https://github.com/hapijs/good.
+  config.log = {
+    debug: {
+      log: '*',
+      request: '*'
+    },
+
+    prod: {
+      log: 'error',
+      request: '*',
+      ops: '*'
+    }
+  }
 }
 
 module.exports = config;
