@@ -21,3 +21,36 @@ a
 
 .content-block
   display: block
+
+.react-markdown-textarea__preview
+  @extend .markdown-body
+  @extend .content-block
+  margin-top: 0
+  min-height: 150px
+
+.react-markdown-textarea__nav
+  @extend .language-picker
+  padding-left: 0
+
+.react-markdown-textarea__nav__item
+  @extend .language-picker__item
+  @extend .nav-link
+
+.react-markdown-textarea__nav__item:first-child
+  border-bottom-left-radius: 0px
+
+.react-markdown-textarea__nav__item:last-child
+  border-bottom-right-radius: 0px
+
+.react-markdown-textarea__nav__item--active
+  @extend .active
+  border-bottom: none
+
+.react-markdown-textarea__textarea
+  margin-bottom: 20px
+
+.react-markdown-textarea__save-button
+  @extend .button
+  @extend .submit-button
+  @extend .small
+
