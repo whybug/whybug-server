@@ -140,6 +140,11 @@ server.pack.register([
     reply(solutionRepository.store(new Solution(request.payload)));
   }, { validate: {payload: Solution.properties()}});
 
+  // Update a solution.
+  route(routes.api.update_solution, (request, reply) => {
+    reply(solutionRepository.store(new Solution(request.payload)));
+  }, { validate: {payload: Solution.properties()}});
+
   // Search solutions.
   route(routes.api.search_solutions, (request, reply) => {
     reply(solutionService.search(request.query.query));

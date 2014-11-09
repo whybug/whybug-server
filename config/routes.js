@@ -58,7 +58,7 @@ module.exports =  {
     // List of unsolved errors.
     unsolved_errors: { method: 'GET', path: '/api/errors/unsolved', config: { auth: 'session' } },
 
-    // List of hidden errors.
+    // Add an error to the list of hidden errors.
     hidden_errors: { method: 'POST', path: '/api/errors/hidden' },
 
     // Search for errors.
@@ -71,7 +71,7 @@ module.exports =  {
     read_solution: { method: 'GET', path: '/api/solutions/{solution_uuid}' },
 
     // Update a solution, with JSON payload.
-    update_solution: { method: 'PUT', path: '/api/solutions/{solution_uuid}' },
+    update_solution: { method: 'PUT', path: '/api/solutions/{solution_uuid}', config: { auth: 'session' } },
 
     // Delete a solution, with JSON payload.
     delete_solution: { method: 'DELETE', path: '/api/solutions/{error_uuid}' }
