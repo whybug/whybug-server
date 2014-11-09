@@ -12,6 +12,49 @@ import {Section} from '../common/ui/Elements';
 
 var {div, h1, h3, form, input, button, label, textarea} = React.DOM;
 
+export var SolutionForm = React.createClass({
+  propTypes: {
+    solution: React.PropTypes.object,
+    onChange: React.PropTypes.func,
+    onSave: React.PropTypes.func
+  },
+
+  render() {
+    var solution = this.props.solution || {};
+
+    return form({},
+      div({className: 'w-row'},
+
+        div({className: 'w-col w-col-9'},
+          MarkdownTextarea({
+            id: 'description',
+            onSave: this.props.onSave,
+            //saving: this.props.saving,
+            //spinner: Spinner,
+            rows: 6,
+            required: "required",
+            className: "w-input field textarea markdown-body",
+            placeholder: 'How to solve this error?',
+            autoFocus: true,
+            buttonText: 'Create'
+          })
+        ),
+
+        div({className: 'w-col w-col-3'},
+          TextInput({text: 'Level', name: 'level', onChange: this.props.onChange('level'), values: solution}),
+          TextInput({text: 'Language', name: 'programminglanguage', onChange: this.props.onChange('programminglanguage'), values: solution}),
+          TextInput({text: 'Language version', name: 'programminglanguage_version', onChange: this.props.onChange('programminglanguage_version'), values: solution}),
+          TextInput({text: 'Operating system', name: 'os', onChange: this.props.onChange('os'), values: solution})
+          //TextInput({text: 'File path', name: 'file_path', onChange: this.props.onChange('file_path'), input: error})
+
+          // Project?
+          //TextInput({text: 'Operating system version', name: 'os_version', onChange: this.props.onChange('os_version'), input: error}),
+        )
+      )
+    );
+  }
+});
+
 export var SolutionCreatePage = React.createClass({
 
   mixins: [ Async.Mixin, NavigatableMixin],
@@ -61,44 +104,19 @@ export var SolutionCreatePage = React.createClass({
   },
 
   render() {
-    var solution = this.state.solution || {};
-
     return div({},
       Header({user: this.props.user}),
-      Section({className: 'hero'}, h1({}, solution.message || 'Create a solution')),
-      Section({className: 'grey'},
-
-      form({},
-        div({className: 'w-row'},
-
-          div({className: 'w-col w-col-9'},
-            MarkdownTextarea({
-              id: 'description',
-              onSave: this.onSubmit,
-              saving: this.state.saving,
-              spinner: Spinner,
-              rows: 6,
-              required: "required",
-              className: "w-input field textarea",
-              placeholder: 'How to solve this error?',
-              buttonText: 'Create'
-            })
-          ),
-
-          div({className: 'w-col w-col-3'},
-            TextInput({text: 'Level', name: 'level', onChange: this.onChange('level'), values: solution}),
-            TextInput({text: 'Language', name: 'programminglanguage', onChange: this.onChange('programminglanguage'), values: solution}),
-            TextInput({text: 'Language version', name: 'programminglanguage_version', onChange: this.onChange('programminglanguage_version'), values: solution}),
-            TextInput({text: 'Operating system', name: 'os', onChange: this.onChange('os'), values: solution})
-            //TextInput({text: 'File path', name: 'file_path', onChange: this.onChange('file_path'), input: error})
-
-            // Project?
-            //TextInput({text: 'Operating system version', name: 'os_version', onChange: this.onChange('os_version'), input: error}),
-          )
+        Section({className: 'hero'}, h1({}, this.state.solution.message || 'Create a solution')),
+        Section({className: 'grey'},
+          SolutionForm({
+            solution: this.state.solution,
+            onChange: this.onChange,
+            onSave: this.onSubmit
+          })
         )
-      )
     )
-  )}
+  }
+
 });
 
 
