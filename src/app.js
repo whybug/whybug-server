@@ -224,7 +224,7 @@ server.pack.register({
     extendedRequests: true,
     reporters: [{
         reporter: require('good-console'),
-        args: config.log[config.debug ? 'dev' : 'prod']
+        args: config.log[config.debug ? 'debug' : 'prod']
       }
     ]
   }
