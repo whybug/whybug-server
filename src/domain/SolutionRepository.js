@@ -169,14 +169,19 @@ export class SolutionRepository {
       if (exists) {
         await this.es.indices.delete({index: this.index, force: true});
       }
-      await this.es.indices.create({
+      await this.es.indices.create({index: this.index});
+      await this.es.indices.putMapping({
         index: this.index,
         type: this.type,
         body: require('../../config/elasticsearch/'  + this.index + '.js')
       });
 
       var entries = await new (this.model)().fetchAll();
-      entries.map((entry) => this.storeEs(entry.attributes));
+      await Promise.all(entries.map(entry => Promise.all([
+        this.storeEs(entry.attributes),
+        this.storePercolator(entry.attributes)
+      ])));
+
     } catch(e) {
       console.log(e);
       throw e;

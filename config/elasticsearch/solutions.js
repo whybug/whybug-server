@@ -1,5 +1,4 @@
 module.exports = {
-  "solutions": {
     "_all" : {"enabled" : false},
     "properties": {
       "client_ip": {"type": "string", "index" : "not_analyzed"},
@@ -17,5 +16,4 @@ module.exports = {
       "protocol_version": {"type": "long", "index" : "not_analyzed"},
       "uuid": {"type": "string", "index" : "not_analyzed"}
     }
-  }
 };
