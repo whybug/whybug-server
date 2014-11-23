@@ -110,11 +110,16 @@ export class SolutionRepository {
    * @returns {Promise}
    */
   async store(solution) {
-    await Promise.all([
-      this.storeMysql(solution),
-      this.storeEs(solution),
-      this.storePercolator(solution)
-    ]);
+    try {
+      await this.storeMysql(solution);
+
+      await Promise.all([
+        this.storeEs(solution),
+        this.storePercolator(solution)
+      ]);
+    } catch (e) {
+      throw e;
+    }
 
     return solution;
   }
