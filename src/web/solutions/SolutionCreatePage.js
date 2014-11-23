@@ -29,15 +29,16 @@ export var SolutionForm = React.createClass({
           MarkdownTextarea({
             id: 'description',
             onSave: this.props.onSave,
-            //saving: this.props.saving,
-            //spinner: Spinner,
+            saving: this.props.saving,
+            spinner: Spinner,
             rows: 6,
             required: "required",
             className: "w-input field textarea markdown-body",
             placeholder: 'How to solve this error?',
             autoFocus: true,
             buttonText: 'Create'
-          })
+          }),
+          this.props.error ? div({}, "Unable to save solution. ", this.props.error.message) : ""
         ),
 
         div({className: 'w-col w-col-3'},
@@ -45,10 +46,6 @@ export var SolutionForm = React.createClass({
           TextInput({text: 'Language', name: 'programminglanguage', onChange: this.props.onChange('programminglanguage'), values: solution}),
           TextInput({text: 'Language version', name: 'programminglanguage_version', onChange: this.props.onChange('programminglanguage_version'), values: solution}),
           TextInput({text: 'Operating system', name: 'os', onChange: this.props.onChange('os'), values: solution})
-          //TextInput({text: 'File path', name: 'file_path', onChange: this.props.onChange('file_path'), input: error})
-
-          // Project?
-          //TextInput({text: 'Operating system version', name: 'os_version', onChange: this.props.onChange('os_version'), input: error}),
         )
       )
     );
@@ -68,7 +65,6 @@ export var SolutionCreatePage = React.createClass({
         programminglanguage_version: error.programminglanguage_version,
         os: error.os,
         os_version: error.os_version
-        //file_path: error.file_path
       }
     }));
   },
@@ -88,12 +84,13 @@ export var SolutionCreatePage = React.createClass({
     this.setState(state);
 
     WhybugApi.createSolution(this.state.solution, (error, solution) => {
-      console.log('response', error, solution);
-
       this.setState({saving: false});
 
-      if (error) { return; }
+      if (error) {
+        return this.setState({error: error});
+      }
 
+      // Redirect to solution.
       var viewPage = routes.web.solution.view.path
         .replace(':language', solution.programminglanguage)
         .replace(':slug', solution.uuid);
@@ -110,6 +107,8 @@ export var SolutionCreatePage = React.createClass({
         Section({className: 'grey'},
           SolutionForm({
             solution: this.state.solution,
+            saving: this.state.saving,
+            error: this.state.error,
             onChange: this.onChange,
             onSave: this.onSubmit
           })
