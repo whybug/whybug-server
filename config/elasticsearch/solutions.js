@@ -8,7 +8,7 @@ module.exports = {
       "file_path": {"type": "string", "index" : "not_analyzed"},
       "level": {"type": "string", "index" : "not_analyzed"},
       "line": {"type": "long", "index" : "not_analyzed"},
-      "message": {"type": "string", "index" : "not_analyzed"},
+      "message": {"type": "string"},
       "os": {"type": "string", "index" : "not_analyzed"},
       "os_version": {"type": "string", "index" : "not_analyzed"},
       "programminglanguage": {"type": "string", "index" : "not_analyzed"},
