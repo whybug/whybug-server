@@ -18,7 +18,7 @@ describe('Error', () => {
       "created_at": new Date("2014-09-20T14:54:17.792Z"),
       "client_ip": "127.0.0.1"
     };
-  })
+  });
 
   describe('#constructor', () => {
 

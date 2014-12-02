@@ -1,3 +1,5 @@
+var Joi = require('joi');
+
 import {Solution} from './Solution';
 
 /**
@@ -13,7 +15,11 @@ export class SolutionRepository {
     this.es = es;
     this.index = SolutionRepository.INDEX;
     this.type = SolutionRepository.TYPE;
-    this.model = bookshelf.model('Solution', Solution.bookshelf());
+    this.knex = bookshelf.knex;
+  }
+
+  table() {
+    return this.knex('solutions');
   }
 
   /**
@@ -34,11 +40,11 @@ export class SolutionRepository {
       }
     });
 
-    var solutions = await new (this.model)({
+    var solutions = this.table().where({
       uuid: result.matches.map((match) => match._id)
-    }).fetchAll();
+    });
 
-    return solutions.map((solution) => new Solution(solution.attributes));
+    return solutions.map((solution) => new Solution(solution));
   }
 
   /**
@@ -47,24 +53,18 @@ export class SolutionRepository {
    * @return {Error} Error matching UUID, or null if not found.
    */
   async findByUuid(uuid) {
-    var solution = await new (this.model)({uuid: uuid}).fetch();
+    var solution = await this.table()
+      .where({uuid: uuid})
+      .first()
+      .then().catch(e => { throw e });
 
-    return solution ? new Solution(solution.attributes) : null;
-  }
-  /**
-   * Suggests error messages that could match
-   * the given message.
-   *
-   * @param message
-   *
-   * @return {Promise}
-   */
-  suggestErrorMessages(message) {
-
+    return solution ? new Solution(solution) : null;
   }
 
   /**
    * Search solutions
+   *
+   * @return {Promise}
    */
   async search(query = '*') {
     var result = await this.es.search({
@@ -100,16 +100,19 @@ export class SolutionRepository {
 
     return {
       total: result.hits.total,
-      solutions: result.hits.hits.map((solution) => new Solution(solution._source)),
+      solutions: result.hits.hits.map(solution => new Solution(solution._source)),
       aggregations: result.aggregations
     };
   }
 
   /**
    * @param {Solution} solution
+   *
    * @returns {Promise}
    */
   async store(solution) {
+    Joi.assert(solution, Joi.object().type(Solution));
+
     try {
       await this.storeMysql(solution);
 
@@ -117,18 +120,32 @@ export class SolutionRepository {
         this.storeEs(solution),
         this.storePercolator(solution)
       ]);
+
+      return solution;
     } catch (e) {
       throw e;
     }
-
-    return solution;
   }
 
+  /**
+   *
+   * @param solution
+   * @returns {Promise}
+   */
   storeMysql(solution) {
-    return new (this.model)(solution).save({}, {method: 'insert'});
+    Joi.assert(solution, Joi.object().type(Solution));
+
+    return this.table().insert(solution).then().catch(e => { throw e });
   }
 
+  /**
+   *
+   * @param solution
+   * @returns {Promise}
+   */
   storeEs(solution) {
+    Joi.assert(solution, Joi.object().type(Solution));
+
     return this.es.index({
       index: this.index,
       type: this.type,
@@ -137,7 +154,14 @@ export class SolutionRepository {
     });
   }
 
+  /**
+   *
+   * @param solution
+   * @returns {Promise}
+   */
   storePercolator(solution) {
+    Joi.assert(solution, Joi.object().type(Solution));
+
     return this.es.index({
       index: this.index,
       type: '.percolator',
@@ -147,6 +171,8 @@ export class SolutionRepository {
   }
 
   getQueryForSolution(solution) {
+    Joi.assert(solution, Joi.object().type(Solution));
+
     var terms = {};
     var match = {};
 
@@ -181,16 +207,15 @@ export class SolutionRepository {
         body: require('../../config/elasticsearch/'  + this.index + '.js')
       });
 
-      var entries = await new (this.model)().fetchAll();
+      var entries = await this.table().select().then();
       await Promise.all(entries.map(entry => Promise.all([
-        this.storeEs(entry.attributes),
-        this.storePercolator(entry.attributes)
+        this.storeEs(entry),
+        this.storePercolator(entry)
       ])));
 
     } catch(e) {
-      console.log(e);
+      console.log('error while reindexing: ', e);
       throw e;
     }
   }
 }
-
