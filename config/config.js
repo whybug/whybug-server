@@ -30,7 +30,7 @@ if (typeof __BROWSER__ == 'undefined' || __BROWSER__ === false) {
 
   config.elasticsearch = {
     host: process.env.ES_URL || '127.0.0.1',
-    port: process.env.ES_URL || 9200
+    port: process.env.ES_PORT || 9200
   };
 
   // For authentication options see https://github.com/hapijs/bell
