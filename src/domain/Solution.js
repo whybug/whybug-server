@@ -20,6 +20,8 @@ export class Solution {
       if (err) { throw err; }
       for (var value in values) { this[value] = values[value]; }
     });
+
+    this.ensureSlugs();
   }
 
   /**
@@ -53,19 +55,13 @@ export class Solution {
     };
   }
 
-  get slug_long() {
-    return this._slug_long || slug(this.message).toLowerCase();
-  }
+  ensureSlugs() {
+    if (!this.slug_long) {
+      this.slug_long = slug(this.message).toLowerCase();
+    }
 
-  set slug_long(slug_long) {
-    this._slug_long = slug_long;
-  }
-
-  get slug_short() {
-    return this._slug_short || this.uuid;
-  }
-
-  set slug_short(slug_short) {
-    this._slug_short = slug_short;
+    if (!this.slug_short) {
+      this.slug_short = this.uuid;
+    }
   }
 }
