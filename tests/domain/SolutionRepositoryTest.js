@@ -30,12 +30,8 @@ describe('SolutionRepository', () => {
 
   describe('#store', () => {
 
-    it('should throw an error with invalid solution', async () => {
-      try {
-        var solution = await repository.store({});
-      } catch(exception) {
-        exception.message.should.have.string('value must be an instance of Solution');
-      }
+    it('should throw an error with invalid solution', () => {
+      return repository.store({}).should.be.rejectedWith('value must be an instance of Solution');
     });
 
     it('should return stored solution', () => {
