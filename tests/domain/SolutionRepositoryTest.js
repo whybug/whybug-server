@@ -1,4 +1,4 @@
-import {es, bookshelf} from '../dependencies.js';
+import {es, knex} from '../dependencies.js';
 import {Solution} from '../../src/domain/Solution';
 import {SolutionRepository} from '../../src/domain/SolutionRepository';
 
@@ -6,7 +6,7 @@ describe('SolutionRepository', () => {
   var repository, dummy;
 
   beforeEach(async () => {
-    repository = new SolutionRepository(es, bookshelf);
+    repository = new SolutionRepository(es, knex);
     dummy = new Solution({
       "uuid":"68c01692-7f74-47ce-990d-519e010f0bc8",
       "slug_long":"cannot-access-empty-property",
@@ -20,8 +20,8 @@ describe('SolutionRepository', () => {
       "os":"Darwin",
       "os_version":"13.3.0",
       "is_active":1,
-      "created_at":"2014-09-28T15:29:18",
-      "updated_at":"2014-09-28T15:29:18"
+      "created_at":"2014-09-28T15:29:18Z",
+      "updated_at":"2014-09-28T15:29:18Z"
     });
 
     await repository.table().truncate().then();
@@ -84,9 +84,6 @@ describe('SolutionRepository', () => {
       });
     });
 
-
-
   });
-
 
 });

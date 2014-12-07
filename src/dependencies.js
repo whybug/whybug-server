@@ -54,10 +54,10 @@ import {UserProfile} from './domain/UserProfile';
 import {UserProfileRepository} from './domain/UserProfileRepository';
 import {UserService} from './domain/UserService.js';
 
-export var solutionRepository = new SolutionRepository(es, bookshelf);
+export var solutionRepository = new SolutionRepository(es, knex);
 export var errorRepository = new ErrorRepository(es, bookshelf);
 export var errorService = new ErrorService(errorRepository);
 export var solutionService = new SolutionService(solutionRepository, errorRepository);
-var userRepository = new UserRepository(bookshelf);
-var userProfileRepository = new UserProfileRepository(bookshelf);
+var userRepository = new UserRepository(knex);
+var userProfileRepository = new UserProfileRepository(knex);
 export var userService = new UserService(userRepository, userProfileRepository);

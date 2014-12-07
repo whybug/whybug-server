@@ -11,11 +11,11 @@ export class SolutionRepository {
   static get INDEX() { return 'solutions'; }
   static get TYPE() { return 'solution'; }
 
-  constructor(es, bookshelf) {
+  constructor(es, knex) {
     this.es = es;
     this.index = SolutionRepository.INDEX;
     this.type = SolutionRepository.TYPE;
-    this.knex = bookshelf.knex;
+    this.knex = knex;
   }
 
   table() {
@@ -48,9 +48,9 @@ export class SolutionRepository {
   }
 
   /**
-   * Returns the Error for specified uuid or null if not found.
+   * Returns the Solution for specified uuid or null if not found.
    *
-   * @return {Error} Error matching UUID, or null if not found.
+   * @return {Solution} Error matching UUID, or null if not found.
    */
   async findByUuid(uuid) {
     var solution = await this.table()
@@ -208,10 +208,15 @@ export class SolutionRepository {
       });
 
       var entries = await this.table().select().then();
-      await Promise.all(entries.map(entry => Promise.all([
-        this.storeEs(entry),
-        this.storePercolator(entry)
-      ])));
+
+      await Promise.all(
+        entries
+          .map(entry => new Solution(entry))
+          .map(solution => Promise.all([
+            this.storeEs(solution),
+            this.storePercolator(solution)
+          ]))
+      );
 
     } catch(e) {
       console.log('error while reindexing: ', e);
