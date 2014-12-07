@@ -183,9 +183,9 @@ server.pack.register([
     var user = await userService.loginWithProvider(provider, credentials.profile);
 
     // 2. Setup local session.
-    delete user.attributes.email;
-    delete user.attributes.created_at;
-    delete user.attributes.updated_at;
+    delete user.email;
+    delete user.created_at;
+    delete user.updated_at;
     request.auth.session.set(user);
 
     // 3. Redirect to the application.
