@@ -37,7 +37,8 @@ var knex = require('knex')({
     database: config.mysql.db,
     user:     config.mysql.user,
     password: config.mysql.pass,
-    charset  : 'utf8'
+    charset  : 'utf8',
+    timezone: 'UTC'
   }
 });
 
