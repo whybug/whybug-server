@@ -20,7 +20,6 @@ mysql -e "CREATE DATABASE IF NOT EXISTS whybug;" -h $MYSQL_HOST
 
 echo "reloading services..."
 node_modules/.bin/pm2 start server.js -i max 2<&1
-node_modules/.bin/pm2 reload all 2<&1
 varnishadm -n whybug "ban req.url ~ /" 2<&1
 
 echo "deployment done."

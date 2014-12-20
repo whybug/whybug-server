@@ -1,7 +1,7 @@
 whybug:
   build: .
   working_dir: /src
-  command: bash ./deploy.sh && node_modules/.bin/pm2 logs
+  command: bash ./deploy.sh; node_modules/.bin/pm2 logs
   ports:
     - "80:80"
   volumes:
