@@ -1,7 +1,7 @@
 whybug:
   build: .
   working_dir: /src
-  command: bash ./deploy.sh
+  command: bash ./deploy.sh && node_modules/.bin/pm2 logs
   ports:
     - "80:80"
   volumes:
@@ -9,7 +9,7 @@ whybug:
   links:
    - db
    - search
-  environment: 
+  environment:
     MYSQL_HOST: "db"
     MYSQL_USER: "root"
     ES_URL: "search"
