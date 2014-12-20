@@ -15,6 +15,7 @@ echo "updating dependencies..."
 npm install
 
 echo "running migrations..."
+mysql -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DB;" -h $MYSQL_HOST
 . ./envvars && node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js migrate:latest
 
 echo "building assets..."
@@ -23,7 +24,7 @@ node_modules/.bin/webpack --config config/webpack.config.js -p 2<&1
 echo "reloading services..."
 node_modules/.bin/pm2 reload whybug 2<&1
 node_modules/.bin/pm2 updatePM2
-varnishadm "ban req.url ~ /" 2<&1
+varnishadm -n whybug "ban req.url ~ /" 2<&1
 
 echo "deployment done."
 exit;

@@ -1,0 +1,26 @@
+whybug:
+  build: .
+  working_dir: /src
+  command: bash ./deploy.sh
+  ports:
+    - "80:80"
+  volumes:
+   - .:/src
+  links:
+   - db
+   - search
+  environment: 
+    MYSQL_HOST: "db"
+    MYSQL_USER: "root"
+    ES_URL: "search"
+
+db:
+  image: dockerfile/mariadb
+  ports:
+   - "3306:3306"
+
+search:
+  image: dockerfile/elasticsearch
+  # ports:
+  #  - "9002:9002"
+  #  - "9300:9300"
