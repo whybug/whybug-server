@@ -15,7 +15,7 @@ echo "installing:"
 bash bin/install.sh
 
 echo "running migrations..."
-mysql -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DB;" -h $MYSQL_HOST
+mysql -e "CREATE DATABASE IF NOT EXISTS whybug;" -h $MYSQL_HOST
 . ./envvars && node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js migrate:latest
 
 echo "reloading services..."
