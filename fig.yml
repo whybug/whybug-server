@@ -1,11 +1,8 @@
 whybug:
   build: .
-  working_dir: /src
-  command: bash ./deploy.sh; node_modules/.bin/pm2 logs
+  command: bash -c ". ./envvars && bin/start.sh"
   ports:
     - "80:80"
-  volumes:
-   - .:/src
   links:
    - db
    - search
@@ -16,11 +13,6 @@ whybug:
 
 db:
   image: dockerfile/mariadb
-  ports:
-   - "3306:3306"
 
 search:
   image: dockerfile/elasticsearch
-  # ports:
-  #  - "9002:9002"
-  #  - "9300:9300"
