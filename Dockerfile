@@ -2,6 +2,10 @@ FROM dockerfile/nodejs
 
 # Setup varnish.
 RUN apt-get update
+RUN apt-get install apt-transport-https
+RUN curl https://repo.varnish-cache.org/ubuntu/GPG-key.txt | apt-key add -
+RUN echo "deb https://repo.varnish-cache.org/ubuntu/ precise varnish-4.0" >> /etc/apt/sources.list.d/varnish-cache.list
+RUN apt-get update
 RUN apt-get -y install varnish
 ADD config/varnish.vcl /etc/varnish/default.vcl
 
