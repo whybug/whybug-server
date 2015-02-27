@@ -1,3 +1,4 @@
+require('../css/main.sass');
 import {WebApp} from '../../WebApp';
 
 // Declare React as global to make use of it in the Google Chrome extension.

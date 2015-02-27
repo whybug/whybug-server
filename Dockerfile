@@ -1,5 +1,7 @@
 FROM dockerfile/nodejs
 
+# TODO: Move all installs to whybug/app-docker image
+
 # Setup varnish.
 RUN apt-get update
 RUN apt-get install apt-transport-https

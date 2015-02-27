@@ -3,21 +3,7 @@
     <meta charset="UTF-8">
     <title>whybug</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style type="text/css">
-    body {
-        background-color: rgb(242, 242, 242);
-    }
-    .navbar-section {
-        background-color: rgb(41, 41, 41);
-    }
-
-    .section.hero,
-    .social-section 
-    {
-        background-color: #4ead5c;
-    }
-    </style>
-    <link rel="stylesheet" href="/css/main.css{{version.cache}}" />
+    <link rel="stylesheet" href="/static/bundle.css{{version.cache}}" />
 </head>
 <body>
 <div id="content-wrapper">{{{ content }}}</div>
@@ -83,6 +69,9 @@
 
 </body>
 <script type="text/javascript">
+var span = document.getElementsByTagName('span')[0];
+          span.textContent = 'interactive'; // change DOM text content
+          span.style.display = 'inline';  // change CSSOM property
     function loadFont() {
         var font =
                 "@font-face {" +
@@ -105,7 +94,7 @@
 
     function loadApp() {
         var element = document.createElement("script");
-        element.src = "/js/bundle.js{{version.cache}}";
+        element.src = "/static/bundle.js{{version.cache}}";
         document.body.appendChild(element);
     }
 
