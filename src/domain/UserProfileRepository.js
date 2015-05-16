@@ -31,7 +31,6 @@ export class UserProfileRepository {
     Joi.assert(userProfile, Joi.object().type(UserProfile));
     let query;
 
-    console.log('hier');
     if (update) {
       query = this.table().where({uuid: userProfile.uuid}).update(userProfile);
     } else {
