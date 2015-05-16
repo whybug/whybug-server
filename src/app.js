@@ -4,6 +4,7 @@ import {
   server,
   Joi,
   Hapi,
+  Boom,
   es,
   bookshelf,
   userService,
@@ -43,18 +44,17 @@ var reactProxy = (callback) => {
 
       // new WebApp(request.path, request.headers.cookie)
       let webRoutes = new WebRoutes(request.path);
-      webRoutes.getMarkup((markup) => {
-        return reply.view('index', { content: markup });
+      webRoutes.getMarkup((markup, data = {}) => {
+        if (request.auth.isAuthenticated) {
+          data.user = request.auth.credentials;
+        }
+
+        return reply.view('index', {
+          content: markup,
+          config: config,
+          data: JSON.stringify(data)
+        });
       });
-
-      // ReactAsync.renderComponentToStringWithAsyncState(app, (err, markup) => {
-      //   console.log('render', request.path);
-      //   if (err) { console.log('error', err);
-      //     return reply(err);
-      //   }
-
-      //   return reply.view('index', { content: markup });
-      // });
     }
   }
 };
@@ -80,9 +80,8 @@ var route = (route, handler, config = {}) => {
   server.route(route);
 };
 
-server.pack.register([
+server.register([
   require('bell'),
-  require('hapi-as-promised'),
   require('hapi-auth-cookie'),
   require('hapi-cache-buster')
 ], (err) => {
@@ -113,9 +112,9 @@ server.pack.register([
   // Get a single error.
   route(routes.api.read_error, async (request, reply) => {
     try {
-      reply(await errorRepository.findByUuid(request.params.error_uuid) || Hapi.error.notFound());
+      reply(await errorRepository.findByUuid(request.params.error_uuid) || Boom.notFound());
     } catch(e) {
-      reply(Hapi.error.internal(e))
+      reply(Boom.internal(e))
     }
   }, {validate: { params: {error_uuid: Joi.string().guid() }}});
 
@@ -127,15 +126,15 @@ server.pack.register([
 
   // Post hidden error.
   route(routes.api.hidden_errors, async (request, reply) => {
-    reply(await errorService.hideError(new Error(request.payload)) || Hapi.error.notFound());
+    reply(await errorService.hideError(new Error(request.payload)) || Boom.notFound());
   }, { validate: {payload: Error.properties()}});
 
   // Get a single solution.
   route(routes.api.read_solution, async (request, reply) => {
     try {
-      reply(await solutionRepository.findByUuid(request.params.solution_uuid) || Hapi.error.notFound());
+      reply(await solutionRepository.findByUuid(request.params.solution_uuid) || Boom.notFound());
     } catch(e) {
-      reply(Hapi.error.internal(e))
+      reply(Boom.internal(e))
     }
   }, {validate: { params: {solution_uuid: Joi.string().guid() }}});
 
@@ -180,7 +179,7 @@ server.pack.register([
   });
 
   // Login handler for all providers.
-  var login = (provider) => async (request, reply) => {
+  var login = async (request, provider) => {
     var credentials = request.auth.credentials;
 
     // 1. Perform account lookup or registration.
@@ -193,7 +192,7 @@ server.pack.register([
     request.auth.session.set(user);
 
     // 3. Redirect to the application.
-    return reply.redirect(credentials.query.redirect || '/');
+    return credentials.query.redirect || '/';
   };
 
   // Register providers.
@@ -208,7 +207,13 @@ server.pack.register([
       isSecure: false // Terrible idea but required if not using HTTPS
     });
 
-    route(routes.web.login[provider], login(provider));
+    var loginWith = (provider) => (request, reply) => {
+      login(request, provider)
+        .then(url => {console.log('redirect to', url); reply.redirect(url)})
+        .catch(error => reply(error))
+    };
+
+    route(routes.web.login[provider], loginWith(provider));
   });
 });
 
@@ -217,19 +222,20 @@ var SECOND = 1000, MINUTE = 60 * SECOND, HOUR = 60 * MINUTE, DAY = 24 * HOUR, WE
 var cache_2weeks = {privacy: 'public', expiresIn: 2 * WEEK};
 
 // Todo: proxy to dev server in development
-server.route({ method: 'GET', path: '/static/{p*}', config: {cache: cache_2weeks,  handler: { directory: { path: './build/', listing: false, index: true } } } });
+server.route({ method: 'GET', path: '/main.js', config: {cache: cache_2weeks,  handler: { file: './build/main.js' } } });
+server.route({ method: 'GET', path: '/main.css', config: {cache: cache_2weeks,  handler: { file: './build/main.css' } } });
 server.route({ method: 'GET', path: '/fonts/{p*}', config: {cache: cache_2weeks, handler: { directory: { path: './src/web/assets/fonts/', listing: false, index: true } } } });
 
 
 // Setup logging.
-server.pack.register({
-  plugin: require('good'),
+server.register({
+  register: require('good'),
   options: {
     opsInterval: 60 * 1000, // every minute
-    extendedRequests: true,
     reporters: [{
         reporter: require('good-console'),
-        args: [config.log[config.debug ? 'debug' : 'prod']]
+        events: { log: '*', response: '*' }
+        //args: [config.log[config.debug ? 'debug' : 'prod']]
       }
     ]
   }
@@ -241,5 +247,4 @@ server.pack.register({
 // Start the server.
 server.start(() => {
   console.log('Server started at: ' + server.info.uri);
-  //process.exit(0);
 });

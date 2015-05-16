@@ -6,11 +6,17 @@ export var config = require('../config/config');
 export var routes = require('../config/routes');
 export var Joi = require('joi');
 export var Hapi = require('hapi');
+export var Boom = require('boom');
 
-export var server = new Hapi.Server(config.node.host, config.node.port, {
-  debug: { request: ['error'] },
-  cors: {
-    methods: ['POST']
+export var server = new Hapi.Server({debug: { request: ['error']} });
+
+server.connection({
+  host: config.node.host,
+  port: config.node.port,
+  routes: {
+    cors: {
+      methods: ['POST']
+    }
   }
 });
 
