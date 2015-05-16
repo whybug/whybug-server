@@ -5,16 +5,17 @@
   "scripts": {
     "start": "node_modules/.bin/pm2 start server.js --name whybug -i max",
     "stop": "node_modules/.bin/pm2 stop whybug",
-    "watch": "node_modules/.bin/webpack --config config/webpack.config.js --watch -d --progress --colors",
+    "dev": "bash -c '. ./.env && nodemon --ignore assets server.js & npm run asset-server'",
+    "asset-server": "bash -c '. ./.env && ./node_modules/.bin/webpack-dev-server --config config/webpack.config.dev.js --host 0.0.0.0 --hot --port 8001'",
     "knex": "node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js",
     "test": "node_modules/.bin/mocha tests --require tests/es6_mocha.js --recursive"
   },
   "dependencies": {
     "bell": "^1.3.0",
     "bookshelf": "^0.7.9",
+    "classnames": "^2.1.1",
     "elasticsearch": "^3.0.0",
     "elasticsearch-hapi-logger": "0.0.1",
-    "fibers": "^1.0.2",
     "good": "^4.0.0",
     "good-console": "^2.0.0",
     "good-reporter": "^3.0.1",
