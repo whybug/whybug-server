@@ -15,10 +15,27 @@
   background-color: white
   border-radius: initial
   border-right: none
+  transition: background-color 0.2s
 
-.language-picker__item:hover,
+.language-picker__item:after
+  display: block
+  position: absolute
+  margin: auto
+  left: 0
+  right: 0
+  bottom: -3px
+  width: 0
+  height: 3px
+  background-color: #e6e6e6
+  content: ""
+  transition: width 0.2s
+
+.language-picker__item.active:after,
+.language-picker__item:hover:after
+  width: 100%
+
 .language-picker__item.active
-  border-bottom: 1px solid #e6e6e6
+  background-color: #f3f3f3
 
 .language-picker__item:first-child
   border-top-left-radius: 4px
