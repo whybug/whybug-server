@@ -1,6 +1,5 @@
 .idea/
-build/js/
-build/css/main.css.map
+build/
 elasticsearch-*
 gslint.conf
 npm-debug.log
