@@ -1,17 +1,13 @@
 var React = require('react'),
-    Async = require('react-async'),
     routes = require('../../../config/routes');
 
-import {Header} from '../common/ui/Header';
-import {WhybugApi} from '../WhybugApi';
-import {Section, NavLink} from '../common/ui/Elements';
+import {Section, Header, HeroSection, Link} from '../common/UI';
 import {PHPInstructions, RubyInstructions, JavascriptInstructions} from './Instructions';
 import {NotFoundPage} from '../common/NotFoundPage';
 
 var {div, span, h1} = React.DOM;
 
 export var InstallationPage = React.createClass({
-
   /**
    * Returns a list of available languages.
    *
@@ -19,10 +15,50 @@ export var InstallationPage = React.createClass({
    */
   getAllLanguages() {
     return [
-      {slug:'php', title: 'PHP', content: PHPInstructions},
-      {slug:'javascript', title: 'Javascript', content: JavascriptInstructions},
-      {slug:'ruby', title: 'Ruby', content: RubyInstructions}
+      {slug:'php', title: 'PHP', instructions: PHPInstructions},
+      {slug:'javascript', title: 'Javascript', instructions: JavascriptInstructions},
+      {slug:'ruby', title: 'Ruby', instructions: RubyInstructions}
     ];
+  },
+
+  render() {
+    return (
+      <div>
+        <Header user={this.props.user} />
+
+        <HeroSection>
+          <h1>Installation</h1>
+        </HeroSection>
+
+        <Section className='grey'>
+          <div className='w-row'>
+            <div className='w-col'>
+              <LanguagePicker languages={this.getAllLanguages()}/>
+              <Instructions
+                languages={this.getAllLanguages()}
+                current={this.props.params.language} />
+            </div>
+          </div>
+        </Section>
+      </div>
+    );
+  }
+});
+
+var LanguagePicker = React.createClass({
+  render() {
+    return (
+      <div className='language-picker'>
+        {this.props.languages.map((language) => (
+          <Link
+            to="language"
+            params={{language: language.slug}}
+            href={this.getLink(language.slug)}
+            className='language-picker__item'
+          >{language.title}</Link>
+        ))}
+      </div>
+    );
   },
 
   /**
@@ -33,46 +69,18 @@ export var InstallationPage = React.createClass({
    */
   getLink(slug) {
     return routes.web.installation.language.path.replace(':language', slug);
-  },
-
-  render() {
-    return div({},
-      Header({user: this.props.user}),
-      Section({className: 'hero'}, h1({}, 'Installation')),
-      Section({className: 'grey'},
-        div({className: 'w-row'},
-          div({className: 'w-col'},
-            this.renderLanguagePicker(),
-            this.renderInstructions()
-          )
-        )
-      )
-    );
-  },
-
-  renderLanguagePicker() {
-    return div({className: 'language-picker'},
-      this.getAllLanguages().map((language) => NavLink(
-        {
-          key: language.slug,
-          href: this.getLink(language.slug),
-          className: 'language-picker__item'
-        },
-        language.title
-      ))
-    );
-  },
-
-  renderInstructions() {
-    if (this.props.language) {
-      var language = this.getAllLanguages()
-        .filter((lang) => lang.slug === this.props.language)[0] || {};
-
-      return language.content({}) || div({}, 'not found');
-    }
-
-    return div({}, 'Please choose a language.');
   }
-
 });
 
+var Instructions = React.createClass({
+  render() {
+    if (this.props.current) {
+      var language = this.props.languages
+          .filter((lang) => lang.slug === this.props.current)[0] || {};
+
+      return <language.instructions /> || <div>not found</div>;
+    }
+
+    return <div>Please choose a language</div>;
+  }
+});

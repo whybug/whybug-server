@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <title>whybug</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="/static/bundle.css{{version.cache}}" />
+    <!--<link rel="stylesheet" href="http://127.0.0.1:8001/main.css{{version.cache}}" />-->
 </head>
 <body>
 <div id="content-wrapper">{{{ content }}}</div>
@@ -69,6 +69,7 @@
 
 </body>
 <script type="text/javascript">
+
 var span = document.getElementsByTagName('span')[0];
           span.textContent = 'interactive'; // change DOM text content
           span.style.display = 'inline';  // change CSSOM property
@@ -94,12 +95,12 @@ var span = document.getElementsByTagName('span')[0];
 
     function loadApp() {
         var element = document.createElement("script");
-        element.src = "/static/bundle.js{{version.cache}}";
+        element.src = "http://192.168.0.14:8001/main.js{{version.cache}}";
         document.body.appendChild(element);
     }
 
     function lazyload() {
-        loadFont();
+//        loadFont();
         loadApp();
     }
 

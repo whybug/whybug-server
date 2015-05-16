@@ -2,7 +2,6 @@ import {
   config,
   routes,
   server,
-  ReactAsync,
   Joi,
   Hapi,
   es,
@@ -15,10 +14,10 @@ import {
 } from './dependencies';
 
 import {UserProfile} from './domain/UserProfile';
-import {WebApp} from './web/WebApp';
 import {Error} from './domain/Error';
 import {Solution} from './domain/Solution';
 import {WhybugApi} from './web/WhybugApi';
+import {WebRoutes} from './web/WebRoutes';
 
 /**
 * Helper to render HTML or return JSON.
@@ -34,23 +33,28 @@ var reactProxy = (callback) => {
       // Forward the ajax request to the proxied function.
       callback(request, reply);
     } else {
-      var app = new WebApp({
-        path: request.path,
-        params: request.params,
-        query: request.query,
-        user: request.auth.credentials
-      });
+      //var app = new WebApp({
+      //  path: request.path,
+      //  params: request.params,
+      //  query: request.query,
+      //  user: request.auth.credentials
+      //});
+      //WhybugApi.setCookie(request.headers.cookie);
 
-      WhybugApi.setCookie(request.headers.cookie);
-
-      ReactAsync.renderComponentToStringWithAsyncState(app, (err, markup) => {
-        console.log('render', request.path);
-        if (err) { console.log('error', err);
-          return reply(err);
-        }
-
+      // new WebApp(request.path, request.headers.cookie)
+      let webRoutes = new WebRoutes(request.path);
+      webRoutes.getMarkup((markup) => {
         return reply.view('index', { content: markup });
       });
+
+      // ReactAsync.renderComponentToStringWithAsyncState(app, (err, markup) => {
+      //   console.log('render', request.path);
+      //   if (err) { console.log('error', err);
+      //     return reply(err);
+      //   }
+
+      //   return reply.view('index', { content: markup });
+      // });
     }
   }
 };
@@ -212,6 +216,7 @@ server.pack.register([
 var SECOND = 1000, MINUTE = 60 * SECOND, HOUR = 60 * MINUTE, DAY = 24 * HOUR, WEEK = 7 * DAY;
 var cache_2weeks = {privacy: 'public', expiresIn: 2 * WEEK};
 
+// Todo: proxy to dev server in development
 server.route({ method: 'GET', path: '/static/{p*}', config: {cache: cache_2weeks,  handler: { directory: { path: './build/', listing: false, index: true } } } });
 server.route({ method: 'GET', path: '/fonts/{p*}', config: {cache: cache_2weeks, handler: { directory: { path: './src/web/assets/fonts/', listing: false, index: true } } } });
 
@@ -236,4 +241,5 @@ server.pack.register({
 // Start the server.
 server.start(() => {
   console.log('Server started at: ' + server.info.uri);
+  //process.exit(0);
 });

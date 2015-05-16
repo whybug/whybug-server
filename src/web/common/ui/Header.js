@@ -1,54 +1,66 @@
+/**
+ * @flow
+ */
 var React = require('react'),
-    Router = require('react-router-component'),
     config = require('../../../../config/config'),
     routes = require('../../../../config/routes');
 
-import {NavLink} from './Elements';
+import {
+  Container,
+  Column,
+  Link,
+  Navigation,
+  NavLink,
+} from '../UI';
 
-var {Link} = Router;
-var {div, a, span, img, nav} = React.DOM;
+export class Header {
+  props: { user: any; };
 
-export var Header = React.createClass({
-  render() {
-    return div({className: 'navbar-section'},
-      div({className: 'w-container'},
-        div({className: 'w-nav w-row navbar'},
-          div({className:"w-col w-col-1 w-col-small-1 w-clearfix"},
-            Link({href: routes.web.startpage.path, className: 'w-nav-brand brand'}, 'whybug')
-          ),
+  render()  {
+    return (
+      <header className="navbar-section">
+        <Container>
+          <div className="w-nav w-row navbar">
+            <Column span={1}>
+              <Link to="startpage" className="w-nav-brand brand">whybug</Link>
+            </Column>
 
-          div({className: "w-col w-col-11 w-col-small-11 w-clearfix"},
-            nav({className: 'w-nav-menu', role: 'navigation'},
-              NavLink({href: routes.web.solution.search.path}, 'Solutions'),
-              NavLink({href: '/projects'}, 'Projects'),
-              NavLink({href: routes.web.installation.index.path}, 'Installation'),
-              this.props.user ? this.renderUserMenu() : this.renderLoginMenu()
-            )
-          )
-        )
-      )
-    );
-  },
-
-  renderUserMenu() {
-    return div({className: 'w-nav-link nav-link'},
-      img({className: 'avatar', src: this.props.user.avatar_url, width: 25, height: 25}),
-      div({className: 'subnav'},
-        a({href: routes.web.logout.path}, span({}, 'Account')),
-        a({href: routes.web.logout.path}, span({}, 'Logout'))
-      )
-    );
-  },
-
-  renderLoginMenu() {
-    return div({className: 'w-nav-link nav-link'},
-      'Login',
-      div({className: 'subnav'},
-        a({href: routes.web.login.github.path, className: 'icon-github-round'}, span({}, 'Github')),
-        a({href: routes.web.login.twitter.path, className: 'icon-twitter-square'}, span({}, 'Twitter')),
-        a({href: routes.web.login.google.path, className: 'icon-google-square'}, span({}, 'Google'))
-      )
+            <Column span={11}>
+              <Navigation>
+                <NavLink to="search">Solutions</NavLink>
+                <NavLink to="language_index">Installation</NavLink>
+                {this.props.user ? this.renderUserMenu() : this.renderLoginMenu()}
+              </Navigation>
+            </Column>
+          </div>
+        </Container>
+      </header>
     );
   }
 
-});
+  renderUserMenu() {
+    return (
+      <div className="w-nav-link nav-link">
+        <img className="avatar" src={this.props.user.avatar_url} width="25" height="25" />
+        <div className="subnav">
+          <a href={routes.web.logout.path}><span>Account</span></a>
+          <a href={routes.web.logout.path}><span>Logout</span></a>
+        </div>
+      </div>
+    );
+  }
+
+  renderLoginMenu() {
+    return (
+      <div className="w-nav-link nav-link">
+        <span>Login</span>
+
+        <div className="subnav">
+          <a href={routes.web.login.github.path} className="icon-github-round"><span>Github</span></a>
+          <a href={routes.web.login.twitter.path} className="icon-twitter-square"><span>Twitter</span></a>
+          <a href={routes.web.login.google.path} className="icon-google-square"><span>Google</span></a>
+        </div>
+      </div>
+    );
+  }
+}

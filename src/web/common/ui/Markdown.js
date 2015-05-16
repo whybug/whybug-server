@@ -8,9 +8,10 @@ var {div} = React.DOM;
  */
 export var Markdown = React.createClass({
   render() {
-    return div({
-      className: 'markdown-body',
-      dangerouslySetInnerHTML: {'__html': marked(this.props.text)
-    }})
+    return (
+      <div
+        className='markdown-body'
+        dangerouslySetInnerHTML={{'__html': marked(this.props.text)}} />
+    );
   }
 });

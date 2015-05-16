@@ -1,15 +1,16 @@
-var React = require('react');
+import React from 'react';
 
-import {Header} from './ui/Header';
+import {Header} from './UI';
 var {div} = React.DOM;
 
-class _NotFoundPage {
+export var NotFoundPage = React.createClass({
   render() {
-    return div({},
-      Header({user: this.props.user}),
-      div({}, 'Not found :-(')
-    )
+    return (
+      <div>
+        <Header user={this.props.user} />
+        <div>Not found :-(</div>
+      </div>
+    );
   }
-}
+});
 
-export var NotFoundPage = React.createClass(_NotFoundPage.prototype);

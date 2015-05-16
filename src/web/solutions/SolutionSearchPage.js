@@ -1,36 +1,30 @@
 var React = require('react'),
-    Async = require('react-async'),
-    Router = require('react-router-component'),
-    NavigatableMixin = require('react-router-component').NavigatableMixin,
-    routes = require('../../../config/routes'),
-    Spinner = require('react-spinkit');
+    Router  = require('react-router');
+    //Spinner = require('react-spinkit');
 
-import {Header} from '../common/ui/Header';
-import {Section} from '../common/ui/Elements';
 import {WhybugApi} from '../WhybugApi';
-
-var {Link} = Router;
-var {section, div, main, a, ul, li, h1, h2, h3, form, label, input, p, span} = React.DOM;
+import {
+  Column,
+  Header,
+  HeroSection,
+  Section,
+  Link,
+  Row,
+} from '../common/UI';
 
 
 var UnsolvedError = React.createClass({
-
   render() {
     var error = this.props.error;
-    return Link({href: this.getSolutionLinkForError(), className: 'content-block'},
-      h3({className: 'latest-errors'}, error.level,  ': ', error.message),
-      span({className: 'button', onClick: this.handleHide}, 'hide')
+    var params = {
+      error_uuid: this.props.error.uuid
+    };
+    return (
+      <Link to="solution_create" params={params} className='content-block'>
+        <h3 className='latest-errors'>{error.level +  ': ' + error.message}</h3>
+        <span className='button' onClick={this.handleHide}>hide</span>
+      </Link>
     );
-  },
-
-  /**
-   * Returns a link to create a solution based on
-   * the specified error.
-   *
-   * @returns {string}
-   */
-  getSolutionLinkForError() {
-    return routes.web.solution.create.path.replace(':error_uuid', this.props.error.uuid);
   },
 
   handleHide(event) {
@@ -43,8 +37,6 @@ var UnsolvedError = React.createClass({
  * Displays a list of unresolved errors.
  */
 var UnsolvedErrorList = React.createClass({
-  get mixins() { return [Async.Mixin]; },
-
   getInitialStateAsync(callback) {
     WhybugApi.findUnsolvedErrors((error, result) => callback(error, {
       unsolved_errors: result
@@ -53,14 +45,19 @@ var UnsolvedErrorList = React.createClass({
 
   render() {
     if (this.state.unsolved_errors) {
-      return div({}, this.state.unsolved_errors.map(error => UnsolvedError({
-        key: error.uuid,
-        error: error,
-        onHide: this.handleHideError
-      })));
+      return (
+        <div>
+          {this.state.unsolved_errors.map(error =>
+            <UnsolvedError
+              key={error.uuid}
+              error={error}
+              onHide={this.handleHideError} />
+          )}
+        </div>
+      );
     }
 
-    return div({}, 'No unsolved errors found');
+    return <div>No unsolved errors found</div>
   },
 
   handleHideError(error) {
@@ -74,134 +71,155 @@ var UnsolvedErrorList = React.createClass({
 
 export var SolutionSearchPage = React.createClass({
 
-  get mixins() { return [Async.Mixin, NavigatableMixin]; },
+  mixins: [Router.State, Router.Navigation],
 
-  getInitialStateAsync(callback) {
-    var query = this.props.query.query;
-    WhybugApi.searchSolutions(query, (error, result) => callback(error, {
-      solutions: result,
-      query: query
-    }));
+  statics: {
+    fetchData(params, query) {
+      console.log('search', query);
+      return WhybugApi.searchSolutions(query.query);
+    }
   },
 
-  onResult(error, result) {
-    this.setState({
-      loading: false,
-      solutions: result
-    });
+  propTypes: {
+    search: React.PropTypes.object
   },
 
   onSearch(query) {
-    // todo: this.navigate(routes.web.solution.search.path + "?query=" + query);
-    this.setState({
-      loading: true,
-      query: query
-    });
-    WhybugApi.searchSolutions(query, this.onResult);
+    if (query) {
+      this.transitionTo('search', {}, {query: query});
+    } else {
+      this.transitionTo('search');
+    }
   },
 
   render() {
-    var solutions = this.state.solutions || [];
+    console.log('render', this.props, this.state, this.getQuery().query);
+    var searchResult = this.props.search || {};
 
-    return div({},
-      Header({user: this.props.user}),
-      Section({className: 'hero'}, SearchForm({query: this.state.query, searchCallback: this.onSearch})),
+    let solutions = searchResult.solutions || [];
+    let filters = searchResult.aggregations || {};
 
-      Section({className: 'grey'},
-        div({className: 'w-row'},
+    return (
+      <div>
+        <Header user={this.props.user} />
 
-          main({className: 'w-col w-col-9'},
-            this.renderSearchResults(solutions),
-            this.props.user ?  h3({}, 'Unresolved errors', UnsolvedErrorList({})) : ''
-          ),
+        <HeroSection>
+            <SearchForm query={this.getQuery().query} searchCallback={this.onSearch} />
+        </HeroSection>
 
-          div({className: 'w-col w-col-3'},
-            SearchResultAggregation({agg: 'programminglanguage', title: 'Language', solutions: solutions}),
-            SearchResultAggregation({agg: 'level', title: 'Level', solutions: solutions}),
-            SearchResultAggregation({agg: 'os', title: 'Operating system', solutions: solutions})
-          )
-        )
-      )
-   )
+        <Section className="grey">
+          <Row>
+            <Column span={9}>
+              {this.renderSolutions(solutions)}
+              {this.props.user && this.renderUnsolvedErrors()}
+            </Column>
+
+            <Column span={3}>
+              <SolutionFilter title="Language" filters={filters['programminglanguage']} />
+              <SolutionFilter title="Level" filters={filters['level']} />
+              <SolutionFilter title="Operating system" filters={filters['os']} />
+            </Column>
+          </Row>
+        </Section>
+      </div>
+    );
   },
 
-  renderSearchResults(solutions) {
-    if (this.state.loading) {
-      return Spinner({
-        spinnerName: 'three-bounce', fadeIn: true
-      });
-    }
+  renderSolutions(solutions) {
+    //if (this.state.loading) {
+    //  //return Spinner({
+    //  //  spinnerName: 'three-bounce', fadeIn: true
+    //  //});
+    //  return <div>loading</div>
+    //}
 
-    if (solutions.total) {
-      return solutions.solutions.map(solution => {
+    if (solutions.length) {
+      return solutions.map(solution => {
         solution.key = solution.uuid;
-        return SearchResult(solution);
+        return <SearchResult {...solution} />;
       })
     }
 
-    return div({}, 'No errors found');
+    return <div>No solutions found</div>;
+  },
+
+  renderUnsolvedErrors() {
+    return (
+      <div>
+        <h3>Unresolved Errors</h3>
+        <UnsolvedErrorList />
+      </div>
+    )
   }
-
-
 });
 
-export var SearchResultAggregation = React.createClass({
+export var SolutionFilter = React.createClass({
+  propTypes: {
+    filters: React.PropTypes.object,
+    title: React.PropTypes.string
+  },
 
   render() {
-    var aggs = this.props.solutions.aggregations[this.props.agg];
-    return div({},
-      label({htmlFor: this.props.agg}, this.props.title),
-      ul({},
-        aggs.buckets.map(agg => li({key: agg.key}, agg.key + "(" + agg.doc_count + ")"))
-      )
-    )
+    if (!this.props.filters) {
+      return null;
+    }
+
+    return (
+      <label>
+        {this.props.title}
+        <ul>{
+          this.props.filters.buckets.map(agg =>
+            <li key={agg.key}>{agg.key} ({agg.doc_count})</li>
+          )
+        }</ul>
+      </label>
+    );
   }
 });
 
 
 export var SearchForm = React.createClass({
-
-  getInitialState() {
-    return {
-      query: this.props.query
-    };
+  propTypes: {
+    query: React.PropTypes.string,
+    searchCallback: React.PropTypes.func
   },
 
   onChange(event) {
-    clearTimeout(this.timeout);
     this.setState({query: event.target.value});
+
+    clearTimeout(this.timeout);
     this.timeout = setTimeout(this.onSubmit, 500);
   },
 
   onSubmit(event) {
-    if (event) event.preventDefault();
     clearTimeout(this.timeout);
 
     this.props.searchCallback(this.state.query);
   },
 
   render() {
-    return div({},
-      h1({}, 'Find solutions.'),
-      form({onSubmit: this.onSubmit, name: 'search-form', method: 'get'},
-        div({className: 'w-row'},
-          div({className: 'w-col w-col-9'},
-            input({
-              placeholder: 'Enter error messsage...',
-              onChange: this.onChange,
-              value: this.state.query,
-              className: 'w-input field',
-              name: 'query',
-              id: 'query',
-              type: 'text'
-            })
-            //div({className: 'hint-text'}, 'Hint: You can use language:php or language:javascript, type:warning and platform:windows to narrow down your search.')
-          ),
-          div({className: 'w-col w-col-3'},
-            input({ className: 'w-button button submit-button', type: 'submit', value: 'Search', dataWait: 'Searching...' })
-          )
-        )
-      )
+    return (
+      <div>
+        <h1>Find solutions.</h1>
+        <form onSubmit={this.onSubmit} name='search-form' method='get'>
+          <Row>
+            <Column span={9}>
+              <input
+                placeholder='Enter error messsage...'
+                onChange={this.onChange}
+                defaultValue={this.props.query}
+                className='w-input field'
+                name='query'
+                id='query'
+                type='text'/>
+              <div className='hint-text'>Hint: You can use language:php or language:javascript, type:warning and platform:windows to narrow down your search.</div>
+            </Column>
+            <Column span={3}>
+              <input className='w-button button submit-button' type='submit' value='Search' dataWait='Searching...' />
+            </Column>
+          </Row>
+        </form>
+      </div>
     );
   }
 });
@@ -215,14 +233,15 @@ export var SearchResult = React.createClass({
   },
 
   render() {
-    return Link({href: this.getSolutionLink(), className: 'content-block'},
-      h3({className: 'latest-errors'}, this.props.level,  ': ', this.props.message)
-    );
-  },
+    const params = {
+      language: this.props.programminglanguage,
+      slug: this.props.uuid
+    };
 
-  getSolutionLink() {
-    return routes.web.solution.view.path
-      .replace(':language', this.props.programminglanguage)
-      .replace(':slug', this.props.uuid);
+    return (
+      <Link to="solution_view" params={params} className='content-block'>
+        <h3 className='latest-errors'>{this.props.level +  ': ' + this.props.message}</h3>
+      </Link>
+    );
   }
 });

@@ -1,14 +1,12 @@
 var React = require('react'),
-    Async = require('react-async'),
-    NavigatableMixin = require('react-router-component').NavigatableMixin,
+    NavigatableMixin = require('react-router').NavigatableMixin,
     routes = require('../../../config/routes'),
-    Spinner = require('react-spinkit'),
+    //Spinner = require('react-spinkit'),
     MarkdownTextarea = require('react-markdown-textarea');
-
 
 import {Header} from '../common/ui/Header';
 import {WhybugApi} from '../WhybugApi';
-import {Section} from '../common/ui/Elements';
+import {Section} from '../common/UI';
 
 var {div, h1, h3, form, input, button, label, textarea} = React.DOM;
 
@@ -30,7 +28,7 @@ export var SolutionForm = React.createClass({
             id: 'description',
             onSave: this.props.onSave,
             saving: this.props.saving,
-            spinner: Spinner,
+            //spinner: Spinner,
             rows: 6,
             required: "required",
             className: "w-input field textarea markdown-body",
@@ -54,7 +52,13 @@ export var SolutionForm = React.createClass({
 
 export var SolutionCreatePage = React.createClass({
 
-  mixins: [ Async.Mixin, NavigatableMixin],
+  statics: {
+    resolve: {
+      solution() {
+        return WhybugApi.findErrorByUuid(this.getParams().errorUuid);
+      }
+    }
+  },
 
   getInitialStateAsync(callback) {
     WhybugApi.findErrorByUuid(this.props.error_uuid, (err, error) => callback(err, {

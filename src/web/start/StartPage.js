@@ -1,17 +1,18 @@
 var React = require('react');
 
-import {Header} from '../common/ui/Header';
-import {Section} from '../common/ui/Elements';
+import {Header, HeroSection} from '../common/UI';
 
-var {h1, div} = React.DOM;
-
-class Start{
+export class StartPage {
   render() {
-    return div({},
-      Header({user: this.props.user}),
-      Section({className: 'hero'}, h1({}, 'Solutions to errors, right where they happen.'))
-   )
+    return (
+      <div>
+        <Header user={this.props.user} />
+
+        <HeroSection>
+          <h1>Solutions to errors, right where they happen.</h1>
+        </HeroSection>
+      </div>
+   );
   }
 }
 
-export var StartPage = React.createClass(Start.prototype);

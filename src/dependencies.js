@@ -1,7 +1,7 @@
 /**
  * Wires up all dependencies.
  */
-export var ReactAsync = require('react-async');
+// export var ReactAsync = require('react-async');
 export var config = require('../config/config');
 export var routes = require('../config/routes');
 export var Joi = require('joi');

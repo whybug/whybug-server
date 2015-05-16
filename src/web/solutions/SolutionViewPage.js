@@ -1,58 +1,62 @@
-var React = require('react'),
-    Async = require('react-async');
+/**
+ * @flow
+ */
 
-import {Header} from '../common/ui/Header';
+import React from 'react';
 import {WhybugApi} from '../WhybugApi';
-import {Section} from '../common/ui/Elements';
 import {NotFoundPage} from '../common/NotFoundPage';
 import {Markdown} from '../common/ui/Markdown';
+import {
+  Header,
+  HeroSection,
+  Section,
+  Row,
+  Column,
+} from '../common/UI';
 
-var {div, h1} = React.DOM;
 
 export var SolutionViewPage = React.createClass({
 
-  mixins: [ Async.Mixin ],
-
-  propTypes: {
-      slug: React.PropTypes.string.isRequired
+  statics: {
+    fetchData(params, query) {
+      return WhybugApi.findSolutionByUuid(params.slug);
+    }
   },
 
-  /**
-   * Select the solution given by the router.
-   */
-  getInitialStateAsync(callback) {
-    WhybugApi.findSolutionByUuid(this.props.slug, (error, solution) => {
-      if (error) {
-        callback(null, {});
-      } else {
-        callback(null, { solution: solution });
-      }
-    });
+  propTypes: {
+    solution_view: React.PropTypes.object.isRequired
   },
 
   render() {
-    var solution = this.state.solution;
+    var solution = this.props.solution_view;
 
     if (!solution) {
-      return NotFoundPage({});
+      return <NotFoundPage />;
     }
 
-    return div({},
-      Header({user: this.props.user}),
-      // SolutionHero({solution: this.state.solution))
-      // SolutionDetail({solutoin: this.state.solution))
-      !solution || Section({className: 'hero'},
-        h1({}, solution.message)
-      ),
-      Section({className: 'grey'},
-        div({className: 'w-row'},
-          div({className: 'w-col w-col-12'},
-            Markdown({text: solution.description})
-          )
-        )
-      )
-   )
+    return (
+      <div>
+        <Header user={this.props.user} />
+        {!solution || this.renderSolution(solution) }
+      </div>
+    );
+  },
+
+  renderSolution(solution) {
+    return (
+      <div>
+        <HeroSection>
+          <h1>{solution.message}</h1>
+        </HeroSection>
+
+        <Section className="grey">
+          <Row>
+            <Column span={12}>
+              <Markdown text={solution.description} />
+            </Column>
+          </Row>
+        </Section>
+      </div>
+    );
   }
-
 });
-
