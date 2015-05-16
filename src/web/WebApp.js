@@ -1,12 +1,10 @@
-var React = require('react'),
-    Router = require('react-router'),
-    config = require('../../config/config'),
-    routes = require('../../config/routes');
+import React from 'react';
+import Router from 'react-router';
 
 var {RouteHandler} = Router;
 
-export var WebApp = React.createClass({
+export class WebApp {
   render() {
     return <RouteHandler {...this.props} />;
   }
-});
+};
