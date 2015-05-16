@@ -8,6 +8,5 @@ require("babel/register")({
 
 // Include keymetrics modul
 var pmx = require('pmx').init();
-// Include keymetrics modul
 
 require('./src/app.js');
