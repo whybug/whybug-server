@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node_modules/.bin/pm2 start server.js --name whybug -i max",
+    "start": "node_modules/.bin/pm2 start server.js --name whybug -i 0",
     "stop": "node_modules/.bin/pm2 stop whybug",
     "dev": "bash -c '. ./.env && nodemon --ignore assets server.js & npm run asset-server'",
     "asset-server": "bash -c '. ./.env && ./node_modules/.bin/webpack-dev-server --config config/webpack.config.dev.js --host 0.0.0.0 --hot --port 8001'",
@@ -29,6 +29,8 @@
     "marked": "^0.3.2",
     "mysql": "^2.5.0",
     "node-uuid": "^1.4.1",
+    "pm2": "^0.12.14",
+    "pmx": "^0.3.11",
     "promise": "^6.1.0",
     "react": "^0.13.3",
     "react-intl": "^1.1.0",
@@ -47,7 +49,6 @@
     "chai-as-promised": "^4.1.1",
     "chai-react": "0.0.4",
     "css-loader": "^0.9.1",
-    "expose-loader": "^0.6.0",
     "extract-text-webpack-plugin": "^0.3.8",
     "mocha": "^2.1.0",
     "node-sass": "^2.0.1",
@@ -58,7 +59,6 @@
     "sinon-chai": "^2.5.0",
     "style-loader": "^0.8.3",
     "supertest": "^0.13.0",
-    "traceur-loader": "^0.6.1",
     "webpack": "^1.7.2",
     "webpack-dev-server": "^1.7.0"
   }
