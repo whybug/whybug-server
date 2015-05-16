@@ -5,7 +5,7 @@
 
 # Fix to run git commands.
 unset GIT_DIR
-. ./envvars
+. ./.env
 
 echo "updating sources..."
 git update-server-info 2<&1

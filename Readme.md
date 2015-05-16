@@ -10,7 +10,7 @@ Requires:
 ## Installation
 
  - Install dependencies with `npm install`.
- - Copy the file `envvars.dist` to `envvars` and change required settings. For a complete list of available environment variables, see `config/config.js`.
+ - Copy the file `.env.example` to `.env` and change required settings. For a complete list of available environment variables, see `config/config.js`.
  - `npm run knex migrate:latest` run all migrations.
 
 ## Useful commands

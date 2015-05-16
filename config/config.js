@@ -1,7 +1,7 @@
 /**
  * Credentials and general configuration.
  *
- * Can be overwritten by a `envvars` file.
+ * Can be overwritten by a `.env` file.
  */
 var config = {
   debug: process.env.DEBUG || false,

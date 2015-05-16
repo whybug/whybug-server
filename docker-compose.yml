@@ -1,6 +1,6 @@
 whybug:
   build: .
-  command: bash -c ". ./envvars && bin/start.sh"
+  command: bash -c ". ./.env && bin/start.sh"
   ports:
     - "80:80"
   links:

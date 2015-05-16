@@ -16,4 +16,4 @@ RUN apt-get -y install mariadb-client-5.5
 
 ADD . /src
 WORKDIR /src
-RUN bash -c "source ./envvars && bash bin/install.sh"
+RUN bash -c "source ./.env && bash bin/install.sh"
