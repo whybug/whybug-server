@@ -64,8 +64,15 @@ export class WebRoutes {
   resolveData(state) {
     let data = {};
 
+    if (typeof window !== 'undefined' && typeof window.__DATA__ == "object") {
+      for (let key in window.__DATA__) {
+        data[key] = window.__DATA__[key];
+      }
+    }
+
     var routes = state.routes
       .filter(route => route.handler.fetchData)
+      .filter(route => !data[route.name])
       .map(route =>
         route.handler
           .fetchData(state.params, state.query)
@@ -86,7 +93,7 @@ export class WebRoutes {
 
     Router.run(routes, this.location, (Handler, state) => {
       this.resolveData(state).then((data) => {
-        callback(React.renderToString(<Handler {...data} />));
+        callback(React.renderToString(<Handler {...data} />), data);
       }).catch(error => {
         console.log(error.stack);
         callback('An error occurred ' + '<pre>' + error.stack + '</pre>');
