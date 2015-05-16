@@ -1,7 +1,9 @@
-var traceur = require('traceur');
-traceur.require.makeDefault(function(filename) {
-  // don't transpile our dependencies, just our app
-  return filename.indexOf('node_modules') === -1;
-}, { asyncFunctions: true });
+require("babel/register")({
+  stage: 0,
+  optional: [
+    'runtime',
+    'utility.inlineEnvironmentVariables'
+  ]
+});
 
 require('./src/app.js');
