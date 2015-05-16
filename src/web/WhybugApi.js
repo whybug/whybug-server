@@ -1,4 +1,5 @@
 var superagent = require('superagent'),
+  superagentPromise = require('superagent-promise'),
   config = require('../../config/config'),
   routes = require('../../config/routes');
 
@@ -34,9 +35,10 @@ export class WhybugApi {
    * @param callback
    * @returns {Promise}
    */
-  static findSolutionByUuid(solutionUuid, callback) {
+  static findSolutionByUuid(solutionUuid) {
     return request(routes.api.read_solution, {solution_uuid: solutionUuid})
-      .end(notify(callback));
+      .end()
+      .then(response => response.body);
   }
 
   /**
@@ -72,10 +74,10 @@ export class WhybugApi {
    * @param callback
    * @returns {*}
    */
-  static searchSolutions(query, callback) {
+  static searchSolutions(query) {
     return request(routes.api.search_solutions)
       .query({query: query})
-      .end(notify(callback));
+      .end().then(response => response.body);
   }
 
   static setCookie(cookie) {
@@ -117,7 +119,7 @@ var request = (route, pathParams = {}) => {
     }
   }
 
-  var http = superagent(route.method, config.web.url + path)
+  var http = superagentPromise(route.method, config.web.url + path)
     .set('Accept', 'application/json');
 
   if (WhybugApi.cookie) {
