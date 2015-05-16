@@ -68,7 +68,7 @@ export class UserProfile {
     return new UserProfile({
       user_uuid: userUuid,
       provider: provider,
-      external_id: providerProfile.id,
+      external_id: `${providerProfile.id}`,
       username: providerProfile.username || providerProfile.displayName,
       display_name: providerProfile.displayName,
       email: providerProfile.email,
