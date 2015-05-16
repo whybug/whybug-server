@@ -7,11 +7,14 @@ language: node_js
 node_js:
 - 'iojs'
 
+cache:
+  directories:
+    - node_modules
+
 before_script:
 - mysql -e 'create database whybug;'
 - node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js migrate:latest
 - ./bin/reindex.js
-
 
 after_success:
 - "/bin/bash bin/metrics_travis.sh"
