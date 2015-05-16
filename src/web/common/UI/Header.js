@@ -2,18 +2,18 @@
  * @flow
  */
 var React = require('react'),
-    config = require('../../../../config/config'),
-    routes = require('../../../../config/routes');
+  config = require('../../../../config/config'),
+  routes = require('../../../../config/routes');
 
 import {
   Container,
   Column,
   Link,
   Navigation,
-  NavLink,
-} from '../UI';
+  NavLink
+  } from '../UI';
 
-export class Header {
+export default class Header {
   render()  {
     return (
       <header className="navbar-section">

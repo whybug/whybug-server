@@ -4,9 +4,8 @@ var React = require('react'),
     //Spinner = require('react-spinkit'),
     MarkdownTextarea = require('react-markdown-textarea');
 
-import {Header} from '../common/ui/Header';
 import {WhybugApi} from '../WhybugApi';
-import {Section} from '../common/UI';
+import {Header, Section} from '../common/UI';
 
 var {div, h1, h3, form, input, button, label, textarea} = React.DOM;
 
