@@ -14,8 +14,6 @@ import {
 } from '../UI';
 
 export class Header {
-  props: { user: any; };
-
   render()  {
     return (
       <header className="navbar-section">
