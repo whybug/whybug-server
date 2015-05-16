@@ -25,3 +25,10 @@ Requires:
  * `npm run knex migrate:latest` run all migrations
  * `npm run knex migrate:rollback` undo latest migration
  * `npm run knex migrate:make [migration_name]` creates a new migration
+
+### Glossary
+
+ - `Page` vs `View`
+
+    > A Page is a component that contains logic and fetch data, also called a _smart components_
+    while a View is a _dump component_, receiving all data via properties.
