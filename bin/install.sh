@@ -1,4 +1,5 @@
 #!/bin/sh
+source ./.env
 
 echo "updating dependencies..."
 npm install --unsafe-perm

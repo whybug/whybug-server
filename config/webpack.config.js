@@ -17,7 +17,7 @@ module.exports = {
       // Compile javascript ES6/ES7/JSX code.
       {
         test: /(src|config)\/.*\.js$/,
-        loader: 'babel-loader?stage=0&optional=runtime'
+        loader: 'babel-loader?stage=0&optional=runtime&optional=utility.inlineEnvironmentVariables'
       },
 
       // Compile assets.

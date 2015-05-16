@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node_modules/.bin/pm2 start server.js --name whybug -i 0",
-    "stop": "node_modules/.bin/pm2 stop whybug",
+    "start": "bash -c '. ./.env && node_modules/.bin/pm2 start server.js --name whybug -i 0'",
+    "stop": "bash -c '. ./.env && node_modules/.bin/pm2 stop whybug'",
     "dev": "bash -c '. ./.env && nodemon --ignore assets server.js & npm run asset-server'",
     "asset-server": "bash -c '. ./.env && ./node_modules/.bin/webpack-dev-server --config config/webpack.config.dev.js --host 0.0.0.0 --hot --port 8001'",
     "knex": "node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js",

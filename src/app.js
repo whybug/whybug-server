@@ -235,7 +235,6 @@ server.register({
     reporters: [{
         reporter: require('good-console'),
         events: { log: '*', response: '*' }
-        //args: [config.log[config.debug ? 'debug' : 'prod']]
       }
     ]
   }
@@ -247,4 +246,5 @@ server.register({
 // Start the server.
 server.start(() => {
   console.log('Server started at: ' + server.info.uri);
+
 });
