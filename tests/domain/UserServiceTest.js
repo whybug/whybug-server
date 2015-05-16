@@ -35,7 +35,7 @@ describe('UserService', () => {
         });
     });
 
-    it('should login with signed up google profile', () => {
+    it('should login with existing google profile', () => {
       var userProfile = {
         updateLastLogin: sinon.stub()
       };
@@ -43,7 +43,7 @@ describe('UserService', () => {
 
       return userService.loginWithProvider('github', googleProfile).should.be.fulfilled
         .then(() => {
-          userProfile.updateLastLogin.should.have.been.calledWith(sinon.match.any);
+          userProfile.updateLastLogin.should.have.been.calledWith();
           userProfileRepository.store.should.have.been.calledWith(userProfile, true);
         });
     });
