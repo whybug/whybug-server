@@ -1,6 +1,6 @@
 {
   "name": "wtf-server",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": {
     "babel": {
       "version": "5.4.3",
