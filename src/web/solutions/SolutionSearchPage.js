@@ -111,7 +111,6 @@ export var SolutionSearchPage = React.createClass({
           <Row>
             <Column span={9}>
               {this.renderSolutions(solutions)}
-              {this.props.user && this.renderUnsolvedErrors()}
             </Column>
 
             <Column span={3}>
@@ -123,6 +122,7 @@ export var SolutionSearchPage = React.createClass({
         </Section>
       </div>
     );
+    //{this.props.user && this.renderUnsolvedErrors()}
   },
 
   renderSolutions(solutions) {
