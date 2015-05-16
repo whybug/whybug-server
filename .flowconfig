@@ -1,0 +1,16 @@
+[ignore]
+.*/build/.*
+.*/migrations/.*
+.*/tests/.*
+.*/bin/.*
+.*/node_modules/webpack-dev-server/.*
+.*/node_modules/node-sass/.*
+.*/node_modules/enhanced-resolve/.*
+
+[include]
+/Users/adri/workspace/whybug-server/src
+
+[libs]
+
+[options]
+module.system=node
