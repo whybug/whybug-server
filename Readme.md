@@ -15,10 +15,10 @@ Requires:
 
 ## Useful commands
 
- * `npm run dev` starts the development environment, go to [http://127.0.0.1:8000]()
- * `npm start` starts the server with pm2
+ * `npm start` starts the development environment, go to [http://127.0.0.1:8000]()
+ * `npm run build` creates build files for prodution
+ * `npm run prod` starts the server with pm2
  * `npm test` runs tests
- * `npm run watch` recompile javascript on change
 
 #### Migrations
 
@@ -28,7 +28,8 @@ Requires:
 
 ### Glossary
 
- - `Page` vs `View`
+ - `Controller`
 
-    > A Page is a component that contains logic and fetch data, also called a _smart components_
-    while a View is a _dump component_, receiving all data via properties.
+    > A Controller is a component that contains logic and fetch data, also
+    called a _smart components_ while a others are a _dump component_,
+    receiving all data via properties.
