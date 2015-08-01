@@ -7,9 +7,9 @@ var {Route, DefaultRoute, NotFoundRoute} = Router;
 var {div} = React.DOM;
 
 import {StartPage} from './start/StartPage';
-import {SolutionCreatePage} from './solutions/SolutionCreatePage';
-import {SolutionViewPage} from './solutions/SolutionViewPage';
-import {SolutionSearchPage} from './solutions/SolutionSearchPage';
+import {SolveErrorPageController} from './solutions/SolveErrorPageController';
+import {ViewSolutionPageController} from './solutions/ViewSolutionPageController';
+import {SearchSolutionsPageController} from './solutions/SearchSolutionsPageController';
 import {InstallationPage} from './installation/InstallationPage';
 import {NotFoundPage} from './common/NotFoundPage';
 import {WebApp} from './WebApp';
@@ -23,9 +23,9 @@ export class WebRoutes {
   getPages() {
     return [
       {name: 'startpage', path: routes.web.startpage.path, handler: StartPage},
-      {name: 'search', path: routes.web.solution.search.path, handler: SolutionSearchPage},
-      {name: 'solution_create', path: routes.web.solution.create.path, handler: SolutionCreatePage},
-      {name: 'solution_view', path: routes.web.solution.view.path, handler: SolutionViewPage},
+      {name: 'search', path: routes.web.solution.search.path, handler: SearchSolutionsPageController},
+      {name: 'solution_create', path: routes.web.solution.create.path, handler: SolveErrorPageController},
+      {name: 'solution_view', path: routes.web.solution.view.path, handler: ViewSolutionPageController},
       {name: 'language_index', path: routes.web.installation.index.path, handler: InstallationPage},
       {name: 'language', path: routes.web.installation.language.path, handler: InstallationPage}
     ];
@@ -63,16 +63,17 @@ export class WebRoutes {
 
   resolveData(state) {
     let data = {};
+    let rehydrated = {};
 
     if (typeof window !== 'undefined' && typeof window.__DATA__ == "object") {
       for (let key in window.__DATA__) {
-        data[key] = window.__DATA__[key];
+        rehydrated[key] = window.__DATA__[key];
       }
     }
 
     var routes = state.routes
       .filter(route => route.handler.fetchData)
-      .filter(route => !data[route.name])
+      //.filter(route => !data[route.name])
       .map(route =>
         route.handler
           .fetchData(state.params, state.query)
