@@ -1,9 +1,4 @@
-/**
- * @flow
- */
-
 import React from 'react';
-import {WhybugApi} from '../WhybugApi';
 import {NotFoundPage} from '../common/NotFoundPage';
 import {Markdown} from '../common/ui/Markdown';
 import {
@@ -14,21 +9,14 @@ import {
   Column,
 } from '../common/UI';
 
-
-export var SolutionViewPage = React.createClass({
-
-  statics: {
-    fetchData(params, query) {
-      return WhybugApi.findSolutionByUuid(params.slug);
-    }
-  },
+export var ViewSolutionPage = React.createClass({
 
   propTypes: {
-    solution_view: React.PropTypes.object.isRequired
+    solution: React.PropTypes.object.isRequired
   },
 
   render() {
-    var solution = this.props.solution_view;
+    var solution = this.props.solution;
 
     if (!solution) {
       return <NotFoundPage />;
