@@ -64,6 +64,7 @@ export class SolutionRepository {
   /**
    * Search solutions
    *
+   * @param string query
    * @return {Promise}
    */
   async search(query = '*') {
