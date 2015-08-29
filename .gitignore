@@ -1,5 +1,7 @@
 .idea/
 build/
+bundle-stats.json
+couchdb/
 elasticsearch-*
 gslint.conf
 npm-debug.log
