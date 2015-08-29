@@ -4,22 +4,28 @@ Feature: WB-26 Signup
   So that I can start using whybug.
 
   Scenario: Signup using google
-    When I select "google" as authentication provider
-    And I authorize whybug
+    When I select "google" as login service
+    And I accept whybug accessing my account
     Then I should be signed up
     And I should be logged in
 
   Scenario: Signup using github
-    When I select "github" as authentication provider
-    And I authorize whybug
+    When I select "github" as login service
+    And I accept whybug accessing my account
     Then I should be signed up
     Then I should be logged in
 
   Scenario: Signup using twitter
-    When I select "twitter" as authentication provider
-    And I authorize whybug
+    When I select "twitter" as login service
+    And I accept whybug accessing my account
     Then I should be signed up
     Then I should be logged in
+
+  Scenario: Reject signup
+    When I select "google" as login service
+    And I reject whybug accessing my account
+    Then I should not be signed up
+    Then I should not be logged in
 
 #  Move to login
 #  Scenario: Automatic login
