@@ -1,14 +1,11 @@
-/* @flow */
 var Joi = require('joi');
 var uuidGenerator = require('node-uuid');
 
-import {ErrorLevels} from './Error';
+import {ErrorLevels} from '../Domain/Error';
 
-// Action validators
-
-export var actions = {
-  recordError: {
-    type: 'recordError',
+export function recordErrorValidator() {
+  return {
+    type: Joi.string().valid(RECORD_ERROR).required(),
     protocol_version: Joi.number().required(),
     uuid: Joi.string().guid().default(uuidGenerator.v4()),
     solution_uuid: Joi.string().guid(),
@@ -26,15 +23,9 @@ export var actions = {
     line: Joi.number().integer().required(),
     hidden: Joi.number().integer().min(0).max(1).default(0),
     created_at: Joi.date().default(new Date)
-  }
-};
-
-// Action creators
-
-export function recordError(solutionId: string) :Object {
-  return { type: 'recordError', solutionId };
+  };
 }
 
-
-
-
+export function recordError(solutionId: string) :Object {
+  return { type: RECORD_ERROR, solutionId };
+}

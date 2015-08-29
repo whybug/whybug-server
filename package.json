@@ -1,15 +1,17 @@
 {
   "name": "whybug-server",
+  "engines": {
+    "iojs": ">= 2.5"
+  },
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "start": "nodemon --watch src server.js & npm run asset-server",
-    "prod": "node_modules/.bin/pm2 start server.js --name whybug -i 0",
-    "stop": "node_modules/.bin/pm2 stop whybug'",
-    "build": "node_modules/.bin/webpack --config config/webpack.config.js -p 2<&1",
-    "asset-server": "./node_modules/.bin/webpack-dev-server --config config/webpack.config.dev.js --host 0.0.0.0 --hot --port 8001",
-    "knex": "node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js",
-    "test": "node_modules/.bin/mocha tests --require tests/es6_mocha.js --recursive"
+    "prod": "pm2 start server.js --name whybug -i 0",
+    "stop": "pm2 stop whybug'",
+    "build": "webpack --config config/webpack.config.js -p 2<&1",
+    "asset-server": "webpack-dev-server --config config/webpack.config.dev.js --host 0.0.0.0 --hot --port 8001",
+    "test": "mocha tests --require tests/es6_mocha.js --recursive"
   },
   "dependencies": {
     "bell": "^2.7.1",
@@ -66,5 +68,21 @@
     "supertest": "^0.13.0",
     "webpack": "^1.7.2",
     "webpack-dev-server": "^1.7.0"
-  }
+  },
+ "babel": {
+  "stage": 0,
+  "optional": [
+    "runtime",
+    "asyncToGenerator",
+    "utility.inlineEnvironmentVariables"
+  ],
+  "blacklist": [
+    "es6.arrowFunctions",
+    "es6.properties.shorthand",
+    "es6.classes",
+    "es6.forOf",
+    "es6.constants",
+    "es6.templateLiterals"
+  ]
+}
 }

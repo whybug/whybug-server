@@ -21,6 +21,7 @@ export function createValidator(...actionValidations) {
 
 export function createHandler(...actionHandlers) {
   var handlers = Object.assign(...actionHandlers);
+  console.log(handlers);
 
   return (store, action) => {
     if (!handlers[action.type]) {

@@ -1,13 +1,24 @@
 import {createHandler, createValidator, createStore} from './util';
-import {raiseEvent} from './Event/EventActions';
 
-import {actions as errorActions } from './Error/ErrorActions';
-import {actions as eventActions } from './Event/EventActions';
-import {actions as solutionActions } from './Solution/SolutionActions';
+import {
+  actionValidators as commonActionValidators,
+  actionHandlers as commonActionHandlers
+} from './Common';
 
-import {handlers as errorHandlers } from './Error/ErrorActionHandlers';
-import {handlers as eventHandlers } from './Event/EventActionHandlers';
-import {handlers as solutionHandlers } from './Solution/SolutionActionHandlers';
+import {
+  actionValidators as errorActionValidators,
+  actionHandlers as errorActionHandlers
+} from './Error';
+
+import {
+  actionValidators as userActionValidators,
+  actionHandlers as userActionHandlers
+} from './User';
+
+//import {
+//  actionValidators as solutionActionValidators,
+//  actionHandlers as solutionActionHandlers
+//} from './Solution';
 
 /**
  * Validator for actions.
@@ -15,18 +26,19 @@ import {handlers as solutionHandlers } from './Solution/SolutionActionHandlers';
  * @throws An error in case an action doesn't validate.
  */
 const valid = createValidator(
-  eventActions,
-  solutionActions,
-  errorActions
+  commonActionValidators,
+  errorActionValidators
+  //solutionActionValidators
 );
 
 /**
  * Handlers for actions which modify the store.
  */
 const handle = createHandler(
-  eventHandlers,
-  solutionHandlers,
-  errorHandlers
+  commonActionHandlers,
+  errorActionHandlers,
+  //solutionActionHandlers,
+  userActionHandlers
 );
 
 /**

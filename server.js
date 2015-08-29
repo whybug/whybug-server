@@ -1,13 +1,6 @@
 // Load environment variables.
 require('dotenv').load();
-
-require("babel/register")({
-  stage: 0,
-  optional: [
-    'runtime',
-    'utility.inlineEnvironmentVariables'
-  ]
-});
+require("babel/register");
 
 // Include keymetrics modul
 var pmx = require('pmx').init();

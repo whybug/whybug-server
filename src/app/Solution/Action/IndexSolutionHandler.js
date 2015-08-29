@@ -7,6 +7,8 @@ export function indexSolutionES(store, action) {
     id: solution.solutionId,
     body: getQueryForSolution(solution)
   });
+
+  store.dispatch(solutionWasIndexed(solution.solutionId));
 }
 
 function getQueryForSolution(solution) {

@@ -4,18 +4,18 @@ import {indexSolutionES} from './ActionHandlers/IndexSolutionES.js';
 
 export var handlers = {
 
-  changeSolution: (store, action) => store('solution', action.solutionId).set(action.key, action.value),
+  [CHANGE_SOLUTION]: (store, action) => store('solution', action.solutionId).set(action.key, action.value),
 
   /**
    * Index a solution in search.
    */
-  indexSolution: indexSolutionES,
+  [INDEX_SOLUTION]: indexSolutionES,
 
   /**
    * @param store
    * @param action
    */
-  hideSolution: (store, action) => {
+  [HIDE_SOLUTION]: (store, action) => {
     store.solutions.update(action.solutionId, action.rev, { hidden: true });
 
     store.dispatch(raiseEvent(solutionWasHidden(action.solutionId)));
@@ -25,7 +25,7 @@ export var handlers = {
    * @param store
    * @param action
    */
-  showSolution: (store, action) => {
+  [SHOW_SOLUTION]: (store, action) => {
     store.solutions.update(action.solutionId, action.rev, { hidden: false });
 
     store.dispatch(raiseEvent(solutionWasShown(action.solutionId)));
@@ -38,7 +38,7 @@ export var handlers = {
    * @param action
    * @returns {Promise}
    */
-  addImageToSolution: (store, action) => {
+  [ADD_IMAGE_TO_SOLUTION]: (store, action) => {
     var url = upload(action.fileName, action.data);
 
     store.solution.update(action.solutionId, action.rev, {
