@@ -17,5 +17,9 @@ var myStepDefinitionsWrapper = function () {
     events.contains(USER_LOGGED_IN);
     callback.pending();
   });
+
+  this.Given(/^I'm signed up using "([^"]*)"$/, function (callback) {
+    callback.pending();
+  });
 };
 module.exports = myStepDefinitionsWrapper;

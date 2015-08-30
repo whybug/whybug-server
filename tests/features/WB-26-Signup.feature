@@ -13,19 +13,26 @@ Feature: WB-26 Signup
     When I select "github" as login service
     And I accept whybug accessing my account
     Then I should be signed up
-    Then I should be logged in
+    And I should be logged in
 
   Scenario: Signup using twitter
     When I select "twitter" as login service
     And I accept whybug accessing my account
     Then I should be signed up
-    Then I should be logged in
+    And I should be logged in
 
   Scenario: Reject signup
     When I select "google" as login service
     And I reject whybug accessing my account
     Then I should not be signed up
-    Then I should not be logged in
+    And I should not be logged in
+
+  Scenario: Login when already signed up
+    Given I'm signed up using "google"
+    When I select "google" as login service
+    And I accept whybug accessing my account
+    Then I should not be signed up
+    And I should be logged in
 
 #  Move to login
 #  Scenario: Automatic login
