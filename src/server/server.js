@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow weak */
 var Hapi = require('hapi');
 var config = require('../../config/config');
 
@@ -13,7 +13,7 @@ server.connection({
   port: config.node.port
 });
 
-const options = {
+var options = {
   store: getStore(persistances)
 };
 

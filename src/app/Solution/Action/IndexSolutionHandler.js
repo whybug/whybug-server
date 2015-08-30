@@ -1,5 +1,7 @@
-export function indexSolutionES(store, action) {
-  const solution = store.solutions.get(action.solutionId);
+/* @flow weak */
+
+export function indexSolutionHandler(store, action) {
+  var solution = store.solutions.get(action.solutionId);
 
   store.solutions.index({
     index: 'solutions',
@@ -8,7 +10,7 @@ export function indexSolutionES(store, action) {
     body: getQueryForSolution(solution)
   });
 
-  store.dispatch(solutionWasIndexed(solution.solutionId));
+  //store.dispatch(solutionWasIndexed(solution.solutionId));
 }
 
 function getQueryForSolution(solution) {

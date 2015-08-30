@@ -1,4 +1,4 @@
-/* @flow */
+/* @flow weak */
 var Joi = require('joi');
 
 import {RAISE_EVENT} from '../../Constants';

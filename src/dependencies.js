@@ -26,6 +26,7 @@ export var eventStore = new EventStore(
 
 export var persistances = {
   elasticSearch,
-  eventStore
+  eventStore,
+  // mailer?
 };
 

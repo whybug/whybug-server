@@ -1,3 +1,4 @@
+/* @flow weak */
 import {VALIDATION_ERROR_OCCURED} from '../../Constants';
 
 export function validationErrorOccured(error) {

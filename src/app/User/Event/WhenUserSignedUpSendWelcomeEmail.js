@@ -1,3 +1,4 @@
+/* @flow weak */
 import {sendWelcomeEmail} from '../Action/SendWelcomeEmail';
 
 export async function whenUserSignedUpSendWelcomeEmail(store, event) {

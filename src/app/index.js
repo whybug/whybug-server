@@ -1,3 +1,4 @@
+/* @flow weak */
 import {raiseEvent} from './Common/Action/RaiseEvent';
 import {validationErrorOccured} from './Common/Event/ValidationErrorOccured';
 import {
@@ -33,7 +34,7 @@ import {
  *
  * @throws An error in case an action doesn't validate.
  */
-const validAction = createActionValidator(
+var validAction = createActionValidator(
   commonActionValidators,
   errorActionValidators,
   userActionValidators
@@ -43,18 +44,17 @@ const validAction = createActionValidator(
 /**
  * Handlers for actions which modify the store.
  */
-const handleAction = createActionHandler(
+var handleAction = createActionHandler(
   commonActionHandlers,
   errorActionHandlers,
   //solutionActionHandlers,
   userActionHandlers
 );
 
-
 /**
  * Handlers for events that happend in a store.
  */
-const handleEvent = createEventHandler(
+var handleEvent = createEventHandler(
   userEventHandlers
 );
 

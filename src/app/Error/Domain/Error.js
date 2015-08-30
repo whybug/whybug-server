@@ -1,2 +1,2 @@
-
-export const ErrorLevels = ['fatal', 'error', 'warning', 'notice'];
+/* @flow weak */
+export var ErrorLevels = ['fatal', 'error', 'warning', 'notice'];

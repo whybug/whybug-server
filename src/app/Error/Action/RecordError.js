@@ -1,9 +1,10 @@
-var Joi = require('joi');
+/* @flow weak */
 var uuidGenerator = require('node-uuid');
 
+import {RECORD_ERROR} from '../../Constants';
 import {ErrorLevels} from '../Domain/Error';
 
-export function recordErrorValidator() {
+export function recordErrorValidator(Joi) {
   return {
     type: Joi.string().valid(RECORD_ERROR).required(),
     protocol_version: Joi.number().required(),

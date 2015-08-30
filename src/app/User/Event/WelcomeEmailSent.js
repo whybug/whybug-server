@@ -1,3 +1,4 @@
+/* @flow weak */
 import {WELCOME_EMAIL_SENT} from '../../Constants';
 
 export function welcomeEmailSent(email, options) {

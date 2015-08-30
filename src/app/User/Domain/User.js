@@ -1,2 +1,2 @@
-
-export const LoginServices = ['github', 'twitter', 'google'];
+/* @flow weak */
+export var LoginServices = ['github', 'twitter', 'google'];
