@@ -1,69 +1,31 @@
 /**
  * Wires up all dependencies.
  */
-// export var ReactAsync = require('react-async');
+
+var EventStoreClient = require('event-store-client');
 export var config = require('../config/config');
 export var routes = require('../config/routes');
-export var Joi = require('joi');
-export var Hapi = require('hapi');
-export var Boom = require('boom');
+import EventStore from './persistance/EventStore';
 
-export var server = new Hapi.Server({debug: { request: ['error']} });
+export var elasticSearch = new (require('elasticsearch')).Client({
+  host: config.elasticsearch.host + ':' + config.elasticsearch.port
+});
 
-server.connection({
-  host: config.node.host,
-  port: config.node.port,
-  routes: {
-    cors: {
-      methods: ['POST']
-    }
+export var eventStore = new EventStore(
+  new EventStoreClient.Connection({
+    host: '127.0.0.1',
+    port: 1113,
+    debug: false
+  }),
+  {
+    username: 'admin',
+    password: 'changeit',
+    stream: '$stats-127.0.0.1:2113' // ????
   }
-});
+);
 
-// Register main layout.
-server.views({
-  engines: {
-    html: require('handlebars')
-  },
-  path: 'src/web/common'
-});
+export var persistances = {
+  elasticSearch,
+  eventStore
+};
 
-
-export var es = new (require('elasticsearch')).Client({
-  host: config.elasticsearch.host + ':' + config.elasticsearch.port,
-  log: require('elasticsearch-hapi-logger')(server)
-});
-
-var knex = require('knex')({
-  debug: config.debug,
-  client: 'mysql',
-  connection: {
-    host:     config.mysql.host,
-    port:     config.mysql.port,
-    database: config.mysql.db,
-    user:     config.mysql.user,
-    password: config.mysql.pass,
-    charset  : 'utf8',
-    timezone: 'UTC'
-  }
-});
-
-export var bookshelf = require('bookshelf')(knex);
-bookshelf.plugin('registry');
-
-import {ErrorRepository} from './domain/ErrorRepository';
-import {ErrorService} from './domain/ErrorService';
-import {SolutionRepository} from './domain/SolutionRepository';
-import {SolutionService} from './domain/SolutionService';
-import {UserRepository} from './domain/UserRepository';
-import {UserProfile} from './domain/UserProfile';
-import {UserProfileRepository} from './domain/UserProfileRepository';
-import {UserService} from './domain/UserService.js';
-
-export var solutionRepository = new SolutionRepository(es, knex);
-export var errorRepository = new ErrorRepository(es, bookshelf);
-export var errorService = new ErrorService(errorRepository);
-export var solutionService = new SolutionService(solutionRepository, errorRepository);
-var userRepository = new UserRepository(knex);
-var userProfileRepository = new UserProfileRepository(knex);
-export var userService = new UserService(userRepository, userProfileRepository);

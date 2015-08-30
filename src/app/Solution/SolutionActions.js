@@ -1,7 +1,7 @@
 /* @flow */
 var Joi = require('joi');
 
-import {AllSources, InternalSources} from './../Sources';
+import {AllSources, INTERNAL_SOURCES} from './../Sources';
 
 // Action validators
 
@@ -23,7 +23,7 @@ export var actions = {
 
   [INDEX_SOLUTION]: {
     type: Joi.string().valid('indexSolution'),
-    source: Joi.string().valid(InternalSources),
+    source: Joi.string().valid(INTERNAL_SOURCES),
     solutionId: Joi.string().guid(),
     rev: Joi.string().required()
   }

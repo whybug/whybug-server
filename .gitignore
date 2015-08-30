@@ -3,6 +3,7 @@ build/
 bundle-stats.json
 couchdb/
 elasticsearch-*
+EventStore-*
 gslint.conf
 npm-debug.log
 node_modules

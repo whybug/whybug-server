@@ -27,6 +27,9 @@ export const SEND_WELCOME_EMAIL = 'SEND_WELCOME_EMAIL';
  * An event is a simple object which is serializable.
  */
 
+// Common
+export const VALIDATION_ERROR_OCCURED = 'VALIDATION_ERROR_OCCURED';
+
 // Solution
 export const SOLUTION_WAS_HIDDEN = 'SOLUTION_WAS_HIDDEN';
 export const SOLUTION_WAS_SHOWN = 'SOLUTION_WAS_SHOWN';
@@ -34,3 +37,4 @@ export const SOLUTION_WAS_INDEXED = 'SOLUTION_WAS_INDEXED';
 
 // User
 export const USER_SIGNED_UP = 'USER_SIGNED_UP';
+export const WELCOME_EMAIL_SENT = 'WELCOME_EMAIL_SENT';

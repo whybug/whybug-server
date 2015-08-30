@@ -1,11 +1,11 @@
 /* @flow */
-var Joi = require('joi');
 var Hapi = require('hapi');
 var config = require('../../config/config');
 
 import {RestPlugin} from './rest';
 import {GraphQLPlugin} from './graphql';
-import {store} from '../app/index';
+import {persistances} from '../dependencies';
+import {getStore} from '../app/index';
 
 var server = new Hapi.Server({debug: { request: ['error']} });
 server.connection({
@@ -14,7 +14,7 @@ server.connection({
 });
 
 const options = {
-  store
+  store: getStore(persistances)
 };
 
 server.register([

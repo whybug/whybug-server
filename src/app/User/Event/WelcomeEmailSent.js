@@ -1,8 +1,9 @@
+import {WELCOME_EMAIL_SENT} from '../../Constants';
 
-export default function userSignedUp(userId, email) {
+export function welcomeEmailSent(email, options) {
   return {
-    type: WECOME_EMAIL_SENT,
-    userId,
-    email
+    type: WELCOME_EMAIL_SENT,
+    email,
+    options
   }
 }

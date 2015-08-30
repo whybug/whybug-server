@@ -1,2 +1,2 @@
 
-export const UserProfileProviders = ['github', 'twitter', 'google'];
+export const LoginServices = ['github', 'twitter', 'google'];

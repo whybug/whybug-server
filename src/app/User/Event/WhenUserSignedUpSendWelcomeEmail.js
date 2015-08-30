@@ -1,5 +1,7 @@
 import {sendWelcomeEmail} from '../Action/SendWelcomeEmail';
 
-export default function whenUserSignedUpSendWelcomeEmail(store, event) {
+export async function whenUserSignedUpSendWelcomeEmail(store, event) {
+  //SentEmails.assertNotSentBefore(event);
+
   store.dispatch(sendWelcomeEmail(event.userId, event.email));
 }
