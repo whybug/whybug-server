@@ -29,7 +29,7 @@
     "hapi-auth-cookie": "2.2.0",
     "hapi-cache-buster": "0.4.0",
     "hapi-relax": "1.0.1",
-    "joi": "4.9.0",
+    "joi": "6.7.1",
     "knex": "0.6.23",
     "marked": "0.3.5",
     "mysql": "2.9.0",
