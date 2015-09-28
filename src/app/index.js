@@ -65,12 +65,12 @@ var handleEvent = createEventHandler(
  * @param action
  * @returns {Promise}
  */
-function actionMiddleware(store, action) {
+async function actionMiddleware(store, action) {
   // todo: split up middlewares, use existing?
   // logging, validation
   try {
-    console.log('ACTION: ', JSON.stringify(action));
-    handleAction(store, validAction(action));
+    console.log(JSON.stringify(action));
+    await handleAction(store, await validAction(action));
   } catch (error) {
     switch (error.message) {
       case 'ValidationError':
@@ -91,12 +91,14 @@ function actionMiddleware(store, action) {
  * @param event
  * @returns {Promise}
  */
-function eventMiddleware(store, event) {
+async function eventMiddleware(store, event) {
   // todo: split up middlewares, use existing?
   // logging, auditlogging, monitoring, validation, storage?
   store.dispatch(raiseEvent(event));
-  console.log('EVENT: ', JSON.stringify(event));
-  handleEvent(store, event);
+  console.log(JSON.stringify(event));
+  await handleEvent(store, event);
+
+  //store.eventStore.subscribeToStream(storedEvent => handleEvent(store, storedEvent));
 }
 
 export function getStore(persistances) {

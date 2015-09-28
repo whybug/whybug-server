@@ -73,11 +73,9 @@
   "stage": 0,
   "optional": [
     "runtime",
-    "asyncToGenerator",
     "utility.inlineEnvironmentVariables"
   ],
   "blacklist": [
-    "es6.arrowFunctions",
     "es6.properties.shorthand",
     "es6.classes",
     "es6.forOf",

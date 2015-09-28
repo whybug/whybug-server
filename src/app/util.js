@@ -3,7 +3,7 @@ var Joi = require('joi');
 export function createActionValidator(...actionValidations) {
   var validations = Object.assign(...actionValidations);
 
-  return (action) => {
+  return async (action) => {
     if (!validations[action.type]) {
       throw Error(`Action "${action.type}" not found.`);
     }
@@ -26,12 +26,12 @@ export function createActionHandler(...actionHandlers) {
   var handlers = Object.assign(...actionHandlers);
   console.log('Action handlers', handlers);
 
-  return (store, action) => {
+  return async (store, action) => {
     if (!handlers[action.type]) {
       throw Error(`No handler for action "${action.type}".`);
     }
 
-    return handlers[action.type](store, action);
+    return await handlers[action.type](store, action);
   };
 }
 
@@ -47,13 +47,13 @@ export function createEventHandler(...eventHandlers) {
 
   console.log('Event handlers', handlers);
 
-  return (store, event) => {
+  return async (store, event) => {
     if (!handlers[event.type]) {
       return console.log(`No handler for event "${event.type}"`);
       //throw Error(`No handler for event "${events.type}".`);
     }
 
-    return handlers[event.type](store, event);
+    return await handlers[event.type](store, event);
   };
 }
 

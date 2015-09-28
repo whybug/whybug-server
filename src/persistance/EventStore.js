@@ -8,6 +8,10 @@ export default class EventStore
     this.credentials = credentials;
   }
 
+  subscribeToStream(onEvent) {
+    this.connection.subscribeToStream(onEvent);
+  }
+
   writeEvent(event) {
     this.connection.writeEvents(
       event.type,
