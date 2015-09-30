@@ -51,7 +51,7 @@
     "babel-loader": "5.3.2",
     "babel-runtime": "5.8.25",
     "chai": "1.10.0",
-    "chai-as-promised": "4.3.0",
+    "chai-as-promised": "5.1.0",
     "chai-react": "0.0.4",
     "css-loader": "0.9.1",
     "extract-text-webpack-plugin": "0.8.2",
