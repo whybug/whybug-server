@@ -23,7 +23,7 @@
     "good": "6.4.0",
     "good-console": "5.1.0",
     "good-reporter": "3.1.0",
-    "graphql": "0.2.6",
+    "graphql": "0.4.5",
     "handlebars": "2.0.0",
     "hapi": "10.1.0",
     "hapi-auth-cookie": "2.2.0",
