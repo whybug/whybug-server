@@ -24,7 +24,7 @@
     "good-console": "5.1.0",
     "good-reporter": "3.1.0",
     "graphql": "0.2.6",
-    "handlebars": "2.0.0",
+    "handlebars": "4.0.3",
     "hapi": "10.1.0",
     "hapi-auth-cookie": "2.2.0",
     "hapi-cache-buster": "0.4.0",
