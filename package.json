@@ -63,7 +63,7 @@
     "sinon": "1.17.1",
     "sinon-chai": "2.8.0",
     "style-loader": "0.12.4",
-    "supertest": "0.13.0",
+    "supertest": "1.1.0",
     "webpack": "1.12.2",
     "webpack-dev-server": "1.12.0"
   }
