@@ -40,7 +40,7 @@
     "react": "0.13.3",
     "react-intl": "1.2.0",
     "react-markdown-textarea": "0.14.2",
-    "react-router": "0.13.3",
+    "react-router": "1.0.0-rc2",
     "slug": "0.7.1",
     "superagent": "1.4.0",
     "superagent-promise": "0.2.0"
