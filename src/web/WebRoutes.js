@@ -3,6 +3,9 @@ var React = require('react'),
     config = require('../../config/config'),
     routes = require('../../config/routes');
 
+var ReactDOM = require('react-dom');
+var ReactDOMServer = require('react-dom/server');
+
 var {Route, DefaultRoute, NotFoundRoute} = Router;
 var {div} = React.DOM;
 
@@ -56,7 +59,7 @@ export class WebRoutes {
 
     Router.run(routes, this.location, (Handler, state) => {
       this.resolveData(state).then((data) => {
-        React.render(<Handler {...data}/>, element);
+        ReactDOM.render(<Handler {...data}/>, element);
       });
     });
   }
@@ -94,7 +97,7 @@ export class WebRoutes {
 
     Router.run(routes, this.location, (Handler, state) => {
       this.resolveData(state).then((data) => {
-        callback(React.renderToString(<Handler {...data} />), data);
+        callback(ReactDOMServer.renderToString(<Handler {...data} />), data);
       }).catch(error => {
         console.log(error.stack);
         callback('An error occurred ' + '<pre>' + error.stack + '</pre>');
