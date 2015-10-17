@@ -12,7 +12,7 @@
     "test": "node_modules/.bin/mocha tests --require tests/es6_mocha.js --recursive"
   },
   "dependencies": {
-    "bell": "2.9.0",
+    "bell": "5.4.0",
     "bookshelf": "0.7.9",
     "boom": "2.9.0",
     "classnames": "2.1.3",
