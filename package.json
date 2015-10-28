@@ -36,7 +36,7 @@
     "pm2": "0.12.16",
     "pmx": "0.5.4",
     "promise": "7.0.4",
-    "react": "0.14.0",
+    "react": "0.14.1",
     "react-intl": "1.2.1",
     "react-markdown-textarea": "0.14.2",
     "react-router": "1.0.0-rc3",
