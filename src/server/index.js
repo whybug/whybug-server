@@ -1,3 +1,5 @@
-require("babel/register");
+//require("babel/register");
+require("babel-core/register");
 
-require('./server');
+var dependencies = require('../dependencies');
+require('./server')(dependencies);

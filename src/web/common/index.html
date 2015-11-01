@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <title>whybug</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="{{config.web.url}}/main.css{{version.cache}}" />
+    <!--<link rel="stylesheet" href="/main.css" />-->
 </head>
 <body>
 <div id="content-wrapper">{{{ content }}}</div>
@@ -92,12 +92,12 @@
 
     function loadApp() {
         var element = document.createElement("script");
-        element.src = "http://192.168.0.14:8001/main.js{{version.cache}}";
+        element.src = "/main.js";
         document.body.appendChild(element);
     }
 
     function lazyload() {
-        loadFont();
+//        loadFont();
         loadApp();
     }
 

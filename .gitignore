@@ -8,3 +8,4 @@ gslint.conf
 npm-debug.log
 node_modules
 .env
+webpack-stats.json

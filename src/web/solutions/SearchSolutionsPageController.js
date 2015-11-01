@@ -7,7 +7,7 @@ import {WhybugApi} from '../WhybugApi';
 import {SearchSolutionsPage} from './Search/SearchSolutionsPage';
 
 
-export var SearchSolutionsPageController = React.createClass({
+export default React.createClass({
 
   mixins: [Router.State, Router.Navigation],
 

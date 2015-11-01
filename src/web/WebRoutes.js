@@ -5,13 +5,13 @@ var React = require('react'),
 
 var {Route, DefaultRoute, NotFoundRoute} = Router;
 
-import {StartPage} from './start/StartPage';
-import {SolveErrorPageController} from './solutions/SolveErrorPageController';
-import {ViewSolutionPageController} from './solutions/ViewSolutionPageController';
-import {SearchSolutionsPageController} from './solutions/SearchSolutionsPageController';
-import {InstallationPage} from './installation/InstallationPage';
-import {NotFoundPage} from './common/NotFoundPage';
-import {WebApp} from './WebApp';
+import StartPage from './start/StartPage';
+import SolveErrorPageController from './solutions/SolveErrorPageController';
+import ViewSolutionPageController from './solutions/ViewSolutionPageController';
+import SearchSolutionsPageController from './solutions/SearchSolutionsPageController';
+import InstallationPage from './installation/InstallationPage';
+import NotFoundPage from './common/NotFoundPage';
+var WebApp = require('./WebApp');
 
 export class WebRoutes {
 

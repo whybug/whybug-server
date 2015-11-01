@@ -9,10 +9,17 @@ var uuid = require('node-uuid');
 var elasticSearch = new (require('elasticsearch')).Client({
   host: config.elasticsearch.host + ':' + config.elasticsearch.port
 });
-var bus = require('./adapters/Bus')();
+var bus = require('./adapters/ServiceBus');
 var search = require('./adapters/Search')(elasticSearch);
 var mailer = require('./adapters/Mailer')();
 var db = require('./adapters/Db')();
+var Hapi = require('hapi');
+
+var server = new Hapi.Server({debug: { request: ['error']} });
+server.connection({
+  host: config.node.host,
+  port: config.node.port
+});
 
 //var EventStoreClient = require('event-store-client');
 //var eventStore = new EventStore(
@@ -32,6 +39,7 @@ export default {
   bus,
   db,
   mailer,
-  search
+  search,
+  server
 };
 

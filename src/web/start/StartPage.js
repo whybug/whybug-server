@@ -2,7 +2,7 @@ var React = require('react');
 
 import {Header, HeroSection} from '../common/UI';
 
-export class StartPage {
+export default React.createClass({
   render() {
     return (
       <div>
@@ -14,5 +14,5 @@ export class StartPage {
       </div>
    );
   }
-}
+});
 

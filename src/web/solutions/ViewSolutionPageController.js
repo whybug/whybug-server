@@ -5,7 +5,7 @@ import React from 'react';
 import {WhybugApi} from '../WhybugApi';
 import {NotFoundPage} from '../common/NotFoundPage';
 
-export var ViewSolutionPageController = React.createClass({
+export default React.createClass({
 
   statics: {
     fetchData(params, query) {
