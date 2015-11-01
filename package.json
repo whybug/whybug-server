@@ -14,6 +14,7 @@
     "test": "mocha tests --require tests/es6_mocha.js --recursive"
   },
   "dependencies": {
+    "body-parser": "^1.14.1",
     "classnames": "^2.1.1",
     "dotenv": "^1.2.0",
     "elasticsearch": "^9.0.0",
@@ -28,6 +29,7 @@
     "react-intl": "^1.1.0",
     "react-markdown-textarea": "^1.0.0",
     "react-router": "^0.13.3",
+    "source-map-support": "^0.3.3",
     "superagent": "^1.2.0",
     "superagent-promise": "^0.2.0"
   },

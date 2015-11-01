@@ -4,6 +4,7 @@
  * @flow weak
  */
 
+require('dotenv').load();
 var config = require('../config/config');
 var uuid = require('node-uuid');
 var elasticSearch = new (require('elasticsearch')).Client({
@@ -13,6 +14,14 @@ var bus = require('./adapters/ServiceBus');
 var search = require('./adapters/Search')(elasticSearch);
 var mailer = require('./adapters/Mailer')();
 var db = require('./adapters/Db')();
+var bodyParser = require('body-parser');
+var express = require('express');
+var expressApp = express();
+expressApp.use(bodyParser.json());
+var server = require('http').createServer(expressApp);
+server.listenApp = function (callback) {
+  return server.listen(config.node.port, config.node.host, callback)
+};
 
 //var EventStoreClient = require('event-store-client');
 //var eventStore = new EventStore(
@@ -30,8 +39,11 @@ var db = require('./adapters/Db')();
 
 export default {
   bus,
+  express,
+  expressApp,
   db,
   mailer,
-  search
+  search,
+  server
 };
 
