@@ -27,7 +27,7 @@
     "hapi": "10.5.0",
     "hapi-auth-cookie": "2.2.0",
     "hapi-cache-buster": "0.4.0",
-    "hapi-relax": "1.0.1",
+    "hapi-relax": "1.0.2",
     "joi": "6.9.1",
     "knex": "0.8.6",
     "marked": "0.3.5",
