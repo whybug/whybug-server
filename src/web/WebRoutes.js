@@ -2,8 +2,8 @@ var React = require('react'),
     Router = require('react-router'),
     config = require('../../config/config'),
     routes = require('../../config/routes');
-var ReactDOM = require('react-dom');
-var ReactDOMServer = require('react-dom/server');
+//var ReactDOM = require('react-dom');
+//var ReactDOMServer = require('react-dom/server');
 
 var {Route, NotFoundRoute} = Router;
 
@@ -57,7 +57,7 @@ export class WebRoutes {
 
     Router.run(routes, this.location, (Handler, state) => {
       this.resolveData(state).then((data) => {
-        ReactDOM.render(<Handler {...data}/>, element);
+        React.render(<Handler {...data}/>, element);
       });
     });
   }

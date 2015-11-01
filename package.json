@@ -63,13 +63,6 @@
     "optional": [
       "runtime",
       "utility.inlineEnvironmentVariables"
-    ],
-    "blacklist": [
-      "es6.properties.shorthand",
-      "es6.classes",
-      "es6.forOf",
-      "es6.constants",
-      "es6.templateLiterals"
     ]
   }
 }
