@@ -1,5 +1,5 @@
 services:
-- mysql
+- postgres
 - elasticsearch
 
 language: node_js

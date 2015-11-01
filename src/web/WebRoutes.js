@@ -2,11 +2,10 @@ var React = require('react'),
     Router = require('react-router'),
     config = require('../../config/config'),
     routes = require('../../config/routes');
-
 var ReactDOM = require('react-dom');
 var ReactDOMServer = require('react-dom/server');
 
-var {Route, DefaultRoute, NotFoundRoute} = Router;
+var {Route, NotFoundRoute} = Router;
 
 import StartPage from './start/StartPage';
 import SolveErrorPageController from './solutions/SolveErrorPageController';
@@ -96,7 +95,7 @@ export class WebRoutes {
 
     Router.run(routes, this.location, (Handler, state) => {
       this.resolveData(state).then((data) => {
-        callback(ReactDOMServer.renderToString(<Handler {...data} />), data);
+        callback(React.renderToString(<Handler {...data} />), data);
       }).catch(error => {
         console.log(error.stack);
         callback('An error occurred ' + '<pre>' + error.stack + '</pre>');
