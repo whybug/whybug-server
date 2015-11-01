@@ -55,7 +55,7 @@
     "sinon-chai": "^2.5.0",
     "style-loader": "^0.12.2",
     "supertest": "^0.13.0",
-    "webpack": "^1.12.1",
+    "webpack": "^1.12.2",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.0.1",
     "webpack-isomorphic-tools": "^0.9.3"
