@@ -4,7 +4,6 @@ var React = require('react'),
     routes = require('../../config/routes');
 
 var {Route, DefaultRoute, NotFoundRoute} = Router;
-var {div} = React.DOM;
 
 import {StartPage} from './start/StartPage';
 import {SolveErrorPageController} from './solutions/SolveErrorPageController';

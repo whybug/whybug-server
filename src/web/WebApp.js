@@ -7,4 +7,4 @@ export class WebApp {
   render() {
     return <RouteHandler {...this.props} />;
   }
-};
+}

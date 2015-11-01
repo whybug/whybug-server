@@ -2,9 +2,9 @@
 var Hapi = require('hapi');
 var config = require('../../config/config');
 
-import {RestPlugin} from './rest';
-import {GraphQLPlugin} from './graphql';
-import {persistances} from '../dependencies';
+import {RestPlugin} from './rest/index';
+import {GraphQLPlugin} from './graphql/index';
+import dependencies from '../dependencies';
 import {getStore} from '../app/index';
 
 var server = new Hapi.Server({debug: { request: ['error']} });
@@ -14,7 +14,7 @@ server.connection({
 });
 
 var options = {
-  store: getStore(persistances)
+  store: getStore(dependencies)
 };
 
 server.register([

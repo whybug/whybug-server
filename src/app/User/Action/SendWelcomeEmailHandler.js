@@ -1,11 +1,11 @@
 import {welcomeEmailSent} from '../Event/WelcomeEmailSent';
-import {findUserById} from '../Query/UserProfile';
+import {findUserProfileById} from '../Query/UserProfile';
 
 export async function sendWelcomeEmailHandler(store, action) {
 
   // send welcome email.
   try {
-    var user = await findUserById(action.userId);
+    var user = await findUserProfileById(action.userId);
 
     await mailer.send({
       to: formatEmailAddress(user),

@@ -1,39 +1,46 @@
-var uuid = require('node-uuid');
-var EventStoreClient = require('event-store-client');
+export default () => {
+  return {
 
-export default class EventStore
-{
-  constructor(connection, credentials) {
-    this.connection = connection;
-    this.credentials = credentials;
-  }
-
-  subscribeToStream(onEvent) {
-    this.connection.subscribeToStream(onEvent);
-  }
-
-  writeEvent(event) {
-    this.connection.writeEvents(
-      event.type,
-      EventStoreClient.ExpectedVersion.Any,
-      false,
-      [this.mapEventToEventStore(event)],
-      this.credentials,
-      function(completed) {
-        if (!completed) {
-          console.log('Events written result: ' + EventStoreClient.OperationResult.getName(completed.result));
-        }
-      });
-  }
-
-  mapEventToEventStore(event) {
-    return {
-      eventId: event.eventId || uuid.v4(),
-      eventType: event.type,
-      data: event
-    };
-  }
+  };
 }
+
+
+//var uuid = require('node-uuid');
+//var EventStoreClient = require('event-store-client');
+//
+//export default class EventStore
+//{
+//  constructor(connection, credentials) {
+//    this.connection = connection;
+//    this.credentials = credentials;
+//  }
+//
+//  subscribeToStream(onEvent) {
+//    this.connection.subscribeToStream(onEvent);
+//  }
+//
+//  writeEvent(event) {
+//    this.connection.writeEvents(
+//      event.type,
+//      EventStoreClient.ExpectedVersion.Any,
+//      false,
+//      [this.mapEventToEventStore(event)],
+//      this.credentials,
+//      function(completed) {
+//        if (!completed) {
+//          console.log('Events written result: ' + EventStoreClient.OperationResult.getName(completed.result));
+//        }
+//      });
+//  }
+//
+//  mapEventToEventStore(event) {
+//    return {
+//      eventId: event.eventId || uuid.v4(),
+//      eventType: event.type,
+//      data: event
+//    };
+//  }
+//}
 
 //var config = {
 //  'eventStore': {
