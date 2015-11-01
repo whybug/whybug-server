@@ -34,7 +34,7 @@ export var SearchSolutionsPage = React.createClass({
 
         <Section className="grey">
           <Row>
-            <Column span={9}>
+            <Column span={10}>
               {this.renderSolutions(solutions)}
             </Column>
 

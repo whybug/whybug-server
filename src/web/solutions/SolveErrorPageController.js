@@ -7,7 +7,7 @@ var React = require('react'),
 import {WhybugApi} from '../WhybugApi';
 import {Header, Section} from '../common/UI';
 
-export var SolveErrorPageController = React.createClass({
+export default React.createClass({
 
   statics: {
     resolve: {

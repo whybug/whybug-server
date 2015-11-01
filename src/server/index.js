@@ -1,9 +1,5 @@
-require("babel/register")({
-  stage: 0,
-  optional: [
-    'runtime',
-    'utility.inlineEnvironmentVariables'
-  ]
-});
+//require("babel/register");
+require("babel-core/register");
 
-require('./server');
+var dependencies = require('../dependencies');
+require('./server')(dependencies);

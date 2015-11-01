@@ -3,7 +3,7 @@ import React from 'react';
 import {Header} from './UI';
 var {div} = React.DOM;
 
-export var NotFoundPage = React.createClass({
+export default React.createClass({
   render() {
     return (
       <div>

@@ -2,31 +2,45 @@ var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
+
 //publicPath: process.env.WEB_URL,
 
 var config =  {
-  devtool: 'eval-source-map',
+  devtool: '#eval-source-map',
   entry: [
-    'webpack-dev-server/client?http://192.168.0.14:8001/',
-    'webpack/hot/dev-server',
+    'webpack-hot-middleware/client',
     './src/web/assets/js/app.js',
     './src/web/assets/css/main.sass'
   ],
   output: {
     path: path.join(__dirname, '/../build/'),
-    publicPath: 'http://192.168.0.14:8001/',
-    filename: 'main.js'
+    filename: 'main.js',
+    publicPath: '/'
   },
   module: {
     loaders: [
       // Compile javascript ES6/ES7/JSX code.
       {
         test: /\.js?$/,
-        exclude: /node_modules/,
-        loaders: [
-          'react-hot',
-          'babel-loader?stage=0&optional=runtime&optional=utility.inlineEnvironmentVariables'
-        ]
+        //exclude: /node_modules/,
+        loader: 'babel',
+        include: path.join(__dirname, '../src'),
+        query: {
+          optional: ['runtime'],
+          plugins: [
+            'react-display-name',
+            'react-transform'
+          ],
+          extra: {
+            'react-transform': [{
+              'target': 'react-transform-hmr',
+              'imports': ['react'],
+              'locals': ['module']
+            }]
+          }
+        }
       },
 
       // Compile assets.
@@ -41,16 +55,17 @@ var config =  {
     ]
   },
   plugins: [
-    // Set a global variable to indicate if the javascript
-    // code is executed in the browser.
-    new webpack.DefinePlugin({
-      __BROWSER__: true
-    }),
-
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-
-    new ExtractTextPlugin("[name].css")
-  ]
+    webpackIsomorphicToolsPlugin.development()
+  ],
+  resolve: {
+    extensions: ['', '.js'],
+    alias: {
+      request: 'browser-request'
+    }
+  }
 };
 
 module.exports = config;

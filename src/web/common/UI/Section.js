@@ -5,10 +5,10 @@ import {Container} from '../UI';
 /**
  * Section with container.
  */
-export default class Section {
-  static propTypes = {
+export default React.createClass({
+  propTypes: {
     type: React.PropTypes.string
-  };
+  },
 
   render() {
     return (
@@ -17,4 +17,4 @@ export default class Section {
       </section>
     );
   }
-}
+});

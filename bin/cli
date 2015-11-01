@@ -1,0 +1,11 @@
+#!/usr/bin/env iojs --harmony_arrow_functions
+
+// https://github.com/mklabs/node-tabtab
+require("babel/register");
+require('../src/cli/cli');
+
+// Iojs unhandled rejections.
+process.on('unhandledRejection', function (err, p) {
+  console.error('Caught an unhandled rejection, make sure to always `catch`.');
+  console.error(err.stack)
+});

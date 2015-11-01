@@ -13,7 +13,7 @@ import {
   NavLink
   } from '../UI';
 
-export default class Header {
+export default React.createClass({
   render()  {
     return (
       <header className="navbar-section">
@@ -34,7 +34,7 @@ export default class Header {
         </Container>
       </header>
     );
-  }
+  },
 
   renderUserMenu() {
     return (
@@ -46,7 +46,7 @@ export default class Header {
         </div>
       </div>
     );
-  }
+  },
 
   renderLoginMenu() {
     return (
@@ -61,4 +61,4 @@ export default class Header {
       </div>
     );
   }
-}
+});

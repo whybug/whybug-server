@@ -6,7 +6,7 @@
 export var RestPlugin = {
 
   register: (server, options, next) => {
-    server.route({method: 'POST', path: '/rest/actions', handler: function(request, reply) {
+    server.route({method: 'POST', path: '/rest/actions', handler: (request, reply) => {
       try {
         const action = {
           ...request.payload,
@@ -15,7 +15,7 @@ export var RestPlugin = {
         //userId: request.auth.userId,
         //apiKey: request.auth.apiKey,
 
-        reply(options.store.dispatch(action));
+        reply(options.store.dispatch(action) || {});
       } catch(e) {
         if (e.stack) {
           console.error(e.stack);

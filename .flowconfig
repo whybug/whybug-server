@@ -6,11 +6,17 @@
 .*/node_modules/webpack-dev-server/.*
 .*/node_modules/node-sass/.*
 .*/node_modules/enhanced-resolve/.*
+.*/src/web/.*
+.*/couchdb/.*
+.*/elasticsearch/.*
+.*/migrations/.*
+.*/tests/.*
 
 [include]
-/Users/adri/workspace/whybug-server/src
+.*/src/domain/.*
 
 [libs]
 
 [options]
 module.system=node
+suppress_comment= \\(.\\|\n\\)*\\$FlowIssue

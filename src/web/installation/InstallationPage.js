@@ -7,7 +7,7 @@ import {NotFoundPage} from '../common/NotFoundPage';
 
 var {div, span, h1} = React.DOM;
 
-export var InstallationPage = React.createClass({
+export default React.createClass({
   /**
    * Returns a list of available languages.
    *

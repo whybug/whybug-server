@@ -3,8 +3,9 @@ import Router from 'react-router';
 
 var {RouteHandler} = Router;
 
-export class WebApp {
+export default React.createClass({
   render() {
     return <RouteHandler {...this.props} />;
   }
-};
+});
+

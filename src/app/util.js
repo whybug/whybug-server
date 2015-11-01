@@ -1,15 +1,18 @@
-
 var Joi = require('joi');
 
-export function createValidator(...actionValidations) {
+export function createActionValidator(...actionValidations) {
   var validations = Object.assign(...actionValidations);
 
-  return (action) => {
+  return async (action) => {
     if (!validations[action.type]) {
       throw Error(`Action "${action.type}" not found.`);
     }
 
-    var {error, value} = Joi.validate(action, validations[action.type], { abortEarly: false });
+    var {error, value} = Joi.validate(
+      action,
+      validations[action.type](Joi),
+      { abortEarly: false }
+    );
 
     if (error) {
       throw {message: error.name, details: error.details};
@@ -19,39 +22,44 @@ export function createValidator(...actionValidations) {
   };
 }
 
-export function createHandler(...actionHandlers) {
+export function createActionHandler(...actionHandlers) {
   var handlers = Object.assign(...actionHandlers);
+  console.log("Action handlers\n", handlers);
 
-  return (store, action) => {
+  return async (store, action) => {
     if (!handlers[action.type]) {
       throw Error(`No handler for action "${action.type}".`);
     }
 
-    return handlers[action.type](store, action);
+    return await handlers[action.type](store, action);
   };
 }
 
-export function createStore(handleAction) {
-  // todo move to Store/Store.js
- const db = {
-   update: (id, rev, attributes) => {
-     //db(dbName).update(id, rev, attributes);
-   },
-   insert: (attributes) => {
-     //db(dbName).update(id, rev, attributes);
-   },
-   get: (id) => {
+export function createEventHandler(...eventHandlers) {
+  const subscribers = Object.assign(...eventHandlers);
+  var handlers = {};
 
-   },
-   index: (config) => {
-     // es.index(config);
-   }
- };
+  subscribers.forEach(subscriber => {
+    subscriber.events.forEach((event) => {
+      handlers[event] = subscriber.handler;
+    })
+  });
 
+  console.log('Event handlers\n', handlers);
+
+  return async (store, event) => {
+    if (!handlers[event.type]) {
+      return console.log(`No handler for event "${event.type}"`);
+      //throw Error(`No handler for event "${events.type}".`);
+    }
+
+    return await handlers[event.type](store, event);
+  };
+}
+
+export function createStore(handleAction, handleEvent, persistances) {
   const store = {
-    solutions: db,
-    errors: db,
-    events: db,
+    ...persistances,
 
     /**
      * Handles an action.
@@ -61,6 +69,10 @@ export function createStore(handleAction) {
      */
     dispatch: (action) => {
       return handleAction(store, action);
+    },
+
+    raise: (event) => {
+      return handleEvent(store, event);
     }
   };
 

@@ -4,11 +4,11 @@ import cx from 'classnames';
 /**
  * Display content in a column of given span.
  */
-export default class Column {
-  static propTypes = {
+export default React.createClass({
+  propTypes: {
     /** How many columns should this column span. */
     span: React.PropTypes.number.isRequired
-  };
+  },
 
   render() {
     const classes = cx(
@@ -20,4 +20,4 @@ export default class Column {
 
     return <div className={classes}>{this.props.children}</div>;
   }
-}
+});
