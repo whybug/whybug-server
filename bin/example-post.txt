@@ -1,0 +1,1 @@
+{"type": "SIGNUP_USER", "loginService": "google", "source": "rest"}
