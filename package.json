@@ -58,7 +58,7 @@
     "webpack": "^1.12.2",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-hot-middleware": "^2.0.1",
-    "webpack-isomorphic-tools": "^0.9.3"
+    "webpack-isomorphic-tools": "^2.2.4"
   },
   "babel": {
     "stage": 0,
