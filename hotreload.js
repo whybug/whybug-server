@@ -7,6 +7,13 @@ var webpack = require('webpack');
 var config = require('./config/webpack.config.dev');
 var compiler = webpack(config);
 var app = dependencies.expressApp;
+var Mocha = require('mocha');
+var mocha = new Mocha({
+  ui: 'bdd',
+  reporter: 'spec'
+});
+mocha.addFile('./tests/acceptance/rest.endpoint.js');
+var testDependencies = require('./tests/dependencies');
 
 // Serve hot-reloading bundle to client
 app.use(require("webpack-dev-middleware")(compiler, {
@@ -29,15 +36,18 @@ app.use(function(req, res, next) {
 // Do "hot-reloading" of express stuff on the server
 // Throw away cached modules and re-require next time
 // Ensure there's no important state in there!
-var watcher = chokidar.watch('./src');
+var watcher = chokidar.watch(['./src', './tests']);
 watcher.on('ready', function() {
   watcher.on('all', function() {
     console.log("Clearing src/server/ module cache from server");
     Object.keys(require.cache).forEach(function(id) {
-      if (/\/src\/(server|app|adapters)\//.test(id)) {
+      if (/\/(tests\/|src\/(server|app|adapters))\//.test(id)) {
+        console.log('deleting ', id);
         delete require.cache[id];
       }
     });
+
+    runTest();
   });
 });
 
@@ -48,14 +58,25 @@ compiler.plugin('done', function() {
   Object.keys(require.cache).forEach(function(id) {
     if (/\/src\/client\//.test(id)) delete require.cache[id];
   });
+  runTest()
 });
+
+
+// Start tests
+function runTest() {
+  console.log('Running tests...');
+
+  mocha.run(function (success) {
+  });
+}
 
 var server = dependencies.server;
 server.listenApp(function(err) {
   if (err) throw err;
 
-  var address = server.address();
-  console.log('Listening at http://%s:%d', address.address, address.port);
+  var s = server.address();
+  console.log('Listening at http://%s:%d', s.address, s.port);
+  //require('open')('http://'+ s.address + ':' + s.port )
 });
 
 
