@@ -13,7 +13,7 @@ import ViewSolutionPageController from './solutions/ViewSolutionPageController';
 import SearchSolutionsPageController from './solutions/SearchSolutionsPageController';
 import InstallationPage from './installation/InstallationPage';
 import NotFoundPage from './common/NotFoundPage';
-import WebApp from './Webapp';
+import WebApp from './WebApp';
 
 export class WebRoutes {
 
