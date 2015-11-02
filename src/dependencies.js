@@ -6,6 +6,7 @@
 
 require('dotenv').load();
 var config = require('../config/config');
+var routes = require('../config/routes');
 var uuid = require('node-uuid');
 var elasticSearch = new (require('elasticsearch')).Client({
   host: config.elasticsearch.host + ':' + config.elasticsearch.port
@@ -43,6 +44,7 @@ export default {
   expressApp,
   db,
   mailer,
+  routes,
   search,
   server
 };

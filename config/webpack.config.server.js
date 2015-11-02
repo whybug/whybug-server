@@ -24,7 +24,7 @@ module.exports = {
   module: {
     loaders: [
       {test: /\.json$/, loaders: ['json'] },
-      {test: /\.js$/, exclude: /node_modules/, loaders: ['babel'] },
+      {test: /\.js$/, exclude: /node_modules/, loaders: ['babel?optional[]=asyncToGenerator&blacklist[]=regenerator'] },
     ]
   },
   externals: nodeModules,

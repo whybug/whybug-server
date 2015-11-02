@@ -1,30 +1,44 @@
 /* @flow weak */
 
+import {searchSolutions} from '../app/Solution/Action/SearchSolutions';
+
 /**
  * REST API for the domain.
  *
  * Takes actions and passes them to the domain to be handled.
  */
-export default (express, store) => {
+module.exports = (express, store, routes) => {
   var app = express.Router();
+  var dispatch = wrapDispatch.bind(null, store);
 
-  app.post('/api/rest/actions', (req, res) => {
-    const action = {
-      ...req.body,
-      source: 'rest'
-    };
+  app.get(routes.api.search_solutions.path, async (req, res) => {
+    res.send(await dispatch(searchSolutions(req.params.q || "")));
+  });
 
-    try {
-      store.dispatch(action);
-      res.send({});
-    } catch(e) {
-      res.send({
-        error: e.message,
-        details: e.details,
-        payload: request.payload
-      });
-    }
+  app.post('/api/rest/actions', async (req, res) => {
+    res.send(await dispatch(req.body));
   });
 
   return app;
+};
+
+/**
+ *
+ * @param store
+ * @param action
+ * @returns {*}
+ */
+async function wrapDispatch(store, action) {
+  try {
+    return await store.dispatch({
+      ...action,
+      source: 'rest'
+    });
+  } catch(e) {
+    return {
+      error: e.message,
+      details: e.details,
+      payload: action
+    };
+  }
 }

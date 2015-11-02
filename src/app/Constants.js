@@ -11,6 +11,7 @@ export var RAISE_EVENT = 'RAISE_EVENT';
 
 // Solution
 export var ADD_IMAGE_TO_SOLUTION = 'ADD_IMAGE_TO_SOLUTION';
+export var SEARCH_SOLUTIONS = 'SEARCH_SOLUTIONS';
 export var INDEX_SOLUTION = 'INDEX_SOLUTION';
 
 // Error

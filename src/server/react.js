@@ -11,10 +11,10 @@ import {WebRoutes} from '../web/WebRoutes';
 var fs = require('fs');
 var template = fs.readFileSync(__dirname + '/../web/common/index.html', 'utf8');
 
-export default (express) => {
+module.exports = (express) => {
   var app = express.Router();
 
-  app.get('*', (req, res, next) => {
+  app.get('*', (req, res) => {
     let webRoutes = new WebRoutes(req.path);
     webRoutes.getMarkup((markup, data = {}) => {
       //if (request.auth.isAuthenticated) {
@@ -29,4 +29,4 @@ export default (express) => {
   });
 
   return app;
-}
+};

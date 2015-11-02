@@ -1,21 +1,21 @@
 /* @flow weak */
 
-class Domain {
-  events: Array;
-  actions: Array;
-
-  replay(event: Event) {}
-}
-
-export default ({bus, db, search, mailer, R}) => {
-
-  bus.subscribeAll((event: Event) => {
-    // todo: call async
-    domains.forEach((domain) => domain.replay(event));
-  });
-
-  return createStore(actionMiddleware, eventMiddleware, persistances);
-};
+//class Domain {
+//  events: Array;
+//  actions: Array;
+//
+//  replay(event: Event) {}
+//}
+//
+//export default ({bus, db, search, mailer, R}) => {
+//
+//  bus.subscribeAll((event: Event) => {
+//    // todo: call async
+//    domains.forEach((domain) => domain.replay(event));
+//  });
+//
+//  return createStore(actionMiddleware, eventMiddleware, persistances);
+//};
 
 import {raiseEvent} from './Common/Action/RaiseEvent';
 import {validationErrorOccured} from './Common/Event/ValidationErrorOccured';

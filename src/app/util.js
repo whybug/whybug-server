@@ -28,6 +28,7 @@ export function createActionHandler(...actionHandlers) {
 
   return async (store, action) => {
     if (!handlers[action.type]) {
+      //return console.log(`No handler for event "${action.type}"`);
       throw Error(`No handler for action "${action.type}".`);
     }
 
@@ -49,8 +50,8 @@ export function createEventHandler(...eventHandlers) {
 
   return async (store, event) => {
     if (!handlers[event.type]) {
-      return console.log(`No handler for event "${event.type}"`);
-      //throw Error(`No handler for event "${events.type}".`);
+      //return console.log(`No handler for event "${event.type}"`);
+      throw Error(`No handler for event "${events.type}".`);
     }
 
     return await handlers[event.type](store, event);
@@ -67,7 +68,7 @@ export function createStore(handleAction, handleEvent, persistances) {
      * @param action
      * @returns {Promise}
      */
-    dispatch: (action) => {
+    dispatch: async (action) => {
       return handleAction(store, action);
     },
 
