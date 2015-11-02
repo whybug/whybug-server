@@ -1,4 +1,4 @@
-require("babel-core/register");
+require("babel/register");
 
 const dependencies = require('./src/dependencies');
 var WebpackIsomorphicTools = require('webpack-isomorphic-tools');
