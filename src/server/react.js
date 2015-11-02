@@ -5,7 +5,7 @@
  *
  * Renders a page on the server.
  */
-import {WebRoutes} from '../web/WebRoutes';
+import { WebRoutes } from '../web/WebRoutes';
 
 // TODO: !!!!! Move somewhere else
 var fs = require('fs');

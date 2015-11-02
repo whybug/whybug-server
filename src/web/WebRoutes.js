@@ -13,7 +13,7 @@ import ViewSolutionPageController from './solutions/ViewSolutionPageController';
 import SearchSolutionsPageController from './solutions/SearchSolutionsPageController';
 import InstallationPage from './installation/InstallationPage';
 import NotFoundPage from './common/NotFoundPage';
-var WebApp = require('./WebApp');
+import WebApp from './Webapp';
 
 export class WebRoutes {
 
