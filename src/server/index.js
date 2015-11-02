@@ -6,12 +6,12 @@
 
 //require('babel-runtime/core-js/promise').default = require('bluebird');
 
-if (process.env.NODE_ENV === 'production') {
-  var raven = require('raven');
-  var SENTRY_DSN = 'https://<DSN>@app.getsentry.com/...';
-  var client = new raven.Client(SENTRY_DSN);
-  client.patchGlobal();
-}
+//if (process.env.NODE_ENV === 'production') {
+//  var raven = require('raven');
+//  var SENTRY_DSN = 'https://<DSN>@app.getsentry.com/...';
+//  var client = new raven.Client(SENTRY_DSN);
+//  client.patchGlobal();
+//}
 
 var dependencies = require('../dependencies');
 var {expressApp, server} = dependencies;
