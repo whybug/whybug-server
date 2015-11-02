@@ -87,7 +87,7 @@ async function actionMiddleware(store, action) {
   // todo: split up middlewares, use existing?
   // logging, validation
   try {
-    console.log(JSON.stringify(action));
+    //console.log(JSON.stringify(action));
     await handleAction(store, await validAction(action));
   } catch (error) {
     switch (error.message) {
@@ -113,7 +113,7 @@ async function eventMiddleware(store, event) {
   // todo: split up middlewares, use existing?
   // logging, auditlogging, monitoring, validation, storage?
   store.dispatch(raiseEvent(event));
-  console.log(JSON.stringify(event));
+  //console.log(JSON.stringify(event));
   await handleEvent(store, event);
 
   //store.eventStore.subscribeToStream(storedEvent => handleEvent(store, storedEvent));

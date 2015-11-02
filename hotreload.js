@@ -8,11 +8,6 @@ var config = require('./config/webpack.config.dev');
 var compiler = webpack(config);
 var app = dependencies.expressApp;
 var Mocha = require('mocha');
-var mocha = new Mocha({
-  ui: 'bdd',
-  reporter: 'spec'
-});
-mocha.addFile('./tests/acceptance/rest.endpoint.js');
 var testDependencies = require('./tests/dependencies');
 
 // Serve hot-reloading bundle to client
@@ -39,10 +34,9 @@ app.use(function(req, res, next) {
 var watcher = chokidar.watch(['./src', './tests']);
 watcher.on('ready', function() {
   watcher.on('all', function() {
-    console.log("Clearing src/server/ module cache from server");
+    console.log("Clearing test/ and src/server/ module cache from server");
     Object.keys(require.cache).forEach(function(id) {
-      if (/\/(tests\/|src\/(server|app|adapters))\//.test(id)) {
-        console.log('deleting ', id);
+      if (/whybug-server\/(src|tests)/.test(id)) {
         delete require.cache[id];
       }
     });
@@ -58,15 +52,20 @@ compiler.plugin('done', function() {
   Object.keys(require.cache).forEach(function(id) {
     if (/\/src\/client\//.test(id)) delete require.cache[id];
   });
-  runTest()
 });
 
 
 // Start tests
 function runTest() {
+  var mocha = new Mocha({
+    ui: 'bdd',
+    reporter: 'dot'
+  });
+  mocha.addFile('./tests/acceptance/rest.endpoint.js');
   console.log('Running tests...');
 
   mocha.run(function (success) {
+    console.log('------------');
   });
 }
 

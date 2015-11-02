@@ -24,7 +24,7 @@ export function createActionValidator(...actionValidations) {
 
 export function createActionHandler(...actionHandlers) {
   var handlers = Object.assign(...actionHandlers);
-  console.log("Action handlers\n", handlers);
+  //console.log("Action handlers\n", handlers);
 
   return async (store, action) => {
     if (!handlers[action.type]) {
@@ -46,7 +46,7 @@ export function createEventHandler(...eventHandlers) {
     })
   });
 
-  console.log('Event handlers\n', handlers);
+  //console.log('Event handlers\n', handlers);
 
   return async (store, event) => {
     if (!handlers[event.type]) {
