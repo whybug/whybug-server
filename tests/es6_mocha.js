@@ -9,10 +9,5 @@ chai.use(sinonChai);
 chai.use(chaiAsPromised);
 chai.use(function (chai, utils) { return chaiReact(chai, utils, React) });
 
-require("babel/register")({
-  stage: 0,
-  optional: [
-    'runtime',
-    'utility.inlineEnvironmentVariables'
-  ]
-});
+require("babel/register")();
+require('../src/server/index.js');

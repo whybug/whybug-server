@@ -15,6 +15,6 @@ export function signUpUserHandler(store, action) {
     // new User?
     store.raise(userSignedUp(uuid.v4(), 'test@example.com'));
   } else {
-    store.raise(userRejectedSignup(reason));
+    store.raise(userRejectedSignup('because Banaaan'));
   }
 }
