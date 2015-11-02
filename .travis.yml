@@ -15,6 +15,7 @@ cache:
 
 before_script:
 - mysql -e 'create database whybug;'
+- cp .env.example .env
 - node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js migrate:latest
 
 after_success:
