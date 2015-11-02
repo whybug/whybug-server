@@ -9,7 +9,7 @@ unused_variables=`node_modules/.bin/webpack --config config/webpack.config.js -p
 echo $rev,"js_unused",$unused_variables
 
 # build/js/bundle.js size
-size=`du -k build/js/bundle.js | awk '{print $1}'`
+size=`du -k build/js/main.js | awk '{print $1}'`
 echo $rev,"js_size_kb",$size
 
 datetime=`date +"%Y-%m-%dT%H:%M:%S"`
