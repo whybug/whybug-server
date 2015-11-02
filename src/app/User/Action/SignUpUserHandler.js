@@ -2,7 +2,7 @@
 var uuid = require('node-uuid');
 
 import {userSignedUp} from '../Event/UserSignedUp';
-import {userRejectedSignup} from '../Event/UserRejectedSignup';
+import {userRejectedSignup} from '../Event/UserRejectedSignUp';
 import {assertUserNotSignedUp} from '../Query/SignedUpUsers';
 
 export function signUpUserHandler(store, action) {
