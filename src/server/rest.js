@@ -11,12 +11,12 @@ module.exports = (express, store, routes) => {
   var app = express.Router();
   var dispatch = wrapDispatch.bind(null, store);
 
-  app.get(routes.api.search_solutions.path, async (req, res) => {
-    res.send(await dispatch(searchSolutions(req.params.q || "")));
+  app.get(routes.api.search_solutions.path, (req, res) => {
+    dispatch(res, searchSolutions(req.params.q || ""));
   });
 
-  app.post('/api/rest/actions', async (req, res) => {
-    res.send(await dispatch(req.body));
+  app.post('/api/rest/actions', (req, res) => {
+    dispatch(res, req.body);
   });
 
   return app;
@@ -25,20 +25,22 @@ module.exports = (express, store, routes) => {
 /**
  *
  * @param store
+ * @param res
  * @param action
  * @returns {*}
  */
-async function wrapDispatch(store, action) {
+async function wrapDispatch(store, res, action) {
   try {
-    return await store.dispatch({
+    var body = await store.dispatch({
       ...action,
       source: 'rest'
     });
+    res.status(200).send(body);
   } catch(e) {
-    return {
+    res.status(400).send({
       error: e.message,
       details: e.details,
       payload: action
-    };
+    });
   }
 }
