@@ -85,7 +85,6 @@ export function createStore(handleAction, handleEvent, handleQuery) {
     },
 
     query: (query) => {
-      console.log('query');
       return handleQuery(store, query);
     },
 
