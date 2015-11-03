@@ -1,10 +1,10 @@
 /* @flow weak */
-import {SIGNUP_USER, SEND_WELCOME_EMAIL, USER_SIGNED_UP} from '../Constants';
-import {signUpUserValidator} from './Action/SignUpUser'
-import {sendWelcomeEmailValidator} from './Action/SendWelcomeEmail'
-import {signUpUserHandler} from './Action/SignUpUserHandler'
-import {sendWelcomeEmailHandler} from './Action/SendWelcomeEmailHandler'
-import {whenUserSignedUpSendWelcomeEmail} from './Event/WhenUserSignedUpSendWelcomeEmail'
+import {SIGNUP_USER, SEND_WELCOME_EMAIL, USER_SIGNED_UP} from './Constants';
+import {signUpUserValidator} from './User/Action/SignUpUser'
+import {sendWelcomeEmailValidator} from './User/Action/SendWelcomeEmail'
+import {signUpUserHandler} from './User/Action/SignUpUserHandler'
+import {sendWelcomeEmailHandler} from './User/Action/SendWelcomeEmailHandler'
+import {whenUserSignedUpSendWelcomeEmail} from './User/Event/WhenUserSignedUpSendWelcomeEmail'
 
 export var actionValidators = {
   // $FlowIssue: suppressing this error until it is fixed

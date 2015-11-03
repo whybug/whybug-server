@@ -50,26 +50,43 @@ export function createEventHandler(...eventHandlers) {
 
   return async (store, event) => {
     if (!handlers[event.type]) {
-      return console.log(`No handler for event "${event.type}"`);
-      //throw Error(`No handler for event "${event.type}".`);
+      //return console.log(`No handler for event "${event.type}"`);
+      throw Error(`No handler for event "${event.type}".`);
     }
 
     return await handlers[event.type](store, event);
   };
 }
 
-export function createStore(handleAction, handleEvent, persistances) {
-  const store = {
-    ...persistances,
+export function createQueryHandler(...queryHandlers) {
+  var handlers = Object.assign(...queryHandlers);
+  //console.log("Query handlers\n", handlers);
 
+  return async (store, query) => {
+    if (!handlers[query.type]) {
+      //return console.log(`No handler for query "${query.type}"`);
+      throw Error(`No handler for query "${query.type}".`);
+    }
+
+    return await handlers[query.type](store, query);
+  };
+}
+
+export function createStore(handleAction, handleEvent, handleQuery) {
+  const store = {
     /**
      * Handles an action.
      *
      * @param action
      * @returns {Promise}
      */
-    dispatch: async (action) => {
+    dispatch: (action) => {
       return handleAction(store, action);
+    },
+
+    query: (query) => {
+      console.log('query');
+      return handleQuery(store, query);
     },
 
     raise: (event) => {

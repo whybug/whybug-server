@@ -1,6 +1,6 @@
 /* @flow weak */
 
-import {searchSolutions} from '../app/Solution/Action/SearchSolutions';
+import {searchSolutions} from '../app/Solution/Query/SearchSolutions';
 
 /**
  * REST API for the domain.
@@ -10,9 +10,11 @@ import {searchSolutions} from '../app/Solution/Action/SearchSolutions';
 module.exports = (express, store, routes) => {
   var app = express.Router();
   var dispatch = wrapDispatch.bind(null, store);
+  var query = wrapQuery.bind(null, store);
 
-  app.get(routes.api.search_solutions.path, (req, res) => {
-    dispatch(res, searchSolutions(req.params.q || ""));
+  app.get(routes.api.search_solutions.path, async (req, res) => {
+    var test = searchSolutions(req.params.q);
+    query(res, test);
   });
 
   app.post('/api/rest/actions', (req, res) => {
@@ -21,6 +23,24 @@ module.exports = (express, store, routes) => {
 
   return app;
 };
+
+
+async function wrapQuery(store, res, query) {
+  try {
+    var body = await store.query({
+      ...query,
+      source: 'rest'
+    });
+
+    res.status(200).send(body);
+  } catch(e) {
+    res.status(400).send({
+      error: e.message,
+      details: e.details,
+      payload: action
+    });
+  }
+}
 
 /**
  *

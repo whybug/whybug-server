@@ -1,7 +1,7 @@
 /* @flow weak */
-import {RECORD_ERROR} from '../Constants';
-import {recordError, recordErrorValidator} from './Action/RecordError'
-import {recordErrorHandler} from './Action/RecordErrorHandler'
+import {RECORD_ERROR} from './Constants';
+import {recordError, recordErrorValidator} from './Error/Action/RecordError'
+import {recordErrorHandler} from './Error/Action/RecordErrorHandler'
 
 export var actionValidators = {
   // $FlowIssue: suppressing this error until it is fixed

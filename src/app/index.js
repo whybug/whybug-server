@@ -23,8 +23,9 @@ import {
   createActionHandler,
   createActionValidator,
   createEventHandler,
+  createQueryHandler,
   createStore}
-from './util';
+from './store';
 
 import {
   actionValidators as commonActionValidators,
@@ -42,10 +43,11 @@ import {
   eventHandlers as userEventHandlers,
 } from './User';
 
-//import {
-//  actionValidators as solutionActionValidators,
-//  actionHandlers as solutionActionHandlers
-//} from './Solution';
+import {
+  actionValidators as solutionActionValidators,
+  actionHandlers as solutionActionHandlers,
+  queryHandlers as solutionQueryHandlers,
+} from './Solution';
 
 /**
  * Validator for actions.
@@ -74,6 +76,10 @@ var handleAction = createActionHandler(
  */
 var handleEvent = createEventHandler(
   userEventHandlers
+);
+
+var handleQuery = createQueryHandler(
+  solutionQueryHandlers
 );
 
 /**
@@ -110,15 +116,17 @@ async function actionMiddleware(store, action) {
  * @returns {Promise}
  */
 async function eventMiddleware(store, event) {
-  // todo: split up middlewares, use existing?
   // logging, auditlogging, monitoring, validation, storage?
   store.dispatch(raiseEvent(event));
   //console.log(JSON.stringify(event));
   await handleEvent(store, event);
-
-  //store.eventStore.subscribeToStream(storedEvent => handleEvent(store, storedEvent));
 }
 
-export function getStore(persistances) {
-  return createStore(actionMiddleware, eventMiddleware, persistances);
+function queryMiddleware(store, query) {
+  //console.log('handle query');
+  return handleQuery(store, query);
+}
+
+export function getStore() {
+  return createStore(actionMiddleware, eventMiddleware, queryMiddleware);
 }

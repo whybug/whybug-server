@@ -1,6 +1,7 @@
 var request = require('supertest-as-promised');
 
 import {signUpUser} from '../../src/app/User/Action/SignUpUser';
+import {searchSolutions} from '../../src/app/Solution/Query/SearchSolutions';
 
 describe('Rest endpoint', () => {
 
@@ -20,8 +21,15 @@ describe('Rest endpoint', () => {
       request('localhost:8000')
         .post('/api/rest/actions')
         .set('Accept', 'application/json')
-        .send(signUpUser({loginService: "google"}))
+        .send(signUpUser({loginService: 'google'}))
         .expect(200, {})
+    );
+
+    it('GET /api/solutions', () =>
+      request('localhost:8000')
+        .get('/api/solutions?q=' + 'test')
+        .set('Accept', 'application/json')
+        .expect(200, { total: 0, solutions: [], aggregations: [] })
     );
   });
 
