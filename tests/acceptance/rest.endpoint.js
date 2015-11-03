@@ -12,8 +12,7 @@ describe('Rest endpoint', () => {
         .set('Accept', 'text/html')
         .expect(200)
         .expect((res) => {
-          res.body.should.be.string
-          //res.body.should.contain('navbar-section')
+          res.text.should.contain('navbar-section')
         })
     );
 
