@@ -16,8 +16,8 @@ cache:
 before_script:
 - mysql -e 'create database whybug;'
 - cp .env.example .env
-- npm build:frontend
-- npm build:server
+- npm run build:frontend
+- npm run build:server
 
 after_success:
 - "/bin/bash bin/metrics_travis.sh"
