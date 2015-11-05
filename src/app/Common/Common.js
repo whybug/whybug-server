@@ -1,7 +1,7 @@
 /* @flow weak */
-import {RAISE_EVENT} from './Constants';
-import {raiseEvent, raiseEventValidator} from './Common/Action/RaiseEvent'
-import {raiseEventHandler} from './Common/Action/RaiseEventHandler'
+import {RAISE_EVENT} from './../Constants';
+import {raiseEvent, raiseEventValidator} from './Action/RaiseEvent'
+import {raiseEventHandler} from './Action/RaiseEventHandler'
 var Joi = require('joi');
 
 export var actionValidators = {

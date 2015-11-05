@@ -30,24 +30,24 @@ from './store';
 import {
   actionValidators as commonActionValidators,
   actionHandlers as commonActionHandlers
-} from './Common';
+} from './Common/Common';
 
 import {
   actionValidators as errorActionValidators,
   actionHandlers as errorActionHandlers
-} from './Error';
+} from './Error/Error';
 
 import {
   actionValidators as userActionValidators,
   actionHandlers as userActionHandlers,
   eventHandlers as userEventHandlers,
-} from './User';
+} from './User/User';
 
 import {
   actionValidators as solutionActionValidators,
   actionHandlers as solutionActionHandlers,
   queryHandlers as solutionQueryHandlers,
-} from './Solution';
+} from './Solution/Solution';
 
 /**
  * Validator for actions.
