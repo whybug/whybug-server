@@ -1,6 +1,5 @@
 /* @flow weak */
-import {INDEX_SOLUTION} from './Constants';
-import {SEARCH_SOLUTIONS} from './Constants';
+import {INDEX_SOLUTION, FIND_SOLUTIONS_FOR_ERROR,  SEARCH_SOLUTIONS} from './Constants';
 import {indexSolutionHandler} from './Solution/Action/IndexSolutionHandler';
 import {searchSolutionsHandler} from './Solution/Query/SearchSolutionsHandler';
 
@@ -11,8 +10,10 @@ export var actionValidators = {
 export var actionHandlers = {
 };
 
+
 export var queryHandlers = {
-  [SEARCH_SOLUTIONS]: searchSolutionsHandler
+  [FIND_SOLUTIONS_FOR_ERROR]: require('./Solution/Query/FindSolutionForErrorHandler')({}),
+  [SEARCH_SOLUTIONS]: require('./Solution/Query/SearchSolutionsHandler')({})
 };
 //export var eventHandlers = [
 //];

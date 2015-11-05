@@ -2,7 +2,6 @@ import {welcomeEmailSent} from '../Event/WelcomeEmailSent';
 import {findUserProfileById} from '../Query/UserProfile';
 
 export async function sendWelcomeEmailHandler(store, action) {
-
   // send welcome email.
   try {
     var user = await findUserProfileById(action.userId);
@@ -13,9 +12,9 @@ export async function sendWelcomeEmailHandler(store, action) {
       body: translate('user.welcomeEmail.body', user.language)
     });
 
-    store.raise(welcomeEmailSent(action.user.email))
+    //store.raise(welcomeEmailSent(action.user.email))
   } catch (e) {
-    store.raise(welcomeEmailSent(action.email, {failed: true}))
+    //store.raise(welcomeEmailSent(action.email, {failed: true}))
   }
 }
 

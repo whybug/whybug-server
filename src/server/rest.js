@@ -13,8 +13,11 @@ module.exports = (express, store, routes) => {
   var query = wrapQuery.bind(null, store);
 
   app.get(routes.api.search_solutions.path, async (req, res) => {
-    var test = searchSolutions(req.params.q);
-    query(res, test);
+    query(res, searchSolutions(req.params.q));
+  });
+
+  app.post('/api/rest/queries', async (req, res) => {
+    query(res, req.body);
   });
 
   app.post('/api/rest/actions', (req, res) => {

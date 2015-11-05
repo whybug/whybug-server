@@ -5,7 +5,7 @@ import {userSignedUp} from '../Event/UserSignedUp';
 import {userRejectedSignup} from '../Event/UserRejectedSignUp';
 import {assertUserNotSignedUp} from '../Query/SignedUpUsers';
 
-export function signUpUserHandler(store, action) {
+export async function signUpUserHandler(store, action) {
   assertUserNotSignedUp(store, action.user);
   // do some more checks here, duplicate email etc.
 

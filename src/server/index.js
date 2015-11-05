@@ -4,7 +4,7 @@
  * Starts a node process.
  */
 
-//require('babel-runtime/core-js/promise').default = require('bluebird');
+require('babel-runtime/core-js/promise').default = require('bluebird');
 
 //if (process.env.NODE_ENV === 'production') {
 //  var raven = require('raven');
