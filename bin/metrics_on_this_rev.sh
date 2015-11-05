@@ -8,8 +8,8 @@ unused_variables=`node_modules/.bin/webpack --config config/webpack.config.js -p
     | wc -l `
 echo $rev,"js_unused",$unused_variables
 
-# build/js/bundle.js size
-size=`du -k build/js/main.js | awk '{print $1}'`
+# build size
+size=`du -k build/main.js | awk '{print $1}'`
 echo $rev,"js_size_kb",$size
 
 datetime=`date +"%Y-%m-%dT%H:%M:%S"`
