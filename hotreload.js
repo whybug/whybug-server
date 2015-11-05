@@ -8,6 +8,7 @@ var config = require('./config/webpack.config.dev');
 var compiler = webpack(config);
 var app = dependencies.expressApp;
 var Mocha = require('mocha');
+var glob = require('glob');
 var testDependencies = require('./tests/dependencies');
 
 // Serve hot-reloading bundle to client
@@ -61,12 +62,20 @@ function runTest() {
     ui: 'bdd',
     reporter: 'dot'
   });
-  mocha.addFile('./tests/acceptance/rest.endpoint.js');
-  console.log('Running tests...');
 
-  mocha.run(function (success) {
-    console.log('------------');
+  glob("?(tests|src)/**/*.spec.js", {}, function (er, files) {
+    console.log(files);
+    files.map(function(file) {
+       mocha.addFile(file);
+    });
+
+    console.log('Running tests...');
+    mocha.run(function (success) {
+      console.log('------------');
+    });
   });
+
+
 }
 
 var server = dependencies.server;

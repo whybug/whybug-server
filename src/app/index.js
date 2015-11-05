@@ -119,7 +119,7 @@ async function eventMiddleware(store, event) {
   // logging, auditlogging, monitoring, validation, storage?
   store.dispatch(raiseEvent(event));
   //console.log(JSON.stringify(event));
-  await handleEvent(store, event);
+  return await handleEvent(store, event);
 }
 
 function queryMiddleware(store, query) {
