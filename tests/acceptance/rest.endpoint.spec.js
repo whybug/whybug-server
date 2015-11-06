@@ -56,7 +56,7 @@ describe('Rest endpoint', () => {
         .expect(200, { total: 0, solutions: [], aggregations: [] })
     );
 
-    it('Finds solution for error', () =>
+    it('Post an error, get solutions', () =>
       request('localhost:8000')
         .post('/api/solutions/error')
         .set('Accept', 'application/json')

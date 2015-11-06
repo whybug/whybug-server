@@ -2,11 +2,10 @@
 import {RECORD_ERROR} from './../Constants';
 import {recordError, recordErrorValidator} from './Action/RecordError'
 import {recordErrorHandler} from './Action/RecordErrorHandler'
-var Joi = require('joi');
 
 export var actionValidators = {
   // $FlowIssue: suppressing this error until it is fixed
-  [RECORD_ERROR]: Joi.compile(recordErrorValidator(Joi))
+  [RECORD_ERROR]: recordErrorValidator
 };
 
 export var actionHandlers = {

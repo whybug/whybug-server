@@ -1,21 +1,11 @@
-var Joi = require('joi');
-var Promise = require('bluebird');
-var validate = Promise.promisify(Joi.validate);
+import {validation, merge} from './validator';
 
 export function createActionValidator(...actionValidations) {
-  var validations = Object.assign(...actionValidations);
+  var validate = validation.bind(null, merge(actionValidations));
 
   return async (action) => {
-    if (!validations[action.type]) {
-      throw Error(`Action "${action.type}" not found.`);
-    }
-
     try {
-      return await validate(
-        action,
-        validations[action.type],
-        { abortEarly: false }
-      );
+      return await validate(action);
     } catch (e) {
       throw {message: e.name, details: e.details};
     }

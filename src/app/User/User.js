@@ -5,13 +5,12 @@ import {sendWelcomeEmailValidator} from './Action/SendWelcomeEmail'
 import {signUpUserHandler} from './Action/SignUpUserHandler'
 import {sendWelcomeEmailHandler} from './Action/SendWelcomeEmailHandler'
 import {whenUserSignedUpSendWelcomeEmail} from './Event/WhenUserSignedUpSendWelcomeEmail'
-var Joi = require('joi');
 
 export var actionValidators = {
   // $FlowIssue: suppressing this error until it is fixed
-  [SIGNUP_USER]: Joi.compile(signUpUserValidator(Joi)),
+  [SIGNUP_USER]: signUpUserValidator,
   // $FlowIssue: suppressing this error until it is fixed
-  [SEND_WELCOME_EMAIL]: Joi.compile(sendWelcomeEmailValidator(Joi))
+  [SEND_WELCOME_EMAIL]: sendWelcomeEmailValidator
 };
 
 export var actionHandlers = {
