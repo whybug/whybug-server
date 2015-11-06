@@ -9,7 +9,7 @@ const errorMock = {
   "programminglanguage_version": "5.4.24",
   "message": "Cannot access empty property",
   "code": "1",
-  "level": "exception",
+  "level": "fatal",
   "file_path": "/Volumes/com_mit/frontend/vendor/whybug-php/test.php",
   "line": 10,
   "os": "Darwin",
@@ -56,6 +56,13 @@ describe('Rest endpoint', () => {
         .expect(200, { total: 0, solutions: [], aggregations: [] })
     );
 
+    it('Finds solution for error', () =>
+      request('localhost:8000')
+        .post('/api/solutions/error')
+        .set('Accept', 'application/json')
+        .send(errorMock)
+        .expect(200)
+    );
   });
 
 });

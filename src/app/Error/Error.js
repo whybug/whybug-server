@@ -6,7 +6,7 @@ var Joi = require('joi');
 
 export var actionValidators = {
   // $FlowIssue: suppressing this error until it is fixed
-  [RECORD_ERROR]: recordErrorValidator(Joi)
+  [RECORD_ERROR]: Joi.compile(recordErrorValidator(Joi))
 };
 
 export var actionHandlers = {

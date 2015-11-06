@@ -27,6 +27,6 @@ export function recordErrorValidator(Joi) {
   };
 }
 
-export function recordError(solutionId: string) :Object {
-  return { type: RECORD_ERROR, solutionId };
+export function recordError(error: Error) :Object {
+  return { ...error, type: RECORD_ERROR };
 }

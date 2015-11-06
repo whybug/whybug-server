@@ -1,5 +1,4 @@
 /* @flow weak */
-export function recordErrorHandler(store, action) {
-  console.log(store, action);
-  return {success: true}
+export async function recordErrorHandler(store, action) {
+  // Todo: record error
 }
