@@ -49,31 +49,35 @@ module.exports =  {
    * when rendering HTML on the server.
    */
   api: {
-    // Create a new error, with JSON payload. Returns solutions as JSON.
-    create_error: { method: 'POST', path: '/api/errors', config: { cors: true } },
+    create_action: { method: 'POST', path: '/api/rest/actions' },
+
+    create_query: { method: 'POST', path: '/api/rest/queries' },
 
     // Read a error.
-    read_error: { method: 'GET', path: '/api/errors/{error_uuid}' },
+    //read_error: { method: 'GET', path: '/api/errors/{error_uuid}' },
 
     // List of unsolved errors.
-    unsolved_errors: { method: 'GET', path: '/api/errors/unsolved', config: { auth: 'session' } },
+    //unsolved_errors: { method: 'GET', path: '/api/errors/unsolved', config: { auth: 'session' } },
 
     // Add an error to the list of hidden errors.
-    hidden_errors: { method: 'POST', path: '/api/errors/hidden' },
+    //hidden_errors: { method: 'POST', path: '/api/errors/hidden' },
 
     // Search for errors.
     search_solutions: { method: 'GET', path: '/api/solutions' },
 
+    // Create a new error, with JSON payload. Returns solutions as JSON.
+    find_solutions_for_error: { method: 'POST', path: '/api/solutions/error', config: { cors: true } },
+
     // Create a solution, with JSON payload.
-    create_solution: { method: 'POST', path: '/api/solutions' },
+    //create_solution: { method: 'POST', path: '/api/solutions' },
 
     // Read a solution.
-    read_solution: { method: 'GET', path: '/api/solutions/{solution_uuid}' },
+    //read_solution: { method: 'GET', path: '/api/solutions/{solution_uuid}' },
 
     // Update a solution, with JSON payload.
-    update_solution: { method: 'PUT', path: '/api/solutions/{solution_uuid}', config: { auth: 'session' } },
+    //update_solution: { method: 'PUT', path: '/api/solutions/{solution_uuid}', config: { auth: 'session' } },
 
     // Delete a solution, with JSON payload.
-    delete_solution: { method: 'DELETE', path: '/api/solutions/{error_uuid}' }
+    //delete_solution: { method: 'DELETE', path: '/api/solutions/{error_uuid}' }
   }
 };

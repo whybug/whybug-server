@@ -1,6 +1,7 @@
 /* @flow weak */
 
 import {searchSolutions} from '../app/Solution/Query/SearchSolutions';
+import {recordError} from '../app/Error/Action/RecordError';
 
 /**
  * REST API for the domain.
@@ -9,61 +10,45 @@ import {searchSolutions} from '../app/Solution/Query/SearchSolutions';
  */
 module.exports = (express, store, routes) => {
   var app = express.Router();
+  var route = wrapRoute.bind(null, app);
   var dispatch = wrapDispatch.bind(null, store);
   var query = wrapQuery.bind(null, store);
 
-  app.get(routes.api.search_solutions.path, async (req, res) => {
-    query(res, searchSolutions(req.params.q));
-  });
-
-  app.post('/api/rest/queries', async (req, res) => {
-    query(res, req.body);
-  });
-
-  app.post('/api/rest/actions', (req, res) => {
-    dispatch(res, req.body);
-  });
+  route(routes.api.create_query, (req) => query(req.body));
+  route(routes.api.create_action, (req) => dispatch(req.body));
+  route(routes.api.search_solutions, (req) => query(searchSolutions(req.params.q)));
 
   return app;
 };
 
-
-async function wrapQuery(store, res, query) {
-  try {
-    var body = await store.query({
-      ...query,
-      source: 'rest'
-    });
-
-    res.status(200).send(body);
-  } catch(e) {
-    res.status(400).send({
-      error: e.message,
-      details: e.details,
-      payload: action
-    });
-  }
+function wrapQuery(store, query) {
+  return store.query(setSource(query));
 }
 
-/**
- *
- * @param store
- * @param res
- * @param action
- * @returns {*}
- */
-async function wrapDispatch(store, res, action) {
-  try {
-    var body = await store.dispatch({
-      ...action,
-      source: 'rest'
-    });
-    res.status(200).send(body);
-  } catch(e) {
-    res.status(400).send({
-      error: e.message,
-      details: e.details,
-      payload: action
-    });
-  }
+function wrapDispatch(store, action) {
+  return store.dispatch(setSource(action));
+}
+
+function wrapRoute(app, route, callback) {
+  var method = route.method.toLowerCase();
+
+  app[method](route.path, async (req, res) => {
+    try {
+      res.status(200).send(await callback(req, res));
+    } catch(e) {
+      res.stats(400).send(formatException(e, req.body));
+    }
+  });
+}
+
+function setSource(item) {
+  return {...item, source: 'rest'};
+}
+
+function formatException(e, payload) {
+  return {
+    error: e.message,
+    details: e.details,
+    payload: payload
+  };
 }
