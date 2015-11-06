@@ -17,7 +17,7 @@ export function createActionValidator(...actionValidations) {
         { abortEarly: false }
       );
     } catch (e) {
-      throw {message: error.name, details: error.details};
+      throw {message: e.name, details: e.details};
     }
   };
 }
