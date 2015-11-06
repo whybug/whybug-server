@@ -37,7 +37,7 @@ watcher.on('ready', function() {
   watcher.on('all', function() {
     console.log("Clearing test/ and src/server/ module cache from server");
     Object.keys(require.cache).forEach(function(id) {
-      if (/whybug-server\/(src|tests)/.test(id)) {
+      if (/whybug-server\/(config|src|tests)/.test(id)) {
         delete require.cache[id];
       }
     });
@@ -64,7 +64,6 @@ function runTest() {
   });
 
   glob("?(tests|src)/**/*.spec.js", {}, function (er, files) {
-    console.log(files);
     files.map(function(file) {
        mocha.addFile(file);
     });
@@ -74,8 +73,6 @@ function runTest() {
       console.log('------------');
     });
   });
-
-
 }
 
 var server = dependencies.server;
