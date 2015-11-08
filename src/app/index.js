@@ -16,20 +16,18 @@ var contexts = [
    require('./Solution/Solution')
 ];
 
-var domain = {
-  actionHandlers: Object.assign(...contexts.map(context => context.actionHandlers)),
-  actionValidators: Object.assign(...contexts.map(context => context.actionValidators)),
-  eventHandlers: Object.assign(...contexts.map(context => context.eventHandlers)),
-  queryHandlers: Object.assign(...contexts.map(context => context.queryHandlers))
-};
-
-var validAction = createActionValidator(domain.actionValidators || {});
-var handleAction = createActionHandler(domain.actionHandlers || {});
-var handleEvent = createEventHandler(domain.eventHandlers || []);
-var handleQuery = createQueryHandler(domain.queryHandlers || {});
+var validAction = createActionValidator(get(contexts, 'actionValidators'));
+var handleAction = createActionHandler(get(contexts, 'actionHandlers'));
+var handleEvent = createEventHandler(get(contexts, 'eventHandlers'));
+var handleQuery = createQueryHandler(get(contexts, 'queryHandlers'));
 
 export function getStore() {
   return createStore(actionMiddleware, eventMiddleware, queryMiddleware);
+}
+
+// Todo: convert to R or lodash magic
+function get(objects, prop) {
+  return Object.assign(...objects.map(entry => entry[prop]));
 }
 
 /**
