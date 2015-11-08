@@ -2,4 +2,4 @@
 require('dotenv').load();
 require("babel/register");
 
-require('./src/app.js');
+require('./src/server/index');

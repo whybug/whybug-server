@@ -3,7 +3,8 @@ import {INDEX_SOLUTION, FIND_SOLUTIONS_FOR_ERROR,  SEARCH_SOLUTIONS} from './../
 import {indexSolutionHandler} from './Action/IndexSolutionHandler';
 import {searchSolutionsHandler} from './Query/SearchSolutionsHandler';
 
-module.exports = () => {
+module.exports = ({search}) => {
+
   return {
     actionValidators: {
       //[INDEX_SOLUTION]: indexSolutionHandler
@@ -12,8 +13,8 @@ module.exports = () => {
     actionHandlers: {},
 
     queryHandlers: {
-      [FIND_SOLUTIONS_FOR_ERROR]: require('./Query/FindSolutionForErrorHandler')({}),
-        [SEARCH_SOLUTIONS]: require('./Query/SearchSolutionsHandler')({})
+      [FIND_SOLUTIONS_FOR_ERROR]: require('./Query/FindSolutionForErrorHandler')(search),
+      [SEARCH_SOLUTIONS]: require('./Query/SearchSolutionsHandler')(search)
     },
 
     eventHandlers: []
