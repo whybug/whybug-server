@@ -22,7 +22,10 @@ describe('recordErrorValidator', () => {
       "os_version": "13.3.0",
       "protocol_version": 1,
       "created_at": new Date("2014-09-20T14:54:17.792Z"),
-      "client_ip": "127.0.0.1"
+      "client_ip": "127.0.0.1",
+      "solution_uuid": "1eb138f8-850e-4555-970b-93470604de87",
+      "api_key": '1eb138f8-850e-4555-970b-93470604de87',
+      "checksum": '12345'
     };
   });
 

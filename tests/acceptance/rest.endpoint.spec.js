@@ -9,14 +9,17 @@ const errorMock = {
   "programminglanguage_version": "5.4.24",
   "message": "Cannot access empty property",
   "code": "1",
-  "level": "fatal",
+  "level": "warning",
   "file_path": "/Volumes/com_mit/frontend/vendor/whybug-php/test.php",
   "line": 10,
   "os": "Darwin",
   "os_version": "13.3.0",
   "protocol_version": 1,
   "created_at": new Date("2014-09-20T14:54:17.792Z"),
-  "client_ip": "127.0.0.1"
+  "client_ip": "127.0.0.1",
+  "solution_uuid": "1eb138f8-850e-4555-970b-93470604de87",
+  "api_key": '1eb138f8-850e-4555-970b-93470604de87',
+  "checksum": '12345'
 };
 
 describe('Rest endpoint', () => {
