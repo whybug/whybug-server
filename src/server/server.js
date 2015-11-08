@@ -1,5 +1,4 @@
 /* @flow weak */
-import {getStore} from '../app/index';
 
 /**
  * Returns configured server ready to start.
@@ -9,7 +8,7 @@ import {getStore} from '../app/index';
  */
 export default (dependencies) => {
   var {express, routes} = dependencies;
-  var store = getStore(dependencies);
+  var store = require('../app/index')(dependencies).getStore();
   var app = express.Router();
 
   // Add rest endpoint

@@ -1,9 +1,8 @@
 var config = require('../../config/config');
 
 import dependencies from '../dependencies';
-import {getStore} from '../app/index';
 
-const store = getStore(dependencies);
+const store = require('../app/index').getStore(dependencies);
 
 
 //todo https://github.com/harthur/nomnom

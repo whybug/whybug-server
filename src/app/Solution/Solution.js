@@ -3,20 +3,19 @@ import {INDEX_SOLUTION, FIND_SOLUTIONS_FOR_ERROR,  SEARCH_SOLUTIONS} from './../
 import {indexSolutionHandler} from './Action/IndexSolutionHandler';
 import {searchSolutionsHandler} from './Query/SearchSolutionsHandler';
 
-module.exports = {
-  actionValidators: {
-    //[INDEX_SOLUTION]: indexSolutionHandler
-  },
+module.exports = () => {
+  return {
+    actionValidators: {
+      //[INDEX_SOLUTION]: indexSolutionHandler
+    },
 
+    actionHandlers: {},
 
-  actionHandlers: {},
+    queryHandlers: {
+      [FIND_SOLUTIONS_FOR_ERROR]: require('./Query/FindSolutionForErrorHandler')({}),
+        [SEARCH_SOLUTIONS]: require('./Query/SearchSolutionsHandler')({})
+    },
 
-  queryHandlers: {
-    [FIND_SOLUTIONS_FOR_ERROR]: require('./Query/FindSolutionForErrorHandler')({}),
-    [SEARCH_SOLUTIONS]: require('./Query/SearchSolutionsHandler')({})
-  },
-
-  eventHandlers: []
+    eventHandlers: []
+  }
 };
-//export var eventHandlers = [
-//];
