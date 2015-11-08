@@ -2,7 +2,7 @@
 
 module.exports = (search) => {
 
-  return async (error: Error) => {
+  return async function findSolutionForError (error: Error) {
       //search.search(queryByError(error));
 
       return {};

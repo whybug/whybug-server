@@ -1,22 +1,4 @@
 /* @flow weak */
-
-//class Domain {
-//  events: Array;
-//  actions: Array;
-//
-//  replay(event: Event) {}
-//}
-//
-//export default ({bus, db, search, mailer, R}) => {
-//
-//  bus.subscribeAll((event: Event) => {
-//    // todo: call async
-//    domains.forEach((domain) => domain.replay(event));
-//  });
-//
-//  return createStore(actionMiddleware, eventMiddleware, persistances);
-//};
-
 import {raiseEvent} from './Common/Action/RaiseEvent';
 import {validationErrorOccured} from './Common/Event/ValidationErrorOccured';
 import {
@@ -27,60 +9,28 @@ import {
   createStore}
 from './store';
 
-import {
-  actionValidators as commonActionValidators,
-  actionHandlers as commonActionHandlers
-} from './Common/Common';
+var contexts = [
+   require('./Common/Common'),
+   require('./Error/Error'),
+   require('./User/User'),
+   require('./Solution/Solution')
+];
 
-import {
-  actionValidators as errorActionValidators,
-  actionHandlers as errorActionHandlers
-} from './Error/Error';
+var domain = {
+  actionHandlers: Object.assign(...contexts.map(context => context.actionHandlers)),
+  actionValidators: Object.assign(...contexts.map(context => context.actionValidators)),
+  eventHandlers: Object.assign(...contexts.map(context => context.eventHandlers)),
+  queryHandlers: Object.assign(...contexts.map(context => context.queryHandlers))
+};
 
-import {
-  actionValidators as userActionValidators,
-  actionHandlers as userActionHandlers,
-  eventHandlers as userEventHandlers,
-} from './User/User';
+var validAction = createActionValidator(domain.actionValidators || {});
+var handleAction = createActionHandler(domain.actionHandlers || {});
+var handleEvent = createEventHandler(domain.eventHandlers || []);
+var handleQuery = createQueryHandler(domain.queryHandlers || {});
 
-import {
-  actionValidators as solutionActionValidators,
-  actionHandlers as solutionActionHandlers,
-  queryHandlers as solutionQueryHandlers,
-} from './Solution/Solution';
-
-/**
- * Validator for actions.
- *
- * @throws An error in case an action doesn't validate.
- */
-var validAction = createActionValidator(
-  commonActionValidators,
-  errorActionValidators,
-  userActionValidators
-  //solutionActionValidators
-);
-
-/**
- * Handlers for actions which modify the store.
- */
-var handleAction = createActionHandler(
-  commonActionHandlers,
-  errorActionHandlers,
-  //solutionActionHandlers,
-  userActionHandlers
-);
-
-/**
- * Handlers for events that happend in a store.
- */
-var handleEvent = createEventHandler(
-  userEventHandlers
-);
-
-var handleQuery = createQueryHandler(
-  solutionQueryHandlers
-);
+export function getStore() {
+  return createStore(actionMiddleware, eventMiddleware, queryMiddleware);
+}
 
 /**
  * Handles specified action.
@@ -125,8 +75,4 @@ async function eventMiddleware(store, event) {
 function queryMiddleware(store, query) {
   //console.log('handle query');
   return handleQuery(store, query);
-}
-
-export function getStore() {
-  return createStore(actionMiddleware, eventMiddleware, queryMiddleware);
 }
