@@ -1,5 +1,6 @@
 import {recordErrorValidator} from '../../src/app/Error/Action/RecordError';
 var Joi = require('joi');
+var jsc = require("jsverify");
 
 describe('recordErrorValidator', () => {
   var error;
@@ -46,4 +47,9 @@ describe('recordErrorValidator', () => {
     error.invalid = 'data';
     validate(error).error.message.should.equal('invalid is not allowed');
   });
+
+  jsc.property("message", "nestring", function (message) {
+    return validate({ ...error, message }).value.message == message;
+  });
+
 });
