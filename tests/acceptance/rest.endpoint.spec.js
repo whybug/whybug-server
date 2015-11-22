@@ -3,6 +3,7 @@ var request = require('supertest-as-promised');
 import {signUpUser} from '../../src/app/User/Action/SignUpUser';
 import {searchSolutions} from '../../src/app/Solution/Query/SearchSolutions';
 import {findSolutionsForError} from '../../src/app/Solution/Query/FindSolutionForError';
+import {recordError} from '../../src/app/Error/Action/RecordError';
 
 const errorMock = {
   "programminglanguage": "php",
@@ -22,9 +23,7 @@ const errorMock = {
   "checksum": '12345'
 };
 
-describe('Rest endpoint', () => {
-
-  describe('smoke tests', () => {
+describe('REST', () => {
 
     it('GET /', () =>
       request('localhost:8000')
@@ -36,36 +35,39 @@ describe('Rest endpoint', () => {
         })
     );
 
-    it('Action endpoint', () =>
-      request('localhost:8000')
-        .post('/api/rest/actions')
-        .set('Accept', 'application/json')
-        .send(signUpUser({loginService: 'google'}))
-        .expect(200, {})
-    );
+    describe('action endpoint', () => {
+      it('signup user', () =>
+        request('localhost:8000')
+          .post('/api/rest/actions')
+          .set('Accept', 'application/json')
+          .send(signUpUser({loginService: 'google'}))
+          .expect(200, {})
+      );
 
-    it('Query endpoint', () =>
-      request('localhost:8000')
-        .post('/api/rest/queries')
-        .set('Accept', 'application/json')
-        .send(findSolutionsForError({level: 'warn'}))
-        .expect(200, {})
-    );
+      it('record error', () =>
+        request('localhost:8000')
+          .post('/api/rest/actions')
+          .set('Accept', 'application/json')
+          .send(recordError(errorMock))
+          .expect('')
+          .expect(200)
+      );
+    });
 
-    it('Query solution', () =>
-      request('localhost:8000')
-        .get('/api/solutions?q=' + 'test')
-        .set('Accept', 'application/json')
-        .expect(200, { total: 0, solutions: [], aggregations: [] })
-    );
+    describe('query endpoint', () => {
+      it('find solutions', () =>
+        request('localhost:8000')
+          .post('/api/rest/queries')
+          .set('Accept', 'application/json')
+          .send(findSolutionsForError({level: 'warn'}))
+          .expect(200, {})
+      );
 
-    it('Post an error, get solutions', () =>
-      request('localhost:8000')
-        .post('/api/solutions/error')
-        .set('Accept', 'application/json')
-        .send(errorMock)
-        .expect(200)
-    );
-  });
-
+      it('Query solution', () =>
+        request('localhost:8000')
+          .get('/api/solutions?q=' + 'test')
+          .set('Accept', 'application/json')
+          .expect(200, { total: 0, solutions: [], aggregations: [] })
+      );
+    });
 });

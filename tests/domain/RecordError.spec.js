@@ -12,6 +12,7 @@ describe('recordErrorValidator', () => {
   beforeEach(() => {
     error = {
       "type": 'RECORD_ERROR',
+      "source": 'REST',
       "programminglanguage": "php",
       "programminglanguage_version": "5.4.24",
       "message": "Cannot access empty property",
@@ -46,6 +47,16 @@ describe('recordErrorValidator', () => {
   it('should not assign invalid data', () => {
     error.invalid = 'data';
     validate(error).error.message.should.equal('invalid is not allowed');
+  });
+
+  it('should be allowed for CLI', () => {
+    error.source = 'CLI';
+    validate(error).value.should.contain(error);
+  });
+
+  it('should be allowed for GRAPHQL', () => {
+    error.source = 'GRAPHQL';
+    validate(error).value.should.contain(error);
   });
 
   jsc.property("message", "nestring", function (message) {

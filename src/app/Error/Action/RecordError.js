@@ -2,12 +2,14 @@
 var uuidGenerator = require('node-uuid');
 
 import {RECORD_ERROR} from '../../Constants';
+import {EXTERNAL_SOURCES} from '../../Common/Domain/Sources';
 import {ErrorLevels} from '../Domain/Error';
 
 export function recordErrorValidator(Joi) {
   return {
     type: Joi.string().valid(RECORD_ERROR).required(),
     protocol_version: Joi.number().required(),
+    source: Joi.string().valid(EXTERNAL_SOURCES).required(),
     uuid: Joi.string().guid().default(uuidGenerator.v4()),
     solution_uuid: Joi.string().guid().required(),
     api_key: Joi.string().guid().allow(null).required(),

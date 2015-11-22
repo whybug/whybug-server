@@ -1,3 +1,5 @@
+import {REST} from '../app/Common/Domain/Sources';
+
 export function wrapQuery(store, query) {
   return store.query(setSource(query));
 }
@@ -32,7 +34,7 @@ export function wrapRoute(app, route, handler: Function) {
  * @returns {{source: string}}
  */
 function setSource(item) {
-  return {...item, source: 'rest'};
+  return {...item, source: REST};
 }
 
 /**
