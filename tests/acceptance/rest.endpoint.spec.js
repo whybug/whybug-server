@@ -23,7 +23,7 @@ const errorMock = {
   "checksum": '12345'
 };
 
-describe('REST', () => {
+describe('REST smoketest', () => {
 
     it('GET /', () =>
       request('localhost:8000')
@@ -49,7 +49,6 @@ describe('REST', () => {
           .post('/api/rest/actions')
           .set('Accept', 'application/json')
           .send(recordError(errorMock))
-          .expect('')
           .expect(200)
       );
     });
@@ -63,7 +62,7 @@ describe('REST', () => {
           .expect(200, {})
       );
 
-      it('Query solution', () =>
+      it('query solution', () =>
         request('localhost:8000')
           .get('/api/solutions?q=' + 'test')
           .set('Accept', 'application/json')
