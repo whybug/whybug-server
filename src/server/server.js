@@ -1,4 +1,10 @@
 /* @flow weak */
+/**
+ * Returns configured server ready to start.
+ *
+ * @param dependencies
+ * @returns {*}
+ */
 module.exports = (dependencies) => {
   var {express, routes} = dependencies;
   var store = require('../app/index')(dependencies).getStore();
@@ -12,14 +18,3 @@ module.exports = (dependencies) => {
 
   return app;
 };
-
-///**
-// * Returns configured server ready to start.
-// *
-// * @param dependencies
-// * @returns {*}
-// */
-//export default (dependencies) => {
-//  console.log('server.js');
-//
-//}
