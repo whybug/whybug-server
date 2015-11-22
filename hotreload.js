@@ -69,9 +69,13 @@ function runTest() {
     });
 
     console.log('Running tests...');
-    mocha.run(function (success) {
-      console.log('------------');
-    });
+    try {
+      mocha.run(function (success) {
+        console.log('------------');
+      });
+    } catch(e) {
+      console.error(e.stack);
+    }
   });
 }
 
