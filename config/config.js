@@ -1,4 +1,8 @@
-console.log(process.env.WEB_URL);
+/**
+ * Credentials and general configuration.
+ *
+ * Can be overwritten by a `.env` file.
+ */
 var config = {
   debug: process.env.DEBUG || false,
   web: {
