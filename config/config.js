@@ -1,8 +1,4 @@
-/**
- * Credentials and general configuration.
- *
- * Can be overwritten by a `.env` file.
- */
+console.log(process.env.WEB_URL);
 var config = {
   debug: process.env.DEBUG || false,
   web: {
@@ -14,6 +10,13 @@ var config = {
 if (typeof __BROWSER__ == 'undefined' || __BROWSER__ === false) {
 
   config.web.session_password = process.env.SESSION_PASSWORD || '';
+  if (config.debug === false) {
+    config.web.csp = {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      reportOnly: false,
+    };
+  }
 
   config.node = {
     host: process.env.WEB_HOST || '127.0.0.1',

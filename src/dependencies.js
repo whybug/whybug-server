@@ -17,14 +17,18 @@ var bus = require('./adapters/ServiceBus');
 var search = require('./adapters/Search')(elasticSearch);
 var mailer = require('./adapters/Mailer')();
 var db = require('./adapters/Db')();
-var bodyParser = require('body-parser');
 var express = require('express');
-var helmet = require('helmet');
 var expressApp = express();
 
 // Configure express middleware
+var bodyParser = require('body-parser');
 expressApp.use(bodyParser.json());
+var helmet = require('helmet');
 expressApp.use(helmet());
+if (config.web.csp) {
+  var csp = require('helmet-csp');
+  expressApp.use(csp(config.web.csp));
+}
 
 var server = require('http').createServer(expressApp);
 
