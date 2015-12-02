@@ -38,7 +38,7 @@
     "serve-favicon": "2.3.0",
     "source-map-support": "0.3.3",
     "superagent": "1.2.0",
-    "superagent-promise": "0.2.0"
+    "superagent-promise": "1.0.3"
   },
   "devDependencies": {
     "babel": "5.8.23",
