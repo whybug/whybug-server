@@ -35,6 +35,13 @@ describe('REST smoketest', () => {
             })
     );
 
+    it('GET /non-existing', () =>
+        request('localhost:8000')
+            .get('/non-existing')
+            .set('Accept', 'text/html')
+            .expect(404)
+    );
+
     describe('action endpoint', () => {
         it('signup user', () =>
             request('localhost:8000')
