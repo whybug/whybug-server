@@ -26,7 +26,6 @@ var webpackIsomorphicTools = new WebpackIsomorphicTools(require('./config/webpac
 
 // Include server routes as a middleware
 app.use(function (req, res, next) {
-    console.log('add rest endpoint');
     // Add rest endpoint
     require('./src/server/server')(dependencies)(req, res, next);
 });

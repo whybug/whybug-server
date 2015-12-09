@@ -18,6 +18,8 @@ module.exports = (express) => {
 
     app.use(favicon(__dirname + '/../web/assets/favicon.ico'));
 
+    app.use(express.static(__dirname + '/../../build/'));
+
     app.get('*', (req, res) => {
         let webRoutes = new WebRoutes(req.path);
         webRoutes.getMarkup((markup, data = {}) => {
