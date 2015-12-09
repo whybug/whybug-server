@@ -120,10 +120,13 @@ export class WebRoutes {
         let routes = this.getRoutes();
 
         Router.run(routes, this.location, (Handler, state) => {
-            this.resolveData(state).then((data) => {
-                callback(React.renderToString(<Handler {...data} />), data);
-            }).catch(error => {
-                console.log(error.stack);
+            if (!state.pathname) {
+                return callback('NotFound', {});
+            }
+
+            this.resolveData(state).then((data) =>
+                callback(React.renderToString(<Handler {...data} />), data)
+            ).catch(error => {
                 callback('An error occurred ' + '<pre>' + error.stack + '</pre>');
             });
         });

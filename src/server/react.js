@@ -21,8 +21,11 @@ module.exports = (express) => {
     app.get('*', (req, res) => {
         let webRoutes = new WebRoutes(req.path);
         webRoutes.getMarkup((markup, data = {}) => {
-            //if (request.auth.isAuthenticated) {
-            //  data.user = request.auth.credentials;
+            if (markup === 'NotFound') {
+                return res.status(404).send();
+            }
+            //if (req.auth.isAuthenticated) {
+            //  data.user = req.auth.credentials;
             //}
             var page = template
                 .replace('{{{ content }}}', markup)
