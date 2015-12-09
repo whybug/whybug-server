@@ -2,12 +2,15 @@ var Joi = require('joi');
 var Promise = require('bluebird');
 var joiValidate = Promise.promisify(Joi.validate);
 
-export function validation(schemas, item, options = {abortEarly: false}) {
-    if (!schemas[item.type]) {
-        throw Error(`Item "${item.type}" not found for validation.`);
+export function validation(schemas, message, options = {abortEarly: false}) {
+    if (!message.type) {
+        throw Error(`Message has no type.`);
+    }
+    if (!schemas[message.type]) {
+        throw Error(`No validator found for type "${message.type}".`);
     }
 
-    return joiValidate(item, schemas[item.type], options);
+    return joiValidate(message, schemas[message.type], options);
 }
 
 export function merge(validatorsList) {

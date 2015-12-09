@@ -7,18 +7,19 @@ export function createActionValidator(...actionValidations) {
         try {
             return await validate(action);
         } catch (e) {
-            throw {message: e.name, details: e.details};
+            throw Error(e.name, e.details);
         }
     };
 }
 
 export function createActionHandler(...actionHandlers) {
     var handlers = Object.assign(...actionHandlers);
-    //console.log("Action handlers\n", handlers);
 
     return (store, action) => {
+        if (!action.type) {
+            throw Error(`No type given for action`);
+        }
         if (!handlers[action.type]) {
-            //return console.log(`No handler for action "${action.type}"`);
             throw Error(`No handler for action "${action.type}".`);
         }
 
@@ -36,12 +37,9 @@ export function createEventHandler(...eventHandlers) {
         })
     });
 
-    //console.log('Event handlers\n', handlers);
-
     return async (store, event) => {
         if (!handlers[event.type]) {
-            return console.log(`No handler for event "${event.type}"`);
-            //throw Error(`No handler for event "${event.type}".`);
+            throw Error(`No handler for event "${event.type}".`);
         }
 
         return await handlers[event.type](store, event);
@@ -50,12 +48,10 @@ export function createEventHandler(...eventHandlers) {
 
 export function createQueryHandler(...queryHandlers) {
     var handlers = Object.assign(...queryHandlers);
-    //console.log("Query handlers\n", handlers);
 
     return async (store, query) => {
         if (!handlers[query.type]) {
-            return console.log(`No handler for query "${query.type}"`);
-            //throw Error(`No handler for query "${query.type}".`);
+            throw Error(`No handler for query "${query.type}".`);
         }
 
         return await handlers[query.type](query);

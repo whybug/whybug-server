@@ -54,7 +54,7 @@ module.exports = (dependencies) => {
                     store.dispatch(raiseEvent(validationErrorOccured(error), action));
                     break;
                 default:
-                    console.error(error);
+                    console.error(error.message, error.stack);
             }
 
             throw error;
