@@ -7,30 +7,30 @@ import {sendWelcomeEmailHandler} from './Action/SendWelcomeEmailHandler'
 import {whenUserSignedUpSendWelcomeEmail} from './Event/WhenUserSignedUpSendWelcomeEmail'
 
 module.exports = () => {
-  return {
+    return {
 
-    actionValidators: {
-      // $FlowIssue: suppressing this error until it is fixed
-      [SIGNUP_USER]: signUpUserValidator,
-        // $FlowIssue: suppressing this error until it is fixed
-        [SEND_WELCOME_EMAIL]: sendWelcomeEmailValidator
-    },
+        actionValidators: {
+            // $FlowIssue: suppressing this error until it is fixed
+            [SIGNUP_USER]: signUpUserValidator,
+            // $FlowIssue: suppressing this error until it is fixed
+            [SEND_WELCOME_EMAIL]: sendWelcomeEmailValidator
+        },
 
-    actionHandlers: {
-      // $FlowIssue: suppressing this error until it is fixed
-      [SIGNUP_USER]: signUpUserHandler,
-        // $FlowIssue: suppressing this error until it is fixed
-        [SEND_WELCOME_EMAIL]: sendWelcomeEmailHandler
-    },
+        actionHandlers: {
+            // $FlowIssue: suppressing this error until it is fixed
+            [SIGNUP_USER]: signUpUserHandler,
+            // $FlowIssue: suppressing this error until it is fixed
+            [SEND_WELCOME_EMAIL]: sendWelcomeEmailHandler
+        },
 
-    eventHandlers: [
-      {
-        events: [USER_SIGNED_UP],
-        handler: whenUserSignedUpSendWelcomeEmail
-      }
-    ],
+        eventHandlers: [
+            {
+                events: [USER_SIGNED_UP],
+                handler: whenUserSignedUpSendWelcomeEmail
+            }
+        ],
 
-      queryHandlers: {}
-  }
+        queryHandlers: {}
+    }
 };
 

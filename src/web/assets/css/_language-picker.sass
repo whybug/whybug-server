@@ -3,49 +3,49 @@
  */
 
 .language-picker
-  text-align: center
-  position: relative
-  height: 45px
+    text-align: center
+    position: relative
+    height: 45px
 
 .language-picker__item
-  position: relative
-  font-size: 15px
-  padding: 9px
-  border: 1px solid #e6e6e6
-  background-color: white
-  border-radius: initial
-  border-right: none
-  transition: background-color 0.2s
+    position: relative
+    font-size: 15px
+    padding: 9px
+    border: 1px solid #e6e6e6
+    background-color: white
+    border-radius: initial
+    border-right: none
+    transition: background-color 0.2s
 
 .language-picker__item:after
-  display: block
-  position: absolute
-  margin: auto
-  left: 0
-  right: 0
-  bottom: -3px
-  width: 0
-  height: 3px
-  background-color: #e6e6e6
-  content: ""
-  transition: width 0.2s
+    display: block
+    position: absolute
+    margin: auto
+    left: 0
+    right: 0
+    bottom: -3px
+    width: 0
+    height: 3px
+    background-color: #e6e6e6
+    content: ""
+    transition: width 0.2s
 
 .language-picker__item.active:after,
 .language-picker__item:hover:after
-  width: 100%
+    width: 100%
 
 .language-picker__item.active
-  background-color: #f3f3f3
+    background-color: #f3f3f3
 
 .language-picker__item:first-child
-  border-top-left-radius: 4px
-  border-bottom-left-radius: 4px
+    border-top-left-radius: 4px
+    border-bottom-left-radius: 4px
 
 .language-picker__item:last-child
-  border-top-right-radius: 4px
-  border-bottom-right-radius: 4px
-  border-right: 1px solid #e6e6e6
+    border-top-right-radius: 4px
+    border-bottom-right-radius: 4px
+    border-right: 1px solid #e6e6e6
 
 @media screen and (max-width: 479px)
-  .language-picker
-    height: 65px
+    .language-picker
+        height: 65px

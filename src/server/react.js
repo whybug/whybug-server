@@ -14,23 +14,23 @@ var fs = require('fs');
 var template = fs.readFileSync(__dirname + '/../web/common/index.html', 'utf8');
 
 module.exports = (express) => {
-  var app = express.Router();
+    var app = express.Router();
 
-  app.use(favicon(__dirname + '/../web/assets/favicon.ico'));
+    app.use(favicon(__dirname + '/../web/assets/favicon.ico'));
 
-  app.get('*', (req, res) => {
-    let webRoutes = new WebRoutes(req.path);
-    webRoutes.getMarkup((markup, data = {}) => {
-      //if (request.auth.isAuthenticated) {
-      //  data.user = request.auth.credentials;
-      //}
-      var page = template
-        .replace('{{{ content }}}', markup)
-        .replace('{{{ data }}}', JSON.stringify(data));
+    app.get('*', (req, res) => {
+        let webRoutes = new WebRoutes(req.path);
+        webRoutes.getMarkup((markup, data = {}) => {
+            //if (request.auth.isAuthenticated) {
+            //  data.user = request.auth.credentials;
+            //}
+            var page = template
+                .replace('{{{ content }}}', markup)
+                .replace('{{{ data }}}', JSON.stringify(data));
 
-      res.send(page);
+            res.send(page);
+        });
     });
-  });
 
-  return app;
+    return app;
 };

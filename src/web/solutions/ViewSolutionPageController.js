@@ -7,23 +7,23 @@ import {NotFoundPage} from '../common/NotFoundPage';
 
 export default React.createClass({
 
-  statics: {
-    fetchData(params, query) {
-      return WhybugApi.findSolutionByUuid(params.slug);
+    statics: {
+        fetchData(params, query) {
+            return WhybugApi.findSolutionByUuid(params.slug);
+        }
+    },
+
+    propTypes: {
+        solution_view: React.PropTypes.object.isRequired
+    },
+
+    render() {
+        var solution = this.props.solution_view;
+
+        if (!solution) {
+            return <NotFoundPage />;
+        }
+
+        return <ViewSolutionPage solution={solution}/>;
     }
-  },
-
-  propTypes: {
-    solution_view: React.PropTypes.object.isRequired
-  },
-
-  render() {
-    var solution = this.props.solution_view;
-
-    if (!solution) {
-      return <NotFoundPage />;
-    }
-
-    return <ViewSolutionPage solution={solution} />;
-  }
 });

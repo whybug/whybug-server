@@ -4,19 +4,19 @@ import {recordError, recordErrorValidator} from './Action/RecordError'
 import {recordErrorHandler} from './Action/RecordErrorHandler'
 
 module.exports = () => {
-  return {
-    actionValidators: {
-      // $FlowIssue: suppressing this error until it is fixed
-      [RECORD_ERROR]: recordErrorValidator
-    },
+    return {
+        actionValidators: {
+            // $FlowIssue: suppressing this error until it is fixed
+            [RECORD_ERROR]: recordErrorValidator
+        },
 
-    actionHandlers: {
-      // $FlowIssue: suppressing this error until it is fixed
-      [RECORD_ERROR]: recordErrorHandler
-    },
+        actionHandlers: {
+            // $FlowIssue: suppressing this error until it is fixed
+            [RECORD_ERROR]: recordErrorHandler
+        },
 
-    eventHandlers: [],
-      queryHandlers: {}
-  }
+        eventHandlers: [],
+        queryHandlers: {}
+    }
 };
 

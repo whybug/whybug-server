@@ -1,11 +1,11 @@
 import {REST} from '../app/Common/Domain/Sources';
 
 export function wrapQuery(store, query) {
-  return store.query(setSource(query));
+    return store.query(setSource(query));
 }
 
 export function wrapDispatch(store, action) {
-  return store.dispatch(setSource(action));
+    return store.dispatch(setSource(action));
 }
 
 /**
@@ -15,16 +15,16 @@ export function wrapDispatch(store, action) {
  * @param {{method: string, path: string}} route
  * @param {Func} handler Callback returning promise.
  */
-export function wrapRoute(app, route, handler: Function) {
-  var method = route.method.toLowerCase();
+export function wrapRoute(app, route, handler:Function) {
+    var method = route.method.toLowerCase();
 
-  app[method](route.path, async (req, res) => {
-    try {
-      res.status(200).send(await handler(req, res));
-    } catch(e) {
-      res.status(400).send(formatException(e, req.body));
-    }
-  });
+    app[method](route.path, async (req, res) => {
+        try {
+            res.status(200).send(await handler(req, res));
+        } catch (e) {
+            res.status(400).send(formatException(e, req.body));
+        }
+    });
 }
 
 /**
@@ -34,7 +34,7 @@ export function wrapRoute(app, route, handler: Function) {
  * @returns {{source: string}}
  */
 function setSource(item) {
-  return {...item, source: REST};
+    return {...item, source: REST};
 }
 
 /**
@@ -45,9 +45,9 @@ function setSource(item) {
  * @returns {{error: string, details: Object, payload: Object}}
  */
 function formatException(e, payload = {}) {
-  return {
-    error: e.message || 'Unknown error',
-    details: e.details || {},
-    payload: payload
-  };
+    return {
+        error: e.message || 'Unknown error',
+        details: e.details || {},
+        payload: payload
+    };
 }

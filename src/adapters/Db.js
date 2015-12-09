@@ -1,9 +1,6 @@
 export default () => {
-  return {
-
-  };
+    return {};
 }
-
 
 //var uuid = require('node-uuid');
 //var EventStoreClient = require('event-store-client');

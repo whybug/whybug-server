@@ -5,21 +5,21 @@
  */
 export default (zeromq) => {
 
-  const publish = (event: Event) => {
-    zeromq.publish(event);
-  };
+    const publish = (event:Event) => {
+        zeromq.publish(event);
+    };
 
-  const subscribe = (event: Event, callback: Function) => {
-    zeromq.subscribe(event.name, callback);
-  };
+    const subscribe = (event:Event, callback:Function) => {
+        zeromq.subscribe(event.name, callback);
+    };
 
-  const subscribeAll = (callback: Function) => {
-    zeromq.subscribeAll(callback);
-  };
+    const subscribeAll = (callback:Function) => {
+        zeromq.subscribeAll(callback);
+    };
 
-  return {
-    publish,
-    subscribe,
-    subscribeAll
-  };
+    return {
+        publish,
+        subscribe,
+        subscribeAll
+    };
 }

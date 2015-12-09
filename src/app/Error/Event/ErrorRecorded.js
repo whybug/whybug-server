@@ -1,8 +1,8 @@
 /* @flow weak */
 type ErrorStore = {
-  logError: Function;
+    logError: Function;
 }
 
-export function errorRecorded(errorStore: ErrorStore, error: Error) {
-  errorStore.logError(error);
+export function errorRecorded(errorStore:ErrorStore, error:Error) {
+    errorStore.logError(error);
 }

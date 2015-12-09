@@ -2,7 +2,8 @@
 <head>
     <meta charset="UTF-8">
     <title>whybug</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <!--<link rel="stylesheet" href="/main.css" />-->
 </head>
 <body>
@@ -12,17 +13,24 @@
         <div class="w-row selling-points">
             <div class="w-col w-col-4">
                 <h3 class="grey-heading">Advanced debugging.</h3>
+
                 <p>Get solutions to errors right where they happen.
-                    No more searching for an explanation of cryptic messages.</p>
+                    No more searching for an explanation of cryptic
+                    messages.</p>
             </div>
             <div class="w-col w-col-4">
                 <h3 class="grey-heading">Learn from experts.</h3>
+
                 <p>Some errors occur only in a specific context.
-                    Leverage the knowledge of others who already solved the error before.</p>
+                    Leverage the knowledge of others who already solved the
+                    error before.</p>
             </div>
             <div class="w-col w-col-4">
                 <h3 class="grey-heading">Make better software.</h3>
-                <p>As a project maintainer you can make errors more understandable or prevent them from happening. Your users will thank you.&nbsp;</p>
+
+                <p>As a project maintainer you can make errors more
+                    understandable or prevent them from happening. Your users
+                    will thank you.&nbsp;</p>
             </div>
         </div>
     </div>
@@ -31,19 +39,31 @@
 <section class="section social-section">
     <div class="w-container">
         <h3>Stay in touch.</h3>
+
         <p>Would you like to be notified when we add new features?</p>
+
         <div class="w-form">
-            <form id="email-form-2" name="email-form-2" data-name="Email Form 2">
+            <form id="email-form-2" name="email-form-2"
+                  data-name="Email Form 2">
                 <div class="w-row">
                     <div class="w-col w-col-4">
-                        <input class="w-input field" id="name" type="text" placeholder="Enter your name..." name="name" data-name="Name" required="required">
+                        <input class="w-input field" id="name" type="text"
+                               placeholder="Enter your name..." name="name"
+                               data-name="Name" required="required">
                     </div>
                     <div class="w-col w-col-4">
-                        <input class="w-input field" id="email" type="text" placeholder="Enter your email..." name="email" data-name="email" required="required">
+                        <input class="w-input field" id="email" type="text"
+                               placeholder="Enter your email..." name="email"
+                               data-name="email" required="required">
                     </div>
                     <div class="w-col w-col-4">
-                        <input class="w-button button submit-button" type="submit" value="Notify me" data-wait="Please wait...">
-                        <div class="text-no-spam">We don’t send spam. Unsubscribe whenever you like.</div>
+                        <input class="w-button button submit-button"
+                               type="submit" value="Notify me"
+                               data-wait="Please wait...">
+
+                        <div class="text-no-spam">We don’t send spam.
+                            Unsubscribe whenever you like.
+                        </div>
                     </div>
                 </div>
             </form>
@@ -59,12 +79,14 @@
 
 <div class="section grey footer-section">
     <!--<div class="w-container">-->
-        <!--<a class="social-link icon-facebook-square" href="http://facebook.com/whybug"></a>-->
-        <!--<a class="social-link icon-googleplus" href="http://plus.google.com/whybug"></a>-->
-        <!--<a class="social-link icon-twitter" href="http://twitter.com/whybugapp"></a>-->
-        <!--<a class="social-link icon-email" href="mailto:info@whybug.com"></a>-->
+    <!--<a class="social-link icon-facebook-square" href="http://facebook.com/whybug"></a>-->
+    <!--<a class="social-link icon-googleplus" href="http://plus.google.com/whybug"></a>-->
+    <!--<a class="social-link icon-twitter" href="http://twitter.com/whybugapp"></a>-->
+    <!--<a class="social-link icon-email" href="mailto:info@whybug.com"></a>-->
     <!--</div>-->
-    <div class="copyright-text">© 2015 made with <span class="icon-heart"></span> by Adrian Philipp</div>
+    <div class="copyright-text">© 2015 made with <span
+        class="icon-heart"></span> by Adrian Philipp
+    </div>
 </div>
 
 </body>
@@ -72,20 +94,20 @@
 
     function loadFont() {
         var font =
-                "@font-face {" +
-                "font-family: 'icomoon';" +
-                "src:url('../fonts/icomoon.eot?-nl05o8');" +
-                "src:url('../fonts/icomoon.eot?#iefix-nl05o8') format('embedded-opentype')," +
-                "url('../fonts/icomoon.woff') format('woff')," +
-                "url('../fonts/icomoon.svg?-nl05o8#icomoon') format('svg');" +
-                "font-weight: normal;" +
-                "font-style: normal;" +
-                "}";
+            "@font-face {" +
+            "font-family: 'icomoon';" +
+            "src:url('../fonts/icomoon.eot?-nl05o8');" +
+            "src:url('../fonts/icomoon.eot?#iefix-nl05o8') format('embedded-opentype')," +
+            "url('../fonts/icomoon.woff') format('woff')," +
+            "url('../fonts/icomoon.svg?-nl05o8#icomoon') format('svg');" +
+            "font-weight: normal;" +
+            "font-style: normal;" +
+            "}";
         var style = document.styleSheets[0];
-        if ( "function" === typeof(style.insertRule) ) {
+        if ("function" === typeof(style.insertRule)) {
             style.insertRule(font, 0); // Firefox, Safari, Chrome
         }
-        else if ( "string" === typeof(style.cssText) ) {
+        else if ("string" === typeof(style.cssText)) {
             style.cssText = font; // IE
         }
     }
@@ -107,6 +129,13 @@
         window.attachEvent("onload", lazyload);
     else window.onload = lazyload;
 
-    __DATA__ = {{{ data }}};
+    __DATA__ = {
+    {
+        {
+            data
+        }
+    }
+    }
+    ;
 </script>
 </html>

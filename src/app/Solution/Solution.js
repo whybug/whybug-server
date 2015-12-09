@@ -5,18 +5,18 @@ import {searchSolutionsHandler} from './Query/SearchSolutionsHandler';
 
 module.exports = ({search}) => {
 
-  return {
-    actionValidators: {
-      //[INDEX_SOLUTION]: indexSolutionHandler
-    },
+    return {
+        actionValidators: {
+            //[INDEX_SOLUTION]: indexSolutionHandler
+        },
 
-    actionHandlers: {},
+        actionHandlers: {},
 
-    queryHandlers: {
-      [FIND_SOLUTIONS_FOR_ERROR]: require('./Query/FindSolutionForErrorHandler')(search),
-      [SEARCH_SOLUTIONS]: require('./Query/SearchSolutionsHandler')(search)
-    },
+        queryHandlers: {
+            [FIND_SOLUTIONS_FOR_ERROR]: require('./Query/FindSolutionForErrorHandler')(search),
+            [SEARCH_SOLUTIONS]: require('./Query/SearchSolutionsHandler')(search)
+        },
 
-    eventHandlers: []
-  }
+        eventHandlers: []
+    }
 };

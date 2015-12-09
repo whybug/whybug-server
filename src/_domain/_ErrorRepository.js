@@ -4,36 +4,34 @@ import {ErrorLog} from './ErrorLog';
  * @param {es.Client} es
  * @constructor
  */
-export class ErrorRepository
-{
-  constructor(es, bookshelf) {
-    this.es = es;
-    this.index = 'whybug';
-    this.type = 'error_log';
-    this.model = bookshelf.model('ErrorLog', ErrorLog.bookshelf());
-  }
+export class ErrorRepository {
+    constructor(es, bookshelf) {
+        this.es = es;
+        this.index = 'whybug';
+        this.type = 'error_log';
+        this.model = bookshelf.model('ErrorLog', ErrorLog.bookshelf());
+    }
 
-  /**
-   * Stores a ErrorLog.
-   *
-   * @param {ErrorLog} errorLog
-   */
-  store(errorLog) {
-    this.es.index({
-      index: this.index,
-      type: this.type,
-      id: errorLog.uuid,
-      body: errorLog
-    }, function (error) {
+    /**
+     * Stores a ErrorLog.
+     *
+     * @param {ErrorLog} errorLog
+     */
+    store(errorLog) {
+        this.es.index({
+            index: this.index,
+            type: this.type,
+            id: errorLog.uuid,
+            body: errorLog
+        }, function (error) {
 
-    });
+        });
 
-    // Store in Mysql.
-    new (this.model)(errorLog).save();
-  }
+        // Store in Mysql.
+        new (this.model)(errorLog).save();
+    }
 
 }
-
 
 //findByQuery(query = '*') {
 //  return this.search(

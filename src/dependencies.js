@@ -11,7 +11,7 @@ var config = require('../config/config');
 var routes = require('../config/routes');
 var uuid = require('node-uuid');
 var elasticSearch = new (require('elasticsearch')).Client({
-  host: config.elasticsearch.host + ':' + config.elasticsearch.port
+    host: config.elasticsearch.host + ':' + config.elasticsearch.port
 });
 var bus = require('./adapters/ServiceBus');
 var search = require('./adapters/Search')(elasticSearch);
@@ -26,25 +26,25 @@ expressApp.use(bodyParser.json());
 var helmet = require('helmet');
 expressApp.use(helmet());
 if (config.web.csp) {
-  var csp = require('helmet-csp');
-  expressApp.use(csp(config.web.csp));
+    var csp = require('helmet-csp');
+    expressApp.use(csp(config.web.csp));
 }
 
 var server = require('http').createServer(expressApp);
 
 // provides a method to start the server
 server.listenApp = function (callback) {
-  return server.listen(config.node.port, config.node.host, callback)
+    return server.listen(config.node.port, config.node.host, callback)
 };
 
 export default {
-  bus,
-  express,
-  expressApp,
-  db,
-  mailer,
-  routes,
-  search,
-  server
+    bus,
+    express,
+    expressApp,
+    db,
+    mailer,
+    routes,
+    search,
+    server
 };
 

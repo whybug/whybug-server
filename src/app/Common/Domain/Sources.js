@@ -12,21 +12,21 @@ export var CLI = 'CLI';
  * Sources inside of the domain.
  */
 export var INTERNAL_SOURCES = [
-  INTERNAL
+    INTERNAL
 ];
 
 /**
  * Sources outside of the domain, usually endpoints.
  */
 export var EXTERNAL_SOURCES = [
-  REST,
-  GRAPHQL,
-  CLI
+    REST,
+    GRAPHQL,
+    CLI
 ];
 
 export var ALL_SOURCES = [
-  // $FlowIssue: suppressing this error until it is fixed
-  ...EXTERNAL_SOURCES,
-  // $FlowIssue: suppressing this error until it is fixed
-  ...INTERNAL_SOURCES
+    // $FlowIssue: suppressing this error until it is fixed
+    ...EXTERNAL_SOURCES,
+    // $FlowIssue: suppressing this error until it is fixed
+    ...INTERNAL_SOURCES
 ];

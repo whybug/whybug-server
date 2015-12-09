@@ -9,10 +9,10 @@ var Router = require('react-router');
  * when path matches.
  */
 export default React.createClass({
-  //propTypes: { to: string };
+    //propTypes: { to: string };
 
-  render() {
-    return <Router.Link {...this.props} key={this.props.to} /> ;
-  }
+    render() {
+        return <Router.Link {...this.props} key={this.props.to}/>;
+    }
 });
 

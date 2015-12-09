@@ -4,7 +4,6 @@ import dependencies from '../dependencies';
 
 const store = require('../app/index').getStore(dependencies);
 
-
 //todo https://github.com/harthur/nomnom
 
 //argv.usage('Usage: $0 <command> [options]')
@@ -17,7 +16,6 @@ const store = require('../app/index').getStore(dependencies);
 //    .argv
 //  })
 //;
-
 
 // See https://github.com/tj/commander.js
 //program
@@ -43,9 +41,9 @@ program.parse(process.argv);
  * @param action
  */
 export function dispatch(action) {
-  return store.dispatch({
-    ...action,
-    source: 'cli'
-  });
+    return store.dispatch({
+        ...action,
+        source: 'cli'
+    });
 }
 

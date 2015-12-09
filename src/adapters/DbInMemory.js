@@ -1,7 +1,7 @@
 var store = {
-  solutions: [ ],
+    solutions: [],
 
-  errors: [ ],
+    errors: [],
 
-  users: [ ]
+    users: []
 };
