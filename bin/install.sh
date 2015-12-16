@@ -1,9 +1,7 @@
 #!/bin/sh
-source ./.env
-
 echo "updating dependencies..."
 npm install --unsafe-perm
 
 echo "building assets..."
-node_modules/.bin/webpack --config config/webpack.config.js -p 2<&1
-
+npm run build:frontend
+npm run build:server

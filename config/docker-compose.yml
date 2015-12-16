@@ -1,0 +1,35 @@
+web:
+  image: whybug-server
+  ports:
+  - 8000:8000/tcp
+  labels:
+    io.rancher.service.hash: 04742c5f1c5c4b0bc5334812266231b25123ae3f
+  links:
+  - postgres:db
+  - elasticsearch:search
+  tty: true
+  hostname: web
+  stdin_open: true
+
+elasticsearch:
+  image: library/elasticsearch:2.1
+  labels:
+    io.rancher.service.hash: 21cf9e34f76f73539f874cebf314089c3fd8b00f
+  tty: true
+  hostname: search
+  volumes:
+  - $PWD/elasticsearch:/usr/share/elasticsearch/config
+  stdin_open: true
+
+postgres:
+  image: library/postgres:9.5
+  labels:
+    io.rancher.service.hash: 3cdf1ca99c6e48a1b4e32fb481b53a3f53c4c867
+  environment:
+    POSTGRES_ROOT_PASSWORD: dOn5af1nAk1wit8aW6yet3pAg3
+    POSTGRES_DATABASE: whybug
+    POSTGRES_USER: whybug
+    POSTGRES_PASSWORD: dOn5af1nAk1wit8aW6yet3pAg3
+  tty: true
+  hostname: db
+  stdin_open: true

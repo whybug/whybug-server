@@ -1,0 +1,17 @@
+elasticsearch:
+  scale: 1
+  metadata: &id001
+    io.rancher.service.hash: df9cd4d85c339a122fdfd3205b4dda147770c879
+server:
+  scale: 1
+  metadata: *id001
+  health_check:
+    port: 8000
+    interval: 2000
+    unhealthy_threshold: 3
+    request_line: GET /healthcheck HTTP/1.0
+    healthy_threshold: 2
+    response_timeout: 2000
+postgres:
+  scale: 1
+  metadata: *id001
