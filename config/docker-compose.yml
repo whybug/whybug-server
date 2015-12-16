@@ -1,5 +1,5 @@
 web:
-  image: whybug-server
+  image: quay.io/whybug/whybug-server
   ports:
   - 8000:8000/tcp
   labels:

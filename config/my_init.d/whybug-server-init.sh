@@ -52,5 +52,4 @@ whybug_git
 #fi
 
 /opt/whybug-server/bin/install.sh
-
-/opt/whybug-server/bin/start.sh
+#/opt/whybug-server/bin/start.sh
