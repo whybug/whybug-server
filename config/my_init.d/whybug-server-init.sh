@@ -1,9 +1,12 @@
 #!/bin/bash
-rm -fr /opt/whybug-server
 
-whybug_git() {
-    git clone --depth=1 https://github.com/whybug/whybug-server.git /opt/whybug-server
-}
+# todo:
+# - run migrations
+# - startup services
+
+#whybug_git() {
+#    git clone --depth=1 https://github.com/whybug/whybug-server.git /opt/whybug-server
+#}
 
 #if [[ "$USE_GIT" == "true" && "$GIT_USER" && "$GIT_PASS" && "$GIT_REPO" ]]
 #then
@@ -12,7 +15,7 @@ whybug_git() {
 #    whybug_http
 #fi
 # For now use git
-whybug_git
+#whybug_git
 
 # == Configuration section
 
@@ -51,5 +54,4 @@ whybug_git
 #         /opt/observium/adduser.php $OBSERVIUM_USER $OBSERVIUM_PASSWORD 10
 #fi
 
-/opt/whybug-server/bin/install.sh
 #/opt/whybug-server/bin/start.sh

@@ -14,10 +14,9 @@
 #                                 socket instead of using TCP.
 #
 #
-FROM phusion/baseimage:0.9.16
+FROM phusion/baseimage:0.9.18
 MAINTAINER Adrian Philipp <info@whybug.com>
 EXPOSE 8000/tcp
-VOLUME ["/opt/whybug-server"]
 
 # === phusion/baseimage pre-work
 CMD ["/sbin/my_init"]
@@ -35,20 +34,17 @@ ENV LANGUAGE en_US.UTF-8
 # Install locales
 RUN locale-gen en_US.UTF-8
 
-# Install whybug prereqs
-RUN apt-get update -q && \
-    apt-get install -y --no-install-recommends \
-      nodejs \
-      npm \
-      git \
-      whois
+# Install nodejs, also runs apt-get update
+RUN curl --fail -ssL -o /tmp/setup-nodejs https://deb.nodesource.com/setup_4.x
+RUN bash /tmp/setup-nodejs
+RUN rm -f /tmp/setup-nodejs
 
-RUN ln -s /usr/bin/nodejs /usr/bin/node
+# Install git
+RUN apt-get install -y --no-install-recommends nodejs git
 
-RUN mkdir -p \
-        /config \
-        /opt/whybug-server \
-        /var/www/whybug-server
+# Load code
+RUN cd /opt/ && git clone https://github.com/whybug/whybug-server.git
+RUN cd /opt/whybug-server && ./bin/install.sh
 
 # === Webserver - Apache + PHP5
 
