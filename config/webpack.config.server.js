@@ -4,34 +4,46 @@ var fs = require('fs');
 
 var nodeModules = {};
 fs.readdirSync('node_modules')
-  .filter(function(x) {
-    return ['.bin'].indexOf(x) === -1;
-  })
-  .forEach(function(mod) {
-    nodeModules[mod] = 'commonjs ' + mod;
-  });
+    .filter(function (x) {
+        return ['.bin'].indexOf(x) === -1;
+    })
+    .forEach(function (mod) {
+        nodeModules[mod] = 'commonjs ' + mod;
+    });
 
 module.exports = {
-  entry: './src/server/index.js',
-  target: 'node',
-  output: {
-    path: path.join(__dirname, '../build'),
-    filename: 'server.js'
-  },
-  node: {
-    __dirname: true
-  },
-  module: {
-    loaders: [
-      {test: /\.json$/, loaders: ['json'] },
-      {test: /\.js$/, exclude: /node_modules/, loaders: ['babel?optional[]=asyncToGenerator&blacklist[]=regenerator'] },
-    ]
-  },
-  externals: nodeModules,
-  plugins: [
-    new webpack.IgnorePlugin(/\.(css|less)$/),
-    new webpack.BannerPlugin('require("source-map-support").install();',
-      { raw: true, entryOnly: false })
-  ],
-  devtool: 'sourcemap'
-}
+    entry: './src/server/index.js',
+    target: 'node',
+    output: {
+        path: path.join(__dirname, '../build'),
+        filename: 'server.js'
+    },
+    node: {
+        __dirname: true
+    },
+    module: {
+        loaders: [
+            {test: /\.json$/, loaders: ['json']},
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loaders: ['babel?optional[]=asyncToGenerator&blacklist[]=regenerator']
+            }
+        ]
+    },
+    externals: nodeModules,
+    plugins: [
+        // Set a global variable to indicate if the javascript
+        // code is executed in the browser.
+        new webpack.DefinePlugin({
+            __BROWSER__: false,
+            "process.env": {
+                "NODE_ENV": JSON.stringify("production") // This has effect on the react lib size
+            }
+        }),
+        new webpack.IgnorePlugin(/\.(css|less)$/),
+        new webpack.BannerPlugin('require("source-map-support").install();',
+            {raw: true, entryOnly: false})
+    ],
+    devtool: 'sourcemap'
+};
