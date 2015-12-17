@@ -54,4 +54,4 @@
 #         /opt/observium/adduser.php $OBSERVIUM_USER $OBSERVIUM_PASSWORD 10
 #fi
 
-#/opt/whybug-server/bin/start.sh
+/opt/whybug-server/bin/start.sh

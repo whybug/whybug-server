@@ -1,5 +1,6 @@
 web:
   image: quay.io/whybug/whybug-server
+  env_file: ../.env
   ports:
   - 8000:8000/tcp
   labels:
