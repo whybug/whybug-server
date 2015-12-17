@@ -5,6 +5,7 @@ web:
   - 8000:8000/tcp
   labels:
     io.rancher.service.hash: 04742c5f1c5c4b0bc5334812266231b25123ae3f
+    io.rancher.container.pull_image: always
   links:
   - postgres:db
   - elasticsearch:search
