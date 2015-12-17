@@ -1,4 +1,7 @@
 #!/bin/sh
+cd "$(dirname "$0")"
+cd ..
+
 echo "Running migrations..."
 #mysql -e "CREATE DATABASE IF NOT EXISTS whybug;" -h $MYSQL_HOST
 #node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js migrate:latest
