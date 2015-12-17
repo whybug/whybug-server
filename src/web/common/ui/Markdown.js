@@ -11,7 +11,7 @@ export var Markdown = React.createClass({
         return (
             <div
                 className='markdown-body'
-                dangerouslySetInnerHTML={{'__html': marked(this.props.text)}}/>
+                dangerouslySetInnerHTML={{'__html': marked(this.props.text)}}></div>
         );
     }
 });
