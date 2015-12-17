@@ -33,14 +33,6 @@ module.exports = {
     },
     externals: nodeModules,
     plugins: [
-        // Set a global variable to indicate if the javascript
-        // code is executed in the browser.
-        new webpack.DefinePlugin({
-            __BROWSER__: false,
-            "process.env": {
-                "NODE_ENV": JSON.stringify("production") // This has effect on the react lib size
-            }
-        }),
         new webpack.IgnorePlugin(/\.(css|less)$/),
         new webpack.BannerPlugin('require("source-map-support").install();',
             {raw: true, entryOnly: false})

@@ -43,7 +43,12 @@ RUN rm -f /tmp/setup-nodejs
 RUN apt-get install -y --no-install-recommends nodejs git
 
 # Load code
-COPY . /opt/whybug-server/
+RUN mkdir /opt/whybug-server
+COPY ./package.json /opt/whybug-server/
+COPY ./config /opt/whybug-server/config
+COPY ./src /opt/whybug-server/src
+COPY ./bin /opt/whybug-server/bin
+
 #RUN cd /opt/ && git clone https://github.com/whybug/whybug-server.git
 RUN cd /opt/whybug-server && ./bin/install.sh
 
