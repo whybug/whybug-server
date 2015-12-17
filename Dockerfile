@@ -43,7 +43,8 @@ RUN rm -f /tmp/setup-nodejs
 RUN apt-get install -y --no-install-recommends nodejs git
 
 # Load code
-RUN cd /opt/ && git clone https://github.com/whybug/whybug-server.git
+COPY . /opt/whybug-server/
+#RUN cd /opt/ && git clone https://github.com/whybug/whybug-server.git
 RUN cd /opt/whybug-server && ./bin/install.sh
 
 # === Webserver - Apache + PHP5
@@ -56,7 +57,7 @@ RUN cd /opt/whybug-server && ./bin/install.sh
 #RUN chmod +x /etc/service/apache2/run
 
 # Boot-time init scripts for phusion/baseimage
-COPY ./my_init.d /etc/my_init.d/
+COPY ./config/my_init.d /etc/my_init.d/
 RUN chmod +x /etc/my_init.d/*
 
 #&& \
@@ -81,7 +82,7 @@ RUN chmod +x /etc/my_init.d/*
 #    ln -s /opt/observium/html /var/www
 
 # === Cron and finishing
-COPY cron.d /etc/cron.d/
+COPY config/cron.d /etc/cron.d/
 
 # === phusion/baseimage post-work
 # Clean up APT when done
