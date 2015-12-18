@@ -23,12 +23,12 @@ if (typeof __BROWSER__ == 'undefined' || __BROWSER__ === false) {
   }
 
   config.node = {
-    host: process.env.WEB_HOST || '127.0.0.1',
+    host: process.env.WEB_HOST || '0.0.0.0',
     port: process.env.WEB_PORT || 8000
   };
 
   config.mysql = {
-    host: process.env.MYSQL_HOST || '0.0.0.0',
+    host: process.env.MYSQL_HOST || '127.0.0.1',
     port: process.env.MYSQL_PORT || 3306,
     db:   process.env.MYSQL_DB || 'whybug',
     user: process.env.MYSQL_USER || '',
