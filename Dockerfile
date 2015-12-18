@@ -28,19 +28,25 @@ RUN locale-gen en_US.UTF-8
 RUN curl --fail -ssL -o /tmp/setup-nodejs https://deb.nodesource.com/setup_4.x && \
     bash /tmp/setup-nodejs && \
     rm -f /tmp/setup-nodejs && \
-    apt-get install -y --no-install-recommends nodejs git
+    apt-get install -y --no-install-recommends nodejs git && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Load code
-RUN git clone https://github.com/whybug/whybug-server.git /opt/whybug-server && \
-    cd /opt/whybug-server && \
-    ./bin/install.sh
 
+# Version using: ADD
+#ADD https://github.com/whybug/whybug-server/archive/master.tar.gz /opt/whybug-server/
+#RUN cd /opt/whybug-server && \
+#    ./bin/install.sh
+
+# Version using: git clone
+#RUN git clone https://github.com/whybug/whybug-server.git /opt/whybug-server && \
+#    cd /opt/whybug-server && \
+#    ./bin/install.sh
+
+# Version using: COPY, see .dockerignore for whitelist
 #RUN mkdir /opt/whybug-server
-#COPY ./package.json /opt/whybug-server/
-#COPY ./config /opt/whybug-server/config
-#COPY ./src /opt/whybug-server/src
-#COPY ./bin /opt/whybug-server/bin
-#RUN cd /opt/whybug-server && ./bin/install.sh
+COPY . /opt/whybug-server/
+RUN cd /opt/whybug-server && ./bin/install.sh
 
 # === Webserver - Apache + PHP5
 
@@ -78,7 +84,3 @@ RUN chmod +x /etc/my_init.d/*
 
 # === Cron and finishing
 COPY config/cron.d /etc/cron.d/
-
-# === phusion/baseimage post-work
-# Clean up APT when done
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

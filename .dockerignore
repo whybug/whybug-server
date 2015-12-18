@@ -1,0 +1,6 @@
+*
+!bin/
+!config/
+!src/
+!package.json
+!server.js
