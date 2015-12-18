@@ -1,6 +1,6 @@
 var React = require('react');
 
-import {Markdown} from '../common/ui/Markdown';
+import {Markdown} from '../common/UI/Markdown';
 
 export var PHPInstructions = React.createClass({
     render() {
