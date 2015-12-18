@@ -1,4 +1,8 @@
+# Ignore everything by default
 *
+
+# Whitelist files to include in the container
+!Dockerfile
 !bin/
 !config/
 !src/
