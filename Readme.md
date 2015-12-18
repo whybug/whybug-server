@@ -1,5 +1,6 @@
 # Whybug Server
 [![Build Status](https://travis-ci.org/whybug/whybug-server.svg?branch=master)](https://travis-ci.org/whybug/whybug-server)
+[![Docker Repository on Quay](https://quay.io/repository/whybug/whybug-server/status "Docker Repository on Quay")](https://quay.io/repository/whybug/whybug-server)
 
 Requires:
 
