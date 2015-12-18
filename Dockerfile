@@ -24,12 +24,20 @@ ENV LANGUAGE en_US.UTF-8
 # Install locales
 RUN locale-gen en_US.UTF-8
 
-# Install dependencies, also runs apt-get update
+# Install system dependencies, also runs apt-get update
 RUN curl --fail -ssL -o /tmp/setup-nodejs https://deb.nodesource.com/setup_4.x && \
     bash /tmp/setup-nodejs && \
     rm -f /tmp/setup-nodejs && \
     apt-get install -y --no-install-recommends nodejs git && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install node dependencies
+# The docker cache will be busted when package.json is changed
+# http://bitjudo.com/blog/2014/03/13/building-efficient-dockerfiles-node-dot-js/
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
+RUN mkdir -p /opt/whybug-server && \
+    cp -a /tmp/node_modules /opt/whybug-server/
 
 # Load code
 
