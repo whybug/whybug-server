@@ -2,17 +2,7 @@
 #
 # The following volumes may be used with their descriptions next to them:
 #
-#   /config                     : Should contain your `config.php`, otherwise
-#                                 default will be used
-#   /opt/observium/html         : Provided to ease adding plugis (weathermap!)
-#   /opt/observium/logs         : Would be nice to store these somewhere
-#                                 non-volatile!
-#   /opt/observium/rrd          : Will consume the most storage.
-#   /var/run/mysqld/mysqld.sock : If your MySQL server is on the same host that
-#                                 serves the container, setting 'localhost' in
-#                                 observium config will look for the unix
-#                                 socket instead of using TCP.
-#
+#   /opt/whybug-server/         : Source code of whybug
 #
 FROM phusion/baseimage:0.9.18
 MAINTAINER Adrian Philipp <info@whybug.com>
@@ -34,23 +24,23 @@ ENV LANGUAGE en_US.UTF-8
 # Install locales
 RUN locale-gen en_US.UTF-8
 
-# Install nodejs, also runs apt-get update
-RUN curl --fail -ssL -o /tmp/setup-nodejs https://deb.nodesource.com/setup_4.x
-RUN bash /tmp/setup-nodejs
-RUN rm -f /tmp/setup-nodejs
-
-# Install git
-RUN apt-get install -y --no-install-recommends nodejs git
+# Install dependencies, also runs apt-get update
+RUN curl --fail -ssL -o /tmp/setup-nodejs https://deb.nodesource.com/setup_4.x && \
+    bash /tmp/setup-nodejs && \
+    rm -f /tmp/setup-nodejs && \
+    apt-get install -y --no-install-recommends nodejs git
 
 # Load code
-RUN mkdir /opt/whybug-server
-COPY ./package.json /opt/whybug-server/
-COPY ./config /opt/whybug-server/config
-COPY ./src /opt/whybug-server/src
-COPY ./bin /opt/whybug-server/bin
+RUN git clone https://github.com/whybug/whybug-server.git /opt/whybug-server && \
+    cd /opt/whybug-server && \
+    ./bin/install.sh
 
-#RUN cd /opt/ && git clone https://github.com/whybug/whybug-server.git
-RUN cd /opt/whybug-server && ./bin/install.sh
+#RUN mkdir /opt/whybug-server
+#COPY ./package.json /opt/whybug-server/
+#COPY ./config /opt/whybug-server/config
+#COPY ./src /opt/whybug-server/src
+#COPY ./bin /opt/whybug-server/bin
+#RUN cd /opt/whybug-server && ./bin/install.sh
 
 # === Webserver - Apache + PHP5
 

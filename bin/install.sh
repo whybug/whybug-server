@@ -1,7 +1,7 @@
 #!/bin/sh
-echo "Installing dependencies..."
+echo "\nInstalling dependencies..."
 npm install --unsafe-perm
 
-echo "Building assets..."
+echo "\nBuilding assets..."
 npm run build:frontend
 npm run build:server
