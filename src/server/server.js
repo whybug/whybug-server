@@ -6,9 +6,12 @@
  * @returns {*}
  */
 module.exports = (dependencies) => {
-    var {express, routes} = dependencies;
+    var {express, routes, search, db} = dependencies;
     var store = require('../app/index')(dependencies).getStore();
     var app = express.Router();
+
+    // Add healthcheck endpoint
+    app.use(require('./healthcheck')(express, db, search));
 
     // Add rest endpoint
     app.use(require('./rest')(express, store, routes));
