@@ -119,7 +119,7 @@ var request = (route, pathParams = {}) => {
         }
     }
 
-    var http = superagentPromise(route.method, config.web.url + path)
+    var http = superagentPromise(route.method, path)
         .set('Accept', 'application/json');
 
     if (WhybugApi.cookie) {
