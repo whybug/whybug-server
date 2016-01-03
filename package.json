@@ -54,7 +54,7 @@
     "chokidar": "1.0.6",
     "css-loader": "0.22.0",
     "enzyme": "1.2.0",
-    "extract-text-webpack-plugin": "0.9.1",
+    "extract-text-webpack-plugin": "1.0.0",
     "glob": "6.0.1",
     "jsverify": "0.7.1",
     "mocha": "2.1.0",
