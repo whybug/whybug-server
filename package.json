@@ -23,7 +23,7 @@
     "express": "4.13.3",
     "graphql": "0.2.2",
     "helmet": "0.15.0",
-    "helmet-csp": "0.3.0",
+    "helmet-csp": "1.0.3",
     "html-loader": "^0.3.0",
     "joi": "5.0.0",
     "knex": "0.6.22",
