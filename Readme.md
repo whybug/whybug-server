@@ -6,9 +6,21 @@ Requires:
 
   * Nodejs 4.x and npm
   * Elasticsearch
-  * Postgres
+  * Mysql
 
-## Development installation
+## Development
+
+### Local Docker installation
+
+For development it is best to start the node application on the host and
+and access all dependencies in docker. This requires `docker-machine` and
+`docker-compose` [to be installed](https://docs.docker.com/mac/step_one/).
+
+    # start everything up
+    ./bin/start-osx.sh
+
+
+### Manual development installation
 
 First install all required software, then run:
 
