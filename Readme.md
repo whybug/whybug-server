@@ -36,6 +36,8 @@ First install all required software, then run:
 
     open http://127.0.0.1:8000
 
+## Development
+
 Useful commands:
 
  * `npm start` starts the development environment, go to [http://127.0.0.1:8000]()
