@@ -8,9 +8,9 @@ Requires:
   * Elasticsearch
   * Mysql
 
-## Development
+## Installation
 
-### Local Docker installation
+#### Local on OSX via docker
 
 For development it is best to start the node application on the host and
 and access all dependencies in docker. This requires `docker-machine` and
@@ -20,7 +20,7 @@ and access all dependencies in docker. This requires `docker-machine` and
     ./bin/start-osx.sh
 
 
-### Manual development installation
+#### Manual installation
 
 First install all required software, then run:
 
@@ -42,8 +42,11 @@ Useful commands:
  * `npm run build:frontend` creates build files in `./build` for production
  * `npm run build:server` creates build file in `./build` for production
  * `npm test` runs tests
+ * `npm run knex migrate:latest` run all migrations
+ * `npm run knex migrate:rollback` undo latest migration
+ * `npm run knex migrate:make [migration_name]` creates a new migration
 
-## Production installation
+## Deployment
 
 There is a docker image available, for an example usage see
 [whybug-rancher](https://github.com/whybug/whybug-rancher) .
@@ -51,12 +54,6 @@ There is a docker image available, for an example usage see
  * `docker run -p 8000:8000 -i quay.io/whybug/whybug-server:latest` run whybug-server image
  * `docker pull quay.io/whybug/whybug-server:latest`  get the latest image
  * `docker build -t quay.io/whybug/whybug-server .` build image locally
-
-## Migrations
-
- * `npm run knex migrate:latest` run all migrations
- * `npm run knex migrate:rollback` undo latest migration
- * `npm run knex migrate:make [migration_name]` creates a new migration
 
 ## Glossary
 
