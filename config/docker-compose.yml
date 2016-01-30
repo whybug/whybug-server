@@ -1,0 +1,63 @@
+web:
+  image: quay.io/whybug/whybug-server:latest
+  env_file: ../.env
+  ports:
+  - 8000:8000/tcp
+  labels:
+    io.rancher.service.hash: 04742c5f1c5c4b0bc5334812266231b25123ae3f
+    io.rancher.container.pull_image: always
+    io.rancher.scheduler.global: 'true'
+  links:
+  - mysql:db
+  - elasticsearch:search
+  tty: true
+  hostname: web
+  stdin_open: true
+
+elasticsearch:
+  image: library/elasticsearch:2.1
+  labels:
+    io.rancher.service.hash: 21cf9e34f76f73539f874cebf314089c3fd8b00f
+    io.rancher.scheduler.global: 'true'
+  tty: true
+  hostname: search
+  #volumes:
+  #- $PWD/elasticsearch:/usr/share/elasticsearch/config
+  stdin_open: true
+
+mysql:
+  image: library/mysql:5.7
+  labels:
+    io.rancher.service.hash: 3cdf1ca99c6e48a1b4e32fb481b53a3f53c4c867
+    io.rancher.scheduler.global: 'true'
+  env_file: ../.env
+  tty: true
+  hostname: db
+  stdin_open: true
+
+#loadbalancer:
+#  ports:
+#  - 80:8000
+#  - 443:8000
+#  labels:
+#    io.rancher.loadbalancer.ssl.ports: '443'
+#    io.rancher.scheduler.global: 'true'
+#  tty: true
+#  image: rancher/load-balancer-service
+#  links:
+#  - web:web
+#  stdin_open: true
+
+#route53:
+#  image: rancher/external-dns:v0.1.7
+#  expose:
+#   - 1000
+#  environment:
+#    AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+#    AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+#    AWS_REGION: ${AWS_REGION}
+#    ROOT_DOMAIN: ${ROOT_DOMAIN}
+#    TTL: ${TTL}
+#  labels:
+#    io.rancher.container.create_agent: "true"
+#    io.rancher.container.agent.role: "external-dns"
