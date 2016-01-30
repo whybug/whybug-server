@@ -1,12 +1,8 @@
 web:
   image: quay.io/whybug/whybug-server:latest
-  env_file: ../.env
+  env_file: $PWD/../.env
   ports:
   - 8000:8000/tcp
-  labels:
-    io.rancher.service.hash: 04742c5f1c5c4b0bc5334812266231b25123ae3f
-    io.rancher.container.pull_image: always
-    io.rancher.scheduler.global: 'true'
   links:
   - mysql:db
   - elasticsearch:search
@@ -16,21 +12,15 @@ web:
 
 elasticsearch:
   image: library/elasticsearch:2.1
-  labels:
-    io.rancher.service.hash: 21cf9e34f76f73539f874cebf314089c3fd8b00f
-    io.rancher.scheduler.global: 'true'
   tty: true
   hostname: search
-  #volumes:
-  #- $PWD/elasticsearch:/usr/share/elasticsearch/config
+  volumes:
+  - $PWD/elasticsearch:/usr/share/elasticsearch/config
   stdin_open: true
 
 mysql:
   image: library/mysql:5.7
-  labels:
-    io.rancher.service.hash: 3cdf1ca99c6e48a1b4e32fb481b53a3f53c4c867
-    io.rancher.scheduler.global: 'true'
-  env_file: ../.env
+  env_file: $PWD/../.env
   tty: true
   hostname: db
   stdin_open: true
