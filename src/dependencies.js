@@ -8,15 +8,22 @@
 require('dotenv').load();
 
 var config = require('../config/config');
-var routes = require('../config/routes');
 var uuid = require('node-uuid');
 var elasticSearch = new (require('elasticsearch')).Client({
     host: config.elasticsearch.host + ':' + config.elasticsearch.port
 });
 var bus = require('./adapters/ServiceBus');
-var search = require('./adapters/Search')(elasticSearch);
 var mailer = require('./adapters/Mailer')();
-var db = require('./adapters/Db')();
+var knex = require('knex')({
+    client: 'mysql2',
+    connection: {
+        host: config.mysql.host,
+        user: config.mysql.user,
+        password: config.mysql.password,
+        database: config.mysql.db,
+    }
+});
+var db = require('./adapters/Db')(knex);
 var express = require('express');
 var expressApp = express();
 
@@ -43,8 +50,14 @@ export default {
     expressApp,
     db,
     mailer,
-    routes,
-    search,
+    get routes() {
+        return require('../config/routes');
+    },
+
+    get search() {
+        return require('./adapters/Search')(elasticSearch);
+    },
     server
 };
+
 
