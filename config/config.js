@@ -30,9 +30,9 @@ if (typeof __BROWSER__ == 'undefined' || __BROWSER__ === false) {
   config.mysql = {
     host: process.env.MYSQL_HOST || '127.0.0.1',
     port: process.env.MYSQL_PORT || 3306,
-    db:   process.env.MYSQL_DB || 'whybug',
-    user: process.env.MYSQL_USER || '',
-    pass: process.env.MYSQL_PASS || ''
+    db:   process.env.MYSQL_DATABASE || 'whybug',
+    user: process.env.MYSQL_USER || 'whybug',
+    password: process.env.MYSQL_PASSWORD || ''
   };
 
   config.elasticsearch = {
