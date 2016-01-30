@@ -60,7 +60,8 @@ compiler.plugin('done', function () {
 function runTest() {
     var mocha = new Mocha({
         ui: 'bdd',
-        reporter: 'dot'
+        reporter: 'dot',
+        useColors: true,
     });
 
     glob("?(tests|src)/**/*.spec.js", {}, function (er, files) {
