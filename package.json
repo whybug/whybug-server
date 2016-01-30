@@ -11,7 +11,8 @@
     "stop": "pm2 stop whybug'",
     "build:frontend": "webpack --config config/webpack.config.js -p 2<&1",
     "build:server": "webpack --config config/webpack.config.server.js -p 2<&1",
-    "test": "mocha tests --require tests/es6_mocha.js --recursive"
+    "test": "mocha tests --require tests/es6_mocha.js --recursive",
+    "features": "mocha tests --require tests/es6_mocha.js --recursive"
   },
   "dependencies": {
     "belle": "^1.2.2",
@@ -25,10 +26,12 @@
     "helmet": "0.15.0",
     "helmet-csp": "0.3.0",
     "html-loader": "^0.3.0",
+    "isomorphic-fetch": "2.2.0",
     "joi": "5.0.0",
     "knex": "0.6.22",
     "markdown-loader": "^0.1.7",
     "marked": "0.3.5",
+    "mysql2": "0.15.8",
     "naught": "1.6.0",
     "node-uuid": "1.4.1",
     "react": "0.13.3",
