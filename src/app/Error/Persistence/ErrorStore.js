@@ -1,9 +1,9 @@
 /* @flow weak */
-module.exports = (postgres) => {
+module.exports = (db) => {
     var table = 'errors';
 
     function logError(error:Error) {
-        return postgres.insert(error);
+        return db.insert(error);
     }
 
     return {
