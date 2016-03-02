@@ -12,6 +12,8 @@ var config = {
 };
 
 if (typeof __BROWSER__ == 'undefined' || __BROWSER__ === false) {
+  // Load .env file
+  require('dotenv').load();
 
   config.web.session_password = process.env.SESSION_PASSWORD || '';
   if (config.debug === false) {

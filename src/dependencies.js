@@ -3,10 +3,6 @@
  *
  * @flow weak
  */
-
-// Load .env file
-require('dotenv').load();
-
 var config = require('../config/config');
 var uuid = require('node-uuid');
 var elasticSearch = new (require('elasticsearch')).Client({
