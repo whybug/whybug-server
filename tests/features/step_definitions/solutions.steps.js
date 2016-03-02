@@ -11,7 +11,8 @@ var myStepDefinitionsWrapper = function () {
         callback.pending();
     });
 
-    this.Given(/^There are the following solutions$/, function (callback) {
+    this.Given(/^There are the following solutions$/, function (data, callback) {
+        console.log(data);
         callback.pending();
     });
 

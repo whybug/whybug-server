@@ -18,7 +18,8 @@ var myStepDefinitionsWrapper = function () {
         callback.pending();
     });
 
-    this.Given(/^I'm signed up using "([^"]*)"$/, function (callback) {
+    this.Given(/^I'm signed up using "([^"]*)"$/, function (data, callback) {
+        console.log(data);
         callback.pending();
     });
 };
