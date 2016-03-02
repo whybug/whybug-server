@@ -5,6 +5,7 @@
 !Dockerfile
 !bin/
 !config/
+!migrations/
 !src/
 !package.json
 !server.js
