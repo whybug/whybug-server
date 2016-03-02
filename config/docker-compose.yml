@@ -1,53 +1,69 @@
-web:
-  image: quay.io/whybug/whybug-server:latest
-  env_file: $PWD/../.env
-  ports:
-  - 8000:8000/tcp
-  links:
-  - mysql:db
-  - elasticsearch:search
-  tty: true
-  hostname: web
-  stdin_open: true
+version: '2'
+services:
+  web:
+    image: quay.io/whybug/whybug-server:latest
+    env_file: $PWD/../.env
+    depends_on:
+      - mysql
+    ports:
+      - 8000:8000/tcp
+    links:
+      - mysql:mysql
+  #  - elasticsearch:elasticsearch
+    expose:
+     - 8000
+    tty: true
 
-elasticsearch:
-  image: library/elasticsearch:2.1
-  tty: true
-  hostname: search
-  volumes:
-  - $PWD/elasticsearch:/usr/share/elasticsearch/config
-  stdin_open: true
+  #elasticsearch:
+  #  image: library/elasticsearch:2.1
+  #  tty: true
+  #  ports:
+  #    - "9200:9200"
 
-mysql:
-  image: library/mysql:5.7
-  env_file: $PWD/../.env
-  tty: true
-  hostname: db
-  stdin_open: true
+  #mysql:
+  #    image: k0st/alpine-mariadb
+  #    volumes:
+  #      - $PWD/mysql/:/etc/mysql/conf.d
+  #      - $PWD/../data/mysql:/var/lib/mysql/
 
-#loadbalancer:
-#  ports:
-#  - 80:8000
-#  - 443:8000
-#  labels:
-#    io.rancher.loadbalancer.ssl.ports: '443'
-#    io.rancher.scheduler.global: 'true'
-#  tty: true
-#  image: rancher/load-balancer-service
-#  links:
-#  - web:web
-#  stdin_open: true
+  mysql:
+    image: k0st/alpine-mariadb:latest
+#    image: library/mariadb:10.1
+    env_file: $PWD/../.env
+    environment:
+      - TERM=dumb
+      - MYSQL_HOST=localhost
+    volumes:
+      - $PWD/mysql/conf.d/:/etc/mysql/conf.d/
+      - $PWD/mysql/initdb.d/:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306/tcp
+    expose:
+      - 3306
 
-#route53:
-#  image: rancher/external-dns:v0.1.7
-#  expose:
-#   - 1000
-#  environment:
-#    AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
-#    AWS_SECRET_KEY: ${AWS_SECRET_KEY}
-#    AWS_REGION: ${AWS_REGION}
-#    ROOT_DOMAIN: ${ROOT_DOMAIN}
-#    TTL: ${TTL}
-#  labels:
-#    io.rancher.container.create_agent: "true"
-#    io.rancher.container.agent.role: "external-dns"
+  #loadbalancer:
+  #  ports:
+  #  - 80:8000
+  #  - 443:8000
+  #  labels:
+  #    io.rancher.loadbalancer.ssl.ports: '443'
+  #    io.rancher.scheduler.global: 'true'
+  #  tty: true
+  #  image: rancher/load-balancer-service
+  #  links:
+  #  - web:web
+  #  stdin_open: true
+
+  #route53:
+  #  image: rancher/external-dns:v0.1.7
+  #  expose:
+  #   - 1000
+  #  environment:
+  #    AWS_ACCESS_KEY: ${AWS_ACCESS_KEY}
+  #    AWS_SECRET_KEY: ${AWS_SECRET_KEY}
+  #    AWS_REGION: ${AWS_REGION}
+  #    ROOT_DOMAIN: ${ROOT_DOMAIN}
+  #    TTL: ${TTL}
+  #  labels:
+  #    io.rancher.container.create_agent: "true"
+  #    io.rancher.container.agent.role: "external-dns"
