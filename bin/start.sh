@@ -3,9 +3,15 @@
 cd "$(dirname "$0")"
 cd ..
 
+# Wait for services
+until nc -z $MYSQL_HOST 3306; do
+    echo "$(date) - waiting for mysql..."
+    sleep 1
+done
+
 echo "Running migrations..."
-#mysql -e "CREATE DATABASE IF NOT EXISTS whybug;" -h $MYSQL_HOST
-#node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js migrate:latest
+# mysql -e "CREATE DATABASE IF NOT EXISTS whybug;" -h $MYSQL_HOST
+node_modules/.bin/knex --env production --cwd ./ --knexfile config/knexfile.js migrate:latest
 echo "done."
 
 echo "Reloading services..."
