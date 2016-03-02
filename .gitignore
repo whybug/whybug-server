@@ -81,3 +81,5 @@ node_modules
 .env
 config/webpack-stats.json
 config/webpack-stats.debug.json
+
+data/
