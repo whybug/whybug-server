@@ -56,7 +56,7 @@
     "chai-react": "0.0.4",
     "chokidar": "1.0.6",
     "css-loader": "0.22.0",
-    "cucumber": "0.9.4",
+    "cucumber": "0.10.1",
     "enzyme": "1.2.0",
     "extract-text-webpack-plugin": "0.9.1",
     "glob": "6.0.1",
