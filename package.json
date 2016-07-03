@@ -34,7 +34,7 @@
     "mysql2": "0.15.8",
     "naught": "1.6.0",
     "node-uuid": "1.4.1",
-    "react": "0.13.3",
+    "react": "0.14.6",
     "react-dom": "0.14.1",
     "react-intl": "1.1.0",
     "react-markdown-textarea": "1.0.0",
