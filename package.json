@@ -15,7 +15,7 @@
     "features": "node_modules/.bin/cucumber-js tests/features/"
   },
   "dependencies": {
-    "belle": "^1.2.2",
+    "belle": "^2.0.4",
     "bluebird": "3.0.5",
     "body-parser": "1.14.1",
     "classnames": "2.1.1",
