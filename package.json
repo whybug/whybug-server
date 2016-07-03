@@ -20,7 +20,7 @@
     "body-parser": "1.14.1",
     "classnames": "2.1.1",
     "dotenv": "1.2.0",
-    "elasticsearch": "9.0.0",
+    "elasticsearch": "10.1.1",
     "express": "4.13.3",
     "graphql": "0.2.2",
     "helmet": "0.15.0",
