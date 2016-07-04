@@ -71,7 +71,7 @@
     "style-loader": "0.12.2",
     "supertest": "1.1.0",
     "supertest-as-promised": "2.0.2",
-    "webpack": "1.12.2",
+    "webpack": "1.12.11",
     "webpack-dev-middleware": "1.2.0",
     "webpack-hot-middleware": "2.0.1",
     "webpack-isomorphic-tools": "1.0.1"
