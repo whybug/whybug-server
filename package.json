@@ -59,7 +59,7 @@
     "cucumber": "0.9.4",
     "enzyme": "1.2.0",
     "extract-text-webpack-plugin": "0.9.1",
-    "glob": "6.0.1",
+    "glob": "7.0.0",
     "jsverify": "0.7.1",
     "mocha": "2.1.0",
     "node-sass": "3.4.2",
