@@ -52,7 +52,7 @@
     "babel-plugin-react-transform": "1.0.3",
     "babel-runtime": "5.8.24",
     "chai": "1.9.1",
-    "chai-as-promised": "4.1.1",
+    "chai-as-promised": "5.2.0",
     "chai-react": "0.0.4",
     "chokidar": "1.0.6",
     "css-loader": "0.22.0",
