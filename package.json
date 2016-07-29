@@ -38,7 +38,7 @@
     "react-dom": "0.14.1",
     "react-intl": "1.1.0",
     "react-markdown-textarea": "1.0.0",
-    "react-router": "0.13.3",
+    "react-router": "2.6.1",
     "serve-favicon": "2.3.0",
     "source-map-support": "0.3.3",
     "superagent": "1.2.0",
