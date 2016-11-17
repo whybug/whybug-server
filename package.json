@@ -39,7 +39,7 @@
     "react-intl": "1.1.0",
     "react-markdown-textarea": "1.0.0",
     "react-router": "0.13.3",
-    "serve-favicon": "2.3.0",
+    "serve-favicon": "2.3.2",
     "source-map-support": "0.3.3",
     "superagent": "1.2.0",
     "superagent-promise": "0.2.0"
